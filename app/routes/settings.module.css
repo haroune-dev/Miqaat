@@ -1,0 +1,21 @@
+.root {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.pageTitle {
+  font-family: var(--family-display);
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+@media (max-width: 480px) {
+  .root {
+    padding: var(--space-4) var(--space-3);
+  }
+}

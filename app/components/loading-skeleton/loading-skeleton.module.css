@@ -1,0 +1,29 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.bar {
+  background: var(--color-bg-muted);
+  border-radius: var(--radius-md);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.barTall {
+  height: 3.5rem;
+}
+
+.barMedium {
+  height: 2.25rem;
+}
+
+.barShort {
+  height: 1.5rem;
+  width: 60%;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
