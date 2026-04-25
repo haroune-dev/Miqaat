@@ -43,13 +43,13 @@ Comprehensive view of current and upcoming prayer times with a live clock.
 </p>
 
 ### 📍 Location Selection
-A high-contrast, premium interface for choosing your location via list or GPS.
+an interface for choosing your location via list or GPS.
 <p align="center">
   <img src="pictures/Pasted image (2).png" alt="Location Selection" width="500" />
 </p>
 
 ### 🗓️ Prayer Calendar
-Detailed weekly/monthly views with a clean, organized layout.
+weekly/monthly prayer time calendar.
 <p align="center">
   <img src="pictures/Pasted image (3).png" alt="Calendar View" width="800" />
 </p>
