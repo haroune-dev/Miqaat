@@ -11,14 +11,25 @@
   <img src="pictures/photo_2026-04-21_06-54-32.jpg" alt="Miqaat Logo" width="200" />
 </p>
 
+<p align="center">
+  <a href="#-overview">Overview</a> •
+  <a href="#-live-demo">Live Demo</a> •
+  <a href="#-key-features">Key Features</a> •
+  <a href="#-screenshots">Screenshots</a> •
+  <a href="#-tech-stack">Tech Stack</a> •
+  <a href="#-getting-started">Getting Started</a>
+</p>
+
 ## ✨ Overview
-**Miqaat** is a premium web application designed to provide accurate prayer times specifically for users in Algeria. Unlike generic apps, Miqaat is tailored to the Algerian calculation methods and offers a seamless, high-performance experience across all devices.
+**Miqaat** is a web application designed to provide accurate prayer times specifically for users in Algeria. Unlike generic apps, Miqaat is tailored to the Algerian calculation methods and offers a seamless, high-performance experience across all devices.
+
+## 🌐 Live Demo
+[View App](https://miqaat-eight.vercel.app/)
 
 ## 🚀 Key Features
-*   📍 **Dynamic Location Selection**: Easily choose your Wilaya using a premium, centered interface or automatic GPS detection.
+*   📍 **Dynamic Location Selection**: Easily choose your Wilaya using an interface or by using automatic GPS detection.
 *   ⏳ **Live Countdown**: Real-time updates and countdowns to the next prayer time.
 *   📅 **Comprehensive Calendar**: View weekly and monthly prayer schedules with an elegant, printable layout.
-*   🎨 **Premium UI/UX**: Built with modern design principles, featuring glassmorphism, smooth animations, and vibrant gradients.
 *   🌓 **Dark Mode Support**: Fully responsive design that adapts to your system preferences.
 *   🔔 **Smart Notifications**: Frontend-scheduled notifications firing 1 minute before each prayer.
 *   📲 **PWA-ready Architecture**: Designed for future offline support and mobile installability.
@@ -144,12 +155,11 @@ Miqaat leverages the [Adhan DZ API](https://adhan-dz.dexter21767.com) to provide
 
 ## 🔮 Future Improvements
 *   [ ] Full Offline Data Persistence (Service Worker).
+*   [ ] Support for Baladiyas (Sub-provinces).
 *   [ ] Multi-language Expansion (French support).
 *   [ ] Advanced Analytics & Insights.
 
 ## 👤 Author
 **Haroune-dev**
-> Modern Web Solutions Engineer
 
 ---
-<p align="center">Made for the Algerian community.</p>
