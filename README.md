@@ -1,5 +1,5 @@
 # 🌙 ميقات | Miqaat
-> Accurate prayer times for Algerian Wilayas with a premium, modern experience.
+> Accurate prayer times for Algerian Wilayas.
 
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -21,7 +21,7 @@
 </p>
 
 ## ✨ Overview
-**Miqaat** is a web application designed to provide accurate prayer times specifically for users in Algeria. Unlike generic apps, Miqaat is tailored to the Algerian calculation methods and offers a seamless, high-performance experience across all devices.
+**Miqaat** is a web application designed to provide accurate prayer times specifically for users in Algeria.
 
 ## 🌐 Live Demo
 [View App](https://miqaat-eight.vercel.app/)
