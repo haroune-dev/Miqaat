@@ -1,4 +1,5 @@
 import classnames from "classnames";
+import { useLanguage } from "~/i18n/language-context";
 import style from "./time-format-toggle.module.css";
 
 export interface TimeFormatToggleProps {
@@ -8,10 +9,11 @@ export interface TimeFormatToggleProps {
 }
 
 export function TimeFormatToggle({ className, value, onChange }: TimeFormatToggleProps) {
+  const { t } = useLanguage();
   return (
     <div className={classnames(style.root, className)}>
-      <div className={style.sectionTitle}>Time Format</div>
-      <p className={style.sectionDesc}>Choose how prayer times are displayed throughout the app.</p>
+      <div className={style.sectionTitle}>{t("settings.timeFormat")}</div>
+      <p className={style.sectionDesc}>{t("settings.timeFormat.desc")}</p>
       <div className={style.options} role="radiogroup" aria-label="Time format selection">
         <div
           className={classnames(style.option, value === "12h" && style.optionSelected)}
@@ -23,8 +25,8 @@ export function TimeFormatToggle({ className, value, onChange }: TimeFormatToggl
           onKeyDown={(e) => e.key === "Enter" && onChange("12h")}
         >
           <div className={style.preview}>5:30 PM</div>
-          <div className={style.label}>12-Hour</div>
-          <div className={style.subLabel}>AM / PM format</div>
+          <div className={style.label}>{t("settings.timeFormat.12h")}</div>
+          <div className={style.subLabel}>{t("settings.timeFormat.12h.desc")}</div>
         </div>
         <div
           className={classnames(style.option, value === "24h" && style.optionSelected)}
@@ -36,8 +38,8 @@ export function TimeFormatToggle({ className, value, onChange }: TimeFormatToggl
           onKeyDown={(e) => e.key === "Enter" && onChange("24h")}
         >
           <div className={style.preview}>17:30</div>
-          <div className={style.label}>24-Hour</div>
-          <div className={style.subLabel}>Military format</div>
+          <div className={style.label}>{t("settings.timeFormat.24h")}</div>
+          <div className={style.subLabel}>{t("settings.timeFormat.24h.desc")}</div>
         </div>
       </div>
     </div>

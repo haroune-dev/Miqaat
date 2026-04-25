@@ -1,4 +1,5 @@
 import { useAppContext } from "~/context/app-context";
+import { useLanguage } from "~/i18n/language-context";
 import { LoadingSkeleton } from "~/components/loading-skeleton/loading-skeleton";
 import { LocationDisplay } from "../blocks/home/location-display";
 import { CurrentTimeCard } from "../blocks/home/current-time-card";
@@ -9,7 +10,8 @@ import { AdditionalInfoSection } from "../blocks/home/additional-info-section";
 import styles from "./home.module.css";
 
 export default function Home() {
-  const { isLoading, error } = useAppContext();
+  const { isLoading, error, refreshPrayerTimes } = useAppContext();
+  const { t } = useLanguage();
 
   return (
     <main className={styles.root}>
@@ -18,11 +20,21 @@ export default function Home() {
       {isLoading ? (
         <LoadingSkeleton rows={6} />
       ) : error ? (
-        <div className={styles.error} role="alert">{error}</div>
+        <div className={styles.errorContainer}>
+          <p className={styles.errorText}>{error}</p>
+          <button
+            className={styles.retryBtn}
+            onClick={() => refreshPrayerTimes()}
+          >
+            {t("error.retry")}
+          </button>
+        </div>
       ) : (
         <>
-          <CurrentPrayerHighlight />
-          <NextPrayerCountdown />
+          <div className={styles.topGrid}>
+            <CurrentPrayerHighlight />
+            <NextPrayerCountdown />
+          </div>
           <PrayerTimesGrid />
           <AdditionalInfoSection />
         </>

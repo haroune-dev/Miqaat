@@ -3,8 +3,10 @@
 /* Google Fonts are loaded via root.tsx links */
 
 :root {
-  --family-display: "Cormorant Garamond", Georgia, serif;
-  --family-body: "DM Sans", system-ui, sans-serif;
+  --family-display: "Cormorant Garamond", "Noto Sans Arabic", Georgia, serif;
+  --family-brand-ar: "Changa", system-ui, sans-serif;
+  --family-body: "DM Sans", "Noto Sans Arabic", system-ui, sans-serif;
+  --family-mono: "Roboto Mono", "Courier New", monospace;
 
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
@@ -50,7 +52,7 @@
   --color-bg-muted: #dde8f0;
 
   --color-text: #1a2b3c;
-  --color-text-muted: #5d7a8e;
+  --color-text-muted: #455a64;
   --color-text-inverse: #ffffff;
   --color-text-accent: #c9a84c;
 
@@ -83,7 +85,7 @@
   --color-bg-muted: #0f2030;
 
   --color-text: #e8f1f8;
-  --color-text-muted: #89a8bc;
+  --color-text-muted: #a0c4d9;
   --color-text-inverse: #0d1b2a;
   --color-text-accent: #f4d03f;
 

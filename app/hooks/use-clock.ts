@@ -1,26 +1,46 @@
 import { useState, useEffect } from "react";
+import { formatTime } from "~/utils/time-utils";
+
 
 export interface ClockState {
   now: Date;
   timeString: string;
+  timeOnly: string;
+  period: string;
   dateString: string;
   hijriDate: string;
 }
 
-const HIJRI_MONTHS = [
-  "Muharram",
-  "Safar",
-  "Rabi\u02bc al-Awwal",
-  "Rabi\u02bc al-Thani",
-  "Jumada al-Awwal",
-  "Jumada al-Thani",
-  "Rajab",
-  "Sha\u02bcban",
-  "Ramadan",
-  "Shawwal",
-  "Dhu al-Qi\u02bcda",
-  "Dhu al-Hijja",
-];
+const HIJRI_MONTHS = {
+  en: [
+    "Muharram",
+    "Safar",
+    "Rabi\u02bc al-Awwal",
+    "Rabi\u02bc al-Thani",
+    "Jumada al-Awwal",
+    "Jumada al-Thani",
+    "Rajab",
+    "Sha\u02bcban",
+    "Ramadan",
+    "Shawwal",
+    "Dhu al-Qi\u02bcda",
+    "Dhu al-Hijja",
+  ],
+  ar: [
+    "محرم",
+    "صفر",
+    "ربيع الأول",
+    "ربيع الآخر",
+    "جمادى الأولى",
+    "جمادى الآخرة",
+    "رجب",
+    "شعبان",
+    "رمضان",
+    "شوال",
+    "ذو القعدة",
+    "ذو الحجة",
+  ]
+};
 
 /**
  * Approximate Gregorian-to-Hijri conversion.
@@ -58,7 +78,7 @@ function toHijri(date: Date): { day: number; month: number; year: number } {
   return { day: hijriDay, month: hijriMonth, year: hijriYear };
 }
 
-export function useClock(timeFormat: "12h" | "24h"): ClockState {
+export function useClock(timeFormat: "12h" | "24h", locale: "en" | "ar" = "en"): ClockState {
   const [now, setNow] = useState(new Date());
 
   useEffect(() => {
@@ -66,12 +86,31 @@ export function useClock(timeFormat: "12h" | "24h"): ClockState {
     return () => clearInterval(tick);
   }, []);
 
-  const timeString =
-    timeFormat === "12h"
-      ? now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", second: "2-digit", hour12: true })
-      : now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
+  const timeParts = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+  const timeString = formatTime(timeParts, timeFormat, locale);
 
-  const dateString = now.toLocaleDateString("en-US", {
+  const h = now.getHours();
+  const m = now.getMinutes();
+  const s = now.getSeconds();
+  
+  let timeOnly = "";
+  if (timeFormat === "24h") {
+    timeOnly = `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  } else {
+    const h12 = h % 12 || 12;
+    timeOnly = `${h12}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  }
+
+  let period = "";
+  if (timeFormat === "12h") {
+    if (locale === "ar") {
+      period = h >= 12 ? "مساءً" : "صباحاً";
+    } else {
+      period = h >= 12 ? "PM" : "AM";
+    }
+  }
+
+  const dateString = now.toLocaleDateString(locale === "ar" ? "ar-DZ" : "en-US", {
     weekday: "long",
     year: "numeric",
     month: "long",
@@ -79,7 +118,11 @@ export function useClock(timeFormat: "12h" | "24h"): ClockState {
   });
 
   const hijri = toHijri(now);
-  const hijriDate = `${hijri.day} ${HIJRI_MONTHS[hijri.month - 1] ?? ""} ${hijri.year} AH`;
+  const monthName = HIJRI_MONTHS[locale][hijri.month - 1] ?? "";
+  const weekdayName = now.toLocaleDateString(locale === "ar" ? "ar-DZ" : "en-US", { weekday: "long" });
+  const hijriDate = locale === "ar"
+    ? `${weekdayName}، ${hijri.day} ${monthName} ${hijri.year} هـ`
+    : `${weekdayName}, ${hijri.day} ${monthName} ${hijri.year} AH`;
 
-  return { now, timeString, dateString, hijriDate };
+  return { now, timeString, timeOnly, period, dateString, hijriDate };
 }

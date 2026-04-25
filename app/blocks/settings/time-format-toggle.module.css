@@ -4,6 +4,13 @@
   padding: var(--space-6);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-border-light);
+  transition: transform 0.2s, box-shadow 0.2s;
+  height: 100%;
+}
+
+.root:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .sectionTitle {

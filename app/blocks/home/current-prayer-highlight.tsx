@@ -1,48 +1,77 @@
-import { Moon, Sun, Cloud, Sunrise, Sunset, Star } from "lucide-react";
+import { Moon, Sun, Cloud, Sunrise, Sunset, Star, AlertTriangle, SunDim } from "lucide-react";
 import classnames from "classnames";
 import { useAppContext } from "~/context/app-context";
+import { useLanguage } from "~/i18n/language-context";
+import { usePrayerStatus } from "~/hooks/use-prayer-status";
+import type { TranslationKey } from "~/i18n/translations";
 import style from "./current-prayer-highlight.module.css";
+import { formatTime } from "~/utils/time-utils";
+
 
 export interface CurrentPrayerHighlightProps {
   className?: string;
 }
 
 const PRAYER_ICONS: Record<string, React.ReactNode> = {
-  moon: <Moon size={22} />,
-  sun: <Sun size={22} />,
-  sunrise: <Sunrise size={22} />,
-  sunset: <Sunset size={22} />,
-  "cloud-sun": <Cloud size={22} />,
-  star: <Star size={22} />,
+  moon: <Moon size={28} />,
+  sun: <Sun size={28} />,
+  "sun-dim": <SunDim size={28} />,
+  sunrise: <Sunrise size={28} />,
+  sunset: <Sunset size={28} />,
+  "cloud-sun": <Cloud size={28} />,
+  star: <Star size={28} />,
 };
 
-function formatTime(time: string, format: "12h" | "24h"): string {
-  const [h, m] = time.split(":").map(Number);
-  if (format === "24h") return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
-  const period = h >= 12 ? "PM" : "AM";
-  const h12 = h % 12 || 12;
-  return `${h12}:${String(m).padStart(2, "0")} ${period}`;
-}
 
 export function CurrentPrayerHighlight({ className }: CurrentPrayerHighlightProps) {
-  const { currentPrayer, timeFormat } = useAppContext();
+  const { currentPrayer, prayerTimes, timeFormat } = useAppContext();
+  const { t, locale } = useLanguage();
+  const prayerStatus = usePrayerStatus(prayerTimes);
 
   if (!currentPrayer) return null;
 
+  const prayerKey = `prayer.${currentPrayer.name}` as TranslationKey;
+  let displayName = t(prayerKey);
+  let displayIcon = PRAYER_ICONS[currentPrayer.icon] ?? <Star size={28} />;
+
+  if (prayerStatus === "forbidden") {
+    displayName = t("home.forbiddenPrayer");
+    displayIcon = <AlertTriangle size={28} />;
+  } else if (prayerStatus === "duha") {
+    displayName = t("home.duha");
+    displayIcon = <SunDim size={28} />;
+  }
+
   return (
-    <div className={classnames(style.root, className)}>
-      <div className={style.left}>
-        <div className={style.iconWrapper}>
-          {PRAYER_ICONS[currentPrayer.icon] ?? <Star size={22} />}
-        </div>
-        <div>
-          <div className={style.label}>Current Prayer</div>
-          <div className={style.name}>{currentPrayer.name}</div>
-        </div>
+    <div className={classnames(style.root, "transition-all duration-300 hover:shadow-xl hover:-translate-y-1", className)}>
+      <div className={style.header}>
+        <span className={style.headerLabel}>{t("home.currentPrayer")}</span>
       </div>
-      <div className={style.right}>
-        <div className={style.timeLabel}>Prayer Time</div>
-        <div className={style.time}>{formatTime(currentPrayer.time, timeFormat)}</div>
+
+      <div className={style.content}>
+        <div className={style.iconWrapper}>
+          {displayIcon}
+        </div>
+        <div className={style.name}>{displayName}</div>
+      </div>
+
+      <div className={style.footer}>
+        <div className={style.timeLabel}>{t("home.prayerTime")}</div>
+        <div className={style.time}>
+          {(() => {
+            const timeStr = formatTime(currentPrayer.time, timeFormat, locale);
+            const parts = timeStr.split(" ");
+            if (parts.length > 1) {
+              return (
+                <>
+                  <span>{parts[0]}</span>
+                  <span className={style.periodPart}>{parts[1]}</span>
+                </>
+              );
+            }
+            return <span>{timeStr}</span>;
+          })()}
+        </div>
       </div>
     </div>
   );

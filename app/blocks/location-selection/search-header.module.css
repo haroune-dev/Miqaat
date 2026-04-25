@@ -6,9 +6,15 @@
 
 .title {
   font-family: var(--family-display);
-  font-size: var(--text-2xl);
+  font-size: var(--text-3xl);
   font-weight: 600;
-  color: var(--color-text);
+  color: var(--color-primary);
+}
+
+:global([lang="ar"]) .title {
+  font-family: var(--family-brand-ar);
+  font-size: 3rem;
+  font-weight: 700;
 }
 
 .subtitle {

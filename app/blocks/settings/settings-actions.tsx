@@ -1,39 +1,55 @@
 import { useState } from "react";
-import { CheckCircle } from "lucide-react";
+import { AlertCircle, CheckCircle, Loader } from "lucide-react";
 import classnames from "classnames";
+import { useLanguage } from "~/i18n/language-context";
 import style from "./settings-actions.module.css";
 
 export interface SettingsActionsProps {
   className?: string;
   onSave: () => void;
   onReset: () => void;
+  isDirty?: boolean;
+  isSaving?: boolean;
 }
 
-export function SettingsActions({ className, onSave, onReset }: SettingsActionsProps) {
-  const [saved, setSaved] = useState(false);
-
-  const handleSave = () => {
-    onSave();
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
-  };
+export function SettingsActions({ className, onSave, onReset, isDirty, isSaving }: SettingsActionsProps) {
+  const { t } = useLanguage();
 
   return (
     <div className={classnames(style.root, className)}>
       <div className={style.buttons}>
-        <button className={style.saveBtn} onClick={handleSave} aria-label="Save settings">
-          Save Settings
+        <button
+          className={classnames(style.saveBtn, isSaving && style.saveBtnLoading)}
+          onClick={onSave}
+          disabled={!isDirty || isSaving}
+          aria-label={t("settings.save")}
+        >
+          {isSaving ? (
+            <span className={style.loaderContainer}>
+              <Loader size={16} className="animate-spin" />
+              {t("settings.saving")}
+            </span>
+          ) : (
+            t("settings.save")
+          )}
         </button>
-        <button className={style.resetBtn} onClick={onReset} aria-label="Reset all settings to defaults">
-          Reset to Defaults
+        <button 
+          className={style.resetBtn} 
+          onClick={onReset} 
+          disabled={isSaving}
+          aria-label={t("settings.reset")}
+        >
+          {t("settings.reset")}
         </button>
       </div>
-      {saved && (
-        <div className={style.successMsg} role="status">
-          <CheckCircle size={16} />
-          Settings saved successfully!
+      {isDirty && !isSaving && (
+        <div className={style.dirtyIndicator} role="status">
+          <AlertCircle size={14} />
+          {t("settings.unsavedChanges")}
         </div>
       )}
     </div>
   );
 }
+
+

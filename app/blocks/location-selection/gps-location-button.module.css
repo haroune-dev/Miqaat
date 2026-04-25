@@ -8,14 +8,15 @@
   justify-content: center;
   gap: var(--space-3);
   padding: var(--space-4) var(--space-6);
+  min-height: 56px;
   background: var(--color-bg-card);
   border: 2px dashed var(--color-primary);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   color: var(--color-primary);
-  font-size: var(--text-base);
-  font-weight: 600;
+  font-size: var(--text-md);
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn:hover {

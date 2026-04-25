@@ -1,80 +1,62 @@
 import { useState, useEffect, useCallback } from "react";
-import type { Wilaya, Baladiya, Location } from "~/data/prayer-data";
-import { fetchWilayas, fetchBaladiyas, findNearestLocation } from "~/services/api";
+import type { Wilaya, Location } from "~/data/prayer-data";
+import { fetchWilayas, findNearestLocation } from "~/services/api";
 
 export interface LocationSelectionState {
   wilayas: Wilaya[];
-  baladiyas: Baladiya[];
   selectedWilaya: Wilaya | null;
-  selectedBaladiya: Baladiya | null;
   isLoadingWilayas: boolean;
-  isLoadingBaladiyas: boolean;
   isDetectingGPS: boolean;
   gpsError: string | null;
-  selectWilaya: (wilaya: Wilaya) => void;
-  selectBaladiya: (baladiya: Baladiya) => void;
+  fetchError: string | null;
+  selectWilaya: (wilaya: Wilaya | null) => void;
+  clearSelection: () => void;
   detectGPSLocation: () => void;
   clearGpsError: () => void;
+  retryFetch: () => void;
   getSelectedLocation: () => Location | null;
 }
 
 export function useLocationSelection(): LocationSelectionState {
   const [wilayas, setWilayas] = useState<Wilaya[]>([]);
-  const [baladiyas, setBaladiyas] = useState<Baladiya[]>([]);
   const [selectedWilaya, setSelectedWilaya] = useState<Wilaya | null>(null);
-  const [selectedBaladiya, setSelectedBaladiya] = useState<Baladiya | null>(null);
   const [isLoadingWilayas, setIsLoadingWilayas] = useState(true);
-  const [isLoadingBaladiyas, setIsLoadingBaladiyas] = useState(false);
   const [isDetectingGPS, setIsDetectingGPS] = useState(false);
   const [gpsError, setGpsError] = useState<string | null>(null);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+
+  const loadWilayas = useCallback(async (cancelled = false) => {
+    setIsLoadingWilayas(true);
+    setFetchError(null);
+    try {
+      const data = await fetchWilayas();
+      if (!cancelled) setWilayas(data);
+    } catch {
+      if (!cancelled) setFetchError("Failed to load cities. Please check your connection and try again.");
+    } finally {
+      if (!cancelled) setIsLoadingWilayas(false);
+    }
+  }, []);
 
   // Fetch wilayas on mount
   useEffect(() => {
     let cancelled = false;
-    setIsLoadingWilayas(true);
-    fetchWilayas()
-      .then((data) => {
-        if (!cancelled) setWilayas(data);
-      })
-      .catch(() => {
-        // silently handle
-      })
-      .finally(() => {
-        if (!cancelled) setIsLoadingWilayas(false);
-      });
+    loadWilayas(cancelled);
     return () => { cancelled = true; };
-  }, []);
+  }, [loadWilayas]);
 
-  // Fetch baladiyas when wilaya changes
-  useEffect(() => {
-    if (!selectedWilaya) {
-      setBaladiyas([]);
-      setSelectedBaladiya(null);
-      return;
-    }
-    let cancelled = false;
-    setIsLoadingBaladiyas(true);
-    setSelectedBaladiya(null);
-    fetchBaladiyas(selectedWilaya.id)
-      .then((data) => {
-        if (!cancelled) setBaladiyas(data);
-      })
-      .catch(() => {
-        if (!cancelled) setBaladiyas([]);
-      })
-      .finally(() => {
-        if (!cancelled) setIsLoadingBaladiyas(false);
-      });
-    return () => { cancelled = true; };
-  }, [selectedWilaya]);
+  const retryFetch = useCallback(() => {
+    loadWilayas();
+  }, [loadWilayas]);
 
-  const selectWilaya = useCallback((wilaya: Wilaya) => {
+  const selectWilaya = useCallback((wilaya: Wilaya | null) => {
     setSelectedWilaya(wilaya);
     setGpsError(null);
   }, []);
 
-  const selectBaladiya = useCallback((baladiya: Baladiya) => {
-    setSelectedBaladiya(baladiya);
+  const clearSelection = useCallback(() => {
+    setSelectedWilaya(null);
+    setGpsError(null);
   }, []);
 
   const clearGpsError = useCallback(() => {
@@ -83,7 +65,7 @@ export function useLocationSelection(): LocationSelectionState {
 
   const detectGPSLocation = useCallback(() => {
     if (!navigator.geolocation) {
-      setGpsError("GPS is not available on this device. Please select your Wilaya and Baladiya manually.");
+      setGpsError("GPS is not available on this device. Please select your Wilaya manually.");
       return;
     }
     setIsDetectingGPS(true);
@@ -94,48 +76,46 @@ export function useLocationSelection(): LocationSelectionState {
           const result = await findNearestLocation(pos.coords.latitude, pos.coords.longitude);
           if (result) {
             setSelectedWilaya(result.wilaya);
-            // Fetch baladiyas for this wilaya, then auto-select
-            const bals = await fetchBaladiyas(result.wilaya.id);
-            setBaladiyas(bals);
-            setSelectedBaladiya(result.baladiya);
           }
         } catch {
-          setGpsError("Could not determine your location. Please select your Wilaya and Baladiya manually.");
+          setGpsError("Could not determine your location. Please select your Wilaya manually.");
         } finally {
           setIsDetectingGPS(false);
         }
       },
       () => {
         setIsDetectingGPS(false);
-        setGpsError("Location access was denied. Please select your Wilaya and Baladiya from the dropdowns below.");
-      }
+        setGpsError("Location access was denied. Please select your Wilaya from the dropdown below.");
+      },
     );
   }, []);
 
   const getSelectedLocation = useCallback((): Location | null => {
-    if (!selectedWilaya || !selectedBaladiya) return null;
+    if (!selectedWilaya) return null;
     return {
-      city: `${selectedBaladiya.name}, ${selectedWilaya.name}`,
+      city: selectedWilaya.name,
+      cityAr: selectedWilaya.nameAr,
       country: "Algeria",
+      countryAr: "الجزائر",
       timezone: "Africa/Algiers",
-      latitude: selectedBaladiya.latitude,
-      longitude: selectedBaladiya.longitude,
+      latitude: selectedWilaya.latitude,
+      longitude: selectedWilaya.longitude,
+      cityId: selectedWilaya.cityId,
     };
-  }, [selectedWilaya, selectedBaladiya]);
+  }, [selectedWilaya]);
 
   return {
     wilayas,
-    baladiyas,
     selectedWilaya,
-    selectedBaladiya,
     isLoadingWilayas,
-    isLoadingBaladiyas,
     isDetectingGPS,
     gpsError,
+    fetchError,
     selectWilaya,
-    selectBaladiya,
+    clearSelection,
     detectGPSLocation,
     clearGpsError,
+    retryFetch,
     getSelectedLocation,
   };
 }

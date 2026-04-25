@@ -1,25 +1,38 @@
 import { useState, useEffect, useCallback } from "react";
-import type { PrayerTime, Location, CalculationMethod } from "~/data/prayer-data";
+import type { PrayerTime, Location } from "~/data/prayer-data";
 import { fetchPrayerTimes } from "~/services/api";
+import { useLanguage } from "~/i18n/language-context";
 
 const STORAGE_KEY_LOCATION = "prayerApp_location";
-const STORAGE_KEY_METHOD = "prayerApp_method";
 const STORAGE_KEY_FORMAT = "prayerApp_timeFormat";
+const STORAGE_KEY_NOTIFICATIONS = "prayerApp_notifications";
+const STORAGE_KEY_NOTIFICATION_PREFS = "prayerApp_notificationPrefs";
 
 const DEFAULT_LOCATION: Location = {
   city: "Algiers",
+  cityAr: "الجزائر",
   country: "Algeria",
+  countryAr: "الجزائر",
   timezone: "Africa/Algiers",
   latitude: 36.75,
   longitude: 3.06,
+  cityId: 27,
 };
 
-const DEFAULT_METHOD: CalculationMethod = "MWL";
+
 
 function loadFromStorage<T>(key: string, fallback: T): T {
   try {
     const raw = localStorage.getItem(key);
-    return raw ? (JSON.parse(raw) as T) : fallback;
+    if (!raw) return fallback;
+    const parsed = JSON.parse(raw);
+
+    // For location, ensure new fields exist for backward compatibility
+    if (key === STORAGE_KEY_LOCATION) {
+      return { ...fallback, ...parsed } as T;
+    }
+
+    return parsed as T;
   } catch {
     return fallback;
   }
@@ -35,24 +48,27 @@ function saveToStorage<T>(key: string, value: T): void {
 
 export interface PrayerAppState {
   location: Location;
-  calculationMethod: CalculationMethod;
   timeFormat: "12h" | "24h";
   prayerTimes: PrayerTime[];
   currentPrayer: PrayerTime | null;
   nextPrayer: PrayerTime | null;
   isLoading: boolean;
   error: string | null;
+  notificationsEnabled: boolean;
+  notificationPreferences: Record<string, boolean>;
   setLocation: (loc: Location) => void;
-  setCalculationMethod: (m: CalculationMethod) => void;
   setTimeFormat: (f: "12h" | "24h") => void;
+  setNotificationsEnabled: (enabled: boolean) => void;
+  setNotificationPreference: (prayerName: string, enabled: boolean) => void;
+  refreshPrayerTimes: () => Promise<void>;
 }
 
 function determineCurrent(
-  times: PrayerTime[]
+  times: PrayerTime[],
 ): { current: PrayerTime | null; next: PrayerTime | null } {
   const now = new Date();
   const nowMinutes = now.getHours() * 60 + now.getMinutes();
-  const prayers = times.filter((t) => t.isPrayer);
+  const prayers = times; // Use all events including Sunrise and Duha as timeline boundaries
   let current: PrayerTime | null = null;
   let next: PrayerTime | null = null;
 
@@ -62,9 +78,9 @@ function determineCurrent(
     const nextPrayerMinutes =
       i + 1 < prayers.length
         ? (() => {
-            const [nh, nm] = prayers[i + 1].time.split(":").map(Number);
-            return nh * 60 + nm;
-          })()
+          const [nh, nm] = prayers[i + 1].time.split(":").map(Number);
+          return nh * 60 + nm;
+        })()
         : 24 * 60;
 
     if (nowMinutes >= prayerMinutes && nowMinutes < nextPrayerMinutes) {
@@ -83,14 +99,18 @@ function determineCurrent(
 }
 
 export function usePrayerTimes(): PrayerAppState {
+  const { t } = useLanguage();
   const [location, setLocationState] = useState<Location>(
-    () => loadFromStorage<Location>(STORAGE_KEY_LOCATION, DEFAULT_LOCATION)
-  );
-  const [calculationMethod, setMethodState] = useState<CalculationMethod>(
-    () => loadFromStorage<CalculationMethod>(STORAGE_KEY_METHOD, DEFAULT_METHOD)
+    () => loadFromStorage<Location>(STORAGE_KEY_LOCATION, DEFAULT_LOCATION),
   );
   const [timeFormat, setFormatState] = useState<"12h" | "24h">(
-    () => loadFromStorage<"12h" | "24h">(STORAGE_KEY_FORMAT, "12h")
+    () => loadFromStorage<"12h" | "24h">(STORAGE_KEY_FORMAT, "12h"),
+  );
+  const [notificationsEnabled, setNotificationsEnabledState] = useState<boolean>(
+    () => loadFromStorage<boolean>(STORAGE_KEY_NOTIFICATIONS, false),
+  );
+  const [notificationPreferences, setNotificationPreferencesState] = useState<Record<string, boolean>>(
+    () => loadFromStorage<Record<string, boolean>>(STORAGE_KEY_NOTIFICATION_PREFS, {}),
   );
 
   const [prayerTimes, setPrayerTimes] = useState<PrayerTime[]>([]);
@@ -103,17 +123,17 @@ export function usePrayerTimes(): PrayerAppState {
     setIsLoading(true);
     setError(null);
     try {
-      const times = await fetchPrayerTimes(location.latitude, location.longitude);
+      const times = await fetchPrayerTimes(location.cityId);
       setPrayerTimes(times);
       const { current, next } = determineCurrent(times);
       setCurrentPrayer(current);
       setNextPrayer(next);
     } catch {
-      setError("Failed to fetch prayer times. Please try again.");
+      setError(t("error.fetchPrayer") ?? "Failed to fetch prayer times. Please try again.");
     } finally {
       setIsLoading(false);
     }
-  }, [location]);
+  }, [location, t]);
 
   // Fetch on mount and when location changes
   useEffect(() => {
@@ -136,27 +156,38 @@ export function usePrayerTimes(): PrayerAppState {
     saveToStorage(STORAGE_KEY_LOCATION, loc);
   };
 
-  const setCalculationMethod = (m: CalculationMethod) => {
-    setMethodState(m);
-    saveToStorage(STORAGE_KEY_METHOD, m);
-  };
+
 
   const setTimeFormat = (f: "12h" | "24h") => {
     setFormatState(f);
     saveToStorage(STORAGE_KEY_FORMAT, f);
   };
 
+  const setNotificationsEnabled = (enabled: boolean) => {
+    setNotificationsEnabledState(enabled);
+    saveToStorage(STORAGE_KEY_NOTIFICATIONS, enabled);
+  };
+
+  const setNotificationPreference = (prayerName: string, enabled: boolean) => {
+    const newPrefs = { ...notificationPreferences, [prayerName]: enabled };
+    setNotificationPreferencesState(newPrefs);
+    saveToStorage(STORAGE_KEY_NOTIFICATION_PREFS, newPrefs);
+  };
+
   return {
     location,
-    calculationMethod,
     timeFormat,
     prayerTimes,
     currentPrayer,
     nextPrayer,
     isLoading,
     error,
+    notificationsEnabled,
+    notificationPreferences,
     setLocation,
-    setCalculationMethod,
     setTimeFormat,
+    setNotificationsEnabled,
+    setNotificationPreference,
+    refreshPrayerTimes: loadPrayerTimes,
   };
 }
