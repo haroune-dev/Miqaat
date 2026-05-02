@@ -23,15 +23,15 @@ export function CurrentTimeCard({ className }: CurrentTimeCardProps) {
             alignItems: "baseline", 
             justifyContent: "center", 
             gap: "12px", 
-            direction: "ltr" 
+            direction: locale === "ar" ? "rtl" : "ltr" 
           }}
         >
+          <span dir="ltr">{timeOnly}</span>
           {period && (
             <span style={{ fontSize: "0.6em", fontWeight: "normal" }}>
               {period}
             </span>
           )}
-          <span dir="ltr">{timeOnly}</span>
         </div>
         <div className={style.hijri}>{hijriDate}</div>
       </div>

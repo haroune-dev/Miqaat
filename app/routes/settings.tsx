@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useBlocker } from "react-router";
 import { useAppContext } from "~/context/app-context";
 import { useLanguage } from "~/i18n/language-context";
 import { useSettingsDraft } from "~/hooks/use-settings-draft";
@@ -9,6 +10,7 @@ import { ThemeToggle } from "../blocks/settings/theme-toggle";
 import { NotificationToggle } from "../blocks/settings/notification-toggle";
 import { LanguageToggle } from "../blocks/settings/language-toggle";
 import { SettingsActions } from "../blocks/settings/settings-actions";
+import { UnsavedChangesModal } from "../blocks/settings/unsaved-changes-modal";
 import styles from "./settings.module.css";
 
 const DEFAULT_LOCATION = {
@@ -52,8 +54,10 @@ export default function Settings() {
     
     if (result.success) {
       setToast({ message: t("settings.saved") || "Settings saved successfully", type: "success" });
+      return true;
     } else {
       setToast({ message: result.error || "Failed to save settings", type: "error" });
+      return false;
     }
   };
 
@@ -63,9 +67,15 @@ export default function Settings() {
     setToast({ message: t("settings.reset.success") || "Settings reset to defaults", type: "success" });
   };
 
+  const blocker = useBlocker(
+    ({ currentLocation, nextLocation }) =>
+      isDirty && currentLocation.pathname !== nextLocation.pathname
+  );
+
   return (
-    <main className={styles.root}>
-      <h1 className={styles.pageTitle}>{t("settings.title")}</h1>
+    <>
+      <main className={styles.root}>
+        <h1 className={styles.pageTitle}>{t("settings.title")}</h1>
       
       <div className={styles.grid}>
         <div className={styles.topSection}>
@@ -115,7 +125,25 @@ export default function Settings() {
           onClose={() => setToast(null)}
         />
       )}
-    </main>
+      </main>
+
+      {blocker.state === "blocked" ? (
+        <UnsavedChangesModal
+          onSave={async () => {
+            const success = await handleSave();
+            if (success) {
+              blocker.proceed();
+            }
+          }}
+          onDiscard={() => {
+            blocker.proceed();
+          }}
+          onCancel={() => {
+            blocker.reset();
+          }}
+        />
+      ) : null}
+    </>
   );
 }
 

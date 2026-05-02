@@ -52,27 +52,31 @@ export function CurrentPrayerHighlight({ className }: CurrentPrayerHighlightProp
         <div className={style.iconWrapper}>
           {displayIcon}
         </div>
-        <div className={style.name}>{displayName}</div>
+        <div className={classnames(style.name, {
+          [style.forbiddenName]: prayerStatus === "forbidden"
+        })}>{displayName}</div>
       </div>
 
-      <div className={style.footer}>
-        <div className={style.timeLabel}>{t("home.prayerTime")}</div>
-        <div className={style.time}>
-          {(() => {
-            const timeStr = formatTime(currentPrayer.time, timeFormat, locale);
-            const parts = timeStr.split(" ");
-            if (parts.length > 1) {
-              return (
-                <>
-                  <span>{parts[0]}</span>
-                  <span className={style.periodPart}>{parts[1]}</span>
-                </>
-              );
-            }
-            return <span>{timeStr}</span>;
-          })()}
+      {prayerStatus !== "forbidden" && (
+        <div className={style.footer}>
+          <div className={style.timeLabel}>{t("home.prayerTime")}</div>
+          <div className={style.time}>
+            {(() => {
+              const timeStr = formatTime(currentPrayer.time, timeFormat, locale);
+              const parts = timeStr.split(" ");
+              if (parts.length > 1) {
+                return (
+                  <>
+                    <span dir="ltr">{parts[0]}</span>
+                    <span className={style.periodPart}>{parts[1]}</span>
+                  </>
+                );
+              }
+              return <span>{timeStr}</span>;
+            })()}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
