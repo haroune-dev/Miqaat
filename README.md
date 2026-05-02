@@ -64,16 +64,6 @@ weekly/monthly prayer time calendar.
 *   **Persistence**: LocalStorage for user preferences
 *   **Deployment**: Optimized production build via Vite
 
-## 💎 Design System
-Miqaat is built on a custom design system that ensures visual consistency and a premium user experience.
-
-| Token Category | Implementation |
-| :--- | :--- |
-| **Typography** | `Changa` (Arabic Brand), `DM Sans` (Body), `Cormorant Garamond` (Display) |
-| **Color Palette** | Deep Algerian Indigo (`#1A5276`) & Luxurious Gold (`#C9A84C`) |
-| **Visual Effects** | Glassmorphism, Shimmering Skeletons, and Custom Glow Shadows |
-
-
 ## 🏗️ Project Architecture
 The project follows a modular and scalable architecture, separating UI concerns from business logic and data fetching.
 
