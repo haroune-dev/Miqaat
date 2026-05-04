@@ -176,20 +176,48 @@ export async function fetchMonthlyPrayerTimes(
   year: number,
   month: number, // 0-indexed
 ): Promise<DayPrayerTimes[]> {
-  const startDate = `${year}-${String(month + 1).padStart(2, "0")}-01`;
   const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const endDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(daysInMonth).padStart(2, "0")}`;
+  const allEntries: DayPrayerTimes[] = [];
+  
+  let currentStartDay = 1;
+  while (currentStartDay <= daysInMonth) {
+    const currentEndDay = Math.min(currentStartDay + 14, daysInMonth);
+    const startDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(currentStartDay).padStart(2, "0")}`;
+    const endDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(currentEndDay).padStart(2, "0")}`;
+    
+    try {
+      const entries = await fetchPrayerTimesRange(cityId, startDate, endDate);
+      
+      const mappedEntries = entries.map((entry) => {
+        const d = new Date(entry.GeoDate);
+        return {
+          date: entry.GeoDate,
+          day: d.getDate(),
+          times: mapApiEntryToPrayerTimes(entry),
+        };
+      });
 
-  const entries = await fetchPrayerTimesRange(cityId, startDate, endDate);
+      const entriesMap = new Map(mappedEntries.map((e) => [e.date, e]));
 
-  return entries.map((entry) => {
-    const d = new Date(entry.GeoDate);
-    return {
-      date: entry.GeoDate,
-      day: d.getDate(),
-      times: mapApiEntryToPrayerTimes(entry),
-    };
-  });
+      for (let day = currentStartDay; day <= currentEndDay; day++) {
+        const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+        if (entriesMap.has(dateStr)) {
+          allEntries.push(entriesMap.get(dateStr)!);
+        } else {
+          allEntries.push({ date: dateStr, day, times: [] });
+        }
+      }
+    } catch (e) {
+      for (let day = currentStartDay; day <= currentEndDay; day++) {
+        const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+        allEntries.push({ date: dateStr, day, times: [] });
+      }
+    }
+    
+    currentStartDay = currentEndDay + 1;
+  }
+
+  return allEntries;
 }
 
 /** Find the nearest wilaya for GPS coordinates using static metadata. */
