@@ -8,7 +8,7 @@
 [![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)](https://reactrouter.com/)
 
 <p align="center">
-  <img src="pictures/photo_2026-04-21_06-54-32.jpg" alt="Miqaat Logo" width="200" />
+  <img src="images/photo_2026-04-21_06-54-32.jpg" alt="Miqaat Logo" width="200" />
 </p>
 
 <p align="center">
@@ -30,28 +30,26 @@
 *   📍 **Dynamic Location Selection**: Easily choose your Wilaya using an interface or by using automatic GPS detection.
 *   ⏳ **Live Countdown**: Real-time updates and countdowns to the next prayer time.
 *   📅 **Comprehensive Calendar**: View weekly and monthly prayer schedules with an elegant, printable layout.
-*   🌓 **Dark Mode Support**: Fully responsive design that adapts to your system preferences.
 *   🔔 **Smart Notifications**: Frontend-scheduled notifications firing 1 minute before each prayer.
-*   📲 **PWA-ready Architecture**: Designed for future offline support and mobile installability.
 
 ## 📸 Screenshots
 
 ### 🏠 Home Dashboard
 Comprehensive view of current and upcoming prayer times with a live clock.
 <p align="center">
-  <img src="pictures/Pasted image.png" alt="Home Screen" width="800" />
+  <img src="images/Pasted image.png" alt="Home Screen" width="800" />
 </p>
 
 ### 📍 Location Selection
 an interface for choosing your location via list or GPS.
 <p align="center">
-  <img src="pictures/Pasted image (2).png" alt="Location Selection" width="500" />
+  <img src="images/Pasted image (2).png" alt="Location Selection" width="500" />
 </p>
 
 ### 🗓️ Prayer Calendar
 weekly/monthly prayer time calendar.
 <p align="center">
-  <img src="pictures/Pasted image (3).png" alt="Calendar View" width="800" />
+  <img src="images/Pasted image (3).png" alt="Calendar View" width="800" />
 </p>
 
 ## 🛠️ Tech Stack
@@ -68,29 +66,18 @@ weekly/monthly prayer time calendar.
 The project follows a modular and scalable architecture, separating UI concerns from business logic and data fetching.
 
 ### 🧩 System Overview
-```mermaid
-graph TD
-    subgraph UI_Layer [UI Layer]
-        R[Routes / Pages] --> B[Blocks / Layout Sections]
-        B --> C[Atomic Components]
-    end
-
-    subgraph Logic_Layer [Logic & State]
-        B --> H[Custom Hooks]
-        H --> CTX[Global Context]
-        CTX --> LS[(LocalStorage)]
-    end
-
-    subgraph Data_Layer [Data Layer]
-        H --> S[API Services]
-        S --> API[External Adhan API]
-        S --> D[Static Data / Types]
-    end
-
-    style UI_Layer fill:#f0f7ff,stroke:#0369a1,stroke-width:2px
-    style Logic_Layer fill:#f0fdf4,stroke:#15803d,stroke-width:2px
-    style Data_Layer fill:#fff7ed,stroke:#c2410c,stroke-width:2px
-```
+- **UI Layer**
+  - Routes / Pages
+  - Blocks / Layout Sections
+  - Atomic Components
+- **Logic & State**
+  - Custom Hooks
+  - Global Context
+  - LocalStorage
+- **Data Layer**
+  - API Services
+  - External Adhan API
+  - Static Data / Types
 
 ### 📁 Directory Breakdown
 *   **`app/routes/`**: Entry points for each page (Home, Settings, Calendar, Location).
@@ -113,10 +100,6 @@ Miqaat leverages the [Adhan DZ API](https://adhan-dz.dexter21767.com) to provide
     - `/prayerTimes`: Retrieves daily or monthly prayer schedules based on the selected city ID and date range.
 *   **Implementation**: Logic is centralized in [prayerApi.ts](file:///home/haroune-dev/Desktop/Miqaat/app/services/prayerApi.ts) (raw fetch layer) and [api.ts](file:///home/haroune-dev/Desktop/Miqaat/app/services/api.ts) (application mapping).
 
-### Key Features
-*   **Dynamic Data**: Times are fetched dynamically based on the user's selected location.
-*   **State Sync**: Custom hooks (`usePrayerTimes`) handle loading states, error reporting, and real-time synchronization with the application context.
-
 
 ## 🏁 Getting Started
 
@@ -137,12 +120,6 @@ Miqaat leverages the [Adhan DZ API](https://adhan-dz.dexter21767.com) to provide
    ```bash
    npm run dev
    ```
-
-## 🌟 Project Highlights
-*   **Zero Layout Shift**: Optimized loading skeletons for a premium first-load experience.
-*   **RTL/LTR Support**: Fully localized interface for Arabic and English users.
-*   **Performance**: Lightweight bundle with optimized asset delivery.
-
 ## 🔮 Future Improvements
 *   [ ] Full Offline Data Persistence (Service Worker).
 *   [ ] Support for Baladiyas (Sub-provinces).
