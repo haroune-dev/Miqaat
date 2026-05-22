@@ -1,13 +1,13 @@
 .root {
   background: var(--color-bg-card);
   border-radius: var(--radius-lg);
-  padding: var(--space-6) var(--space-6);
+  padding: calc(var(--space-6) * 0.8) calc(var(--space-6) * 0.8);
   box-shadow: var(--shadow-md), var(--shadow-accent-glow);
   border: 2px solid var(--color-accent);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-4);
+  gap: calc(var(--space-4) * 0.8);
   text-align: center;
 }
 
@@ -15,12 +15,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-accent-muted);
-  padding: var(--space-2) var(--space-6);
+  background: rgba(0, 0, 0, 0.04);
+  padding: calc(var(--space-2) * 0.8) var(--space-6);
   border-radius: var(--radius-full);
   color: var(--color-text);
-  border: 1px solid rgba(var(--color-accent), 0.3);
-  margin-bottom: var(--space-2);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.15), inset 0 -2px 4px rgba(255, 255, 255, 0.6);
+  margin-bottom: calc(var(--space-2) * 0.8);
 }
 
 .headerLabel {
@@ -33,15 +34,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-3);
+  gap: calc(var(--space-3) * 0.8);
 }
 
 .iconWrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 2.8rem;
+  height: 2.8rem;
   background: linear-gradient(135deg, var(--color-accent), var(--color-accent-light));
   border-radius: var(--radius-md);
   color: #1a2b3c;
@@ -58,7 +59,7 @@
 
 .forbiddenName {
   font-size: 1.8rem;
-  padding: var(--space-4) 0;
+  padding: calc(var(--space-4) * 0.8) 0;
   line-height: 1.4;
 }
 
@@ -80,7 +81,7 @@
 
 .time {
   font-family: var(--family-mono);
-  font-size: 3rem;
+  font-size: 2.4rem;
   font-weight: 700;
   color: var(--color-accent);
   display: flex;
@@ -92,20 +93,20 @@
 }
 
 .periodPart {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 600;
   margin-top: 4px;
 }
 
 :global([lang="ar"]) .periodPart {
-  font-family: var(--family-brand-ar);
-  font-size: 2.5rem;
+  font-family: var(--family-body);
+  font-size: 2rem;
   margin-top: 0;
 }
 
 @media (max-width: 480px) {
   .root {
-    padding: var(--space-5) var(--space-4);
+    padding: calc(var(--space-5) * 0.8) var(--space-4);
   }
 
   .name {

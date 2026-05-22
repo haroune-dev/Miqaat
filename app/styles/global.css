@@ -122,3 +122,32 @@ button:active {
     background: #fff !important;
   }
 }
+
+/* ── Arabic Typography Overrides ── */
+:root[lang="ar"],
+[dir="rtl"] {
+  --font-display: "Amiri", Georgia, serif;
+  --font-brand-ar: "Amiri", serif;
+  --font-body: "Tajawal", system-ui, sans-serif;
+}
+
+/* Ensure all headings and section titles use Amiri when language is Arabic */
+:root[lang="ar"] h1,
+:root[lang="ar"] h2,
+:root[lang="ar"] h3,
+:root[lang="ar"] h4,
+:root[lang="ar"] h5,
+:root[lang="ar"] h6,
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] h4,
+[dir="rtl"] h5,
+[dir="rtl"] h6,
+[class*="sectionTitle"],
+[class*="gridTitle"],
+[class*="pageTitle"],
+[class*="blockedTitle"] {
+  font-family: "Amiri", Georgia, serif !important;
+}
+

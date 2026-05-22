@@ -28,10 +28,17 @@
   justify-content: center;
   width: 2.75rem;
   height: 2.75rem;
-  background: var(--color-primary);
-  border-radius: var(--radius-md);
-  color: #fff;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-border-light);
   flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logo:hover .logoIcon {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 6px 16px rgba(26, 82, 118, 0.15);
+  border-color: var(--color-primary-light);
 }
 
 .logoText {

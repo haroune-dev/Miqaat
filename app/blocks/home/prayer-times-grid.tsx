@@ -32,7 +32,7 @@ export function PrayerTimesGrid({ className }: PrayerTimesGridProps) {
 
   return (
     <div className={classnames(style.wrapper, className)}>
-      <div className={style.sectionTitle}>— {t("home.schedule")} —</div>
+      <h2 className={style.sectionTitle}>{t("home.schedule")}</h2>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 w-full max-w-[1400px]">
         {displayPrayers.map((prayer) => {
           const isActive = prayer.isPrayer && currentPrayer?.name === prayer.name;

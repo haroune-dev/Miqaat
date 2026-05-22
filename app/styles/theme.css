@@ -102,3 +102,12 @@
   --shadow-glow: 0 0 20px rgba(46, 134, 193, 0.3);
   --shadow-accent-glow: 0 0 16px rgba(244, 208, 63, 0.35);
 }
+
+/* ── Arabic Typography Overrides ── */
+:root[lang="ar"],
+[dir="rtl"] {
+  --family-display: "Amiri", Georgia, serif;
+  --family-brand-ar: "Amiri", serif;
+  --family-body: "Tajawal", system-ui, sans-serif;
+}
+

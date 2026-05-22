@@ -7,12 +7,62 @@
 }
 
 .sectionTitle {
-  font-size: var(--text-base);
-  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-5);
+  width: 100%;
+  margin: 0;
+  padding: var(--space-4) 0 var(--space-2);
+  font-family: var(--family-display);
+  font-size: clamp(1.5rem, 4vw, var(--text-2xl));
   font-weight: 700;
+  color: var(--color-primary);
   text-align: center;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+}
+
+.sectionTitle::before,
+.sectionTitle::after {
+  content: "";
+  display: block;
+  width: 4rem;
+  height: 3px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-accent) 40%,
+    var(--color-accent-light)
+  );
+  flex-shrink: 0;
   opacity: 0.9;
+}
+
+.sectionTitle::after {
+  background: linear-gradient(
+    90deg,
+    var(--color-accent-light),
+    var(--color-accent) 60%,
+    transparent
+  );
+}
+
+:global([lang="ar"]) .sectionTitle {
+  font-family: var(--family-brand-ar) !important;
+  font-size: clamp(1.85rem, 5vw, 2.35rem);
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+:global(.dark-theme) .sectionTitle {
+  color: var(--color-text);
+}
+
+:global(.dark-theme) .sectionTitle::before,
+:global(.dark-theme) .sectionTitle::after {
+  opacity: 0.75;
 }
 
 .root {
@@ -119,7 +169,7 @@
 }
 
 :global([lang="ar"]) .periodPart {
-  font-family: var(--family-brand-ar);
+  font-family: var(--family-body);
   font-size: 1.25rem;
 }
 
