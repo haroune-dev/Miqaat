@@ -7,7 +7,6 @@ const AppContext = createContext<PrayerAppState | null>(null);
 export function AppProvider({ children }: { children: ReactNode }) {
   const state = usePrayerTimes();
 
-  // Wire up browser notifications
   useNotifications(state.prayerTimes, state.notificationsEnabled, state.notificationPreferences);
 
   return <AppContext.Provider value={state}>{children}</AppContext.Provider>;

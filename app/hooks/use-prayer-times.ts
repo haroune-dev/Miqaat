@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import type { PrayerTime, Location } from "~/data/prayer-data";
+import { DEFAULT_LOCATION } from "~/data/default-location";
 import { fetchPrayerTimes } from "~/services/api";
 import { useLanguage } from "~/i18n/language-context";
 
@@ -7,17 +8,6 @@ const STORAGE_KEY_LOCATION = "prayerApp_location";
 const STORAGE_KEY_FORMAT = "prayerApp_timeFormat";
 const STORAGE_KEY_NOTIFICATIONS = "prayerApp_notifications";
 const STORAGE_KEY_NOTIFICATION_PREFS = "prayerApp_notificationPrefs";
-
-const DEFAULT_LOCATION: Location = {
-  city: "Algiers",
-  cityAr: "الجزائر",
-  country: "Algeria",
-  countryAr: "الجزائر",
-  timezone: "Africa/Algiers",
-  latitude: 36.75,
-  longitude: 3.06,
-  cityId: 27,
-};
 
 
 

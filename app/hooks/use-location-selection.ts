@@ -17,7 +17,7 @@ export interface LocationSelectionState {
   getSelectedLocation: () => Location | null;
 }
 
-export function useLocationSelection(): LocationSelectionState {
+export function useLocationSelection(initialCityId?: number): LocationSelectionState {
   const [wilayas, setWilayas] = useState<Wilaya[]>([]);
   const [selectedWilaya, setSelectedWilaya] = useState<Wilaya | null>(null);
   const [isLoadingWilayas, setIsLoadingWilayas] = useState(true);
@@ -44,6 +44,13 @@ export function useLocationSelection(): LocationSelectionState {
     loadWilayas(cancelled);
     return () => { cancelled = true; };
   }, [loadWilayas]);
+
+  // Sync dropdown with the active or draft location
+  useEffect(() => {
+    if (initialCityId == null || wilayas.length === 0) return;
+    const match = wilayas.find((w) => w.cityId === initialCityId);
+    if (match) setSelectedWilaya(match);
+  }, [initialCityId, wilayas]);
 
   const retryFetch = useCallback(() => {
     loadWilayas();

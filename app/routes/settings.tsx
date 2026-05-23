@@ -1,57 +1,48 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useBlocker } from "react-router";
-import { useAppContext } from "~/context/app-context";
 import { useLanguage } from "~/i18n/language-context";
 import { useSettingsDraft } from "~/hooks/use-settings-draft";
 import { Toast } from "~/components/toast/toast";
 
+import { LocationSettings } from "../blocks/settings/location-settings";
 import { TimeFormatToggle } from "../blocks/settings/time-format-toggle";
-import { ThemeToggle } from "../blocks/settings/theme-toggle";
 import { NotificationToggle } from "../blocks/settings/notification-toggle";
-import { LanguageToggle } from "../blocks/settings/language-toggle";
 import { SettingsActions } from "../blocks/settings/settings-actions";
 import { UnsavedChangesModal } from "../blocks/settings/unsaved-changes-modal";
 import styles from "./settings.module.css";
 
-const DEFAULT_LOCATION = {
-  city: "Algiers",
-  cityAr: "الجزائر",
-  country: "Algeria",
-  countryAr: "الجزائر",
-  timezone: "Africa/Algiers",
-  latitude: 36.75,
-  longitude: 3.06,
-  cityId: 27,
-};
-
 export default function Settings() {
-  const { setLocation } = useAppContext();
   const { t } = useLanguage();
-  
+
   const {
     draftFormat,
     setDraftFormat,
     draftNotifications,
     setDraftNotifications,
     draftPrefs,
+    draftLocation,
+    setDraftLocation,
     setNotificationPreference,
-    draftLocale,
-    setDraftLocale,
-    draftTheme,
-    setDraftTheme,
     isDirty,
     save,
+    discard,
     resetToDefaults,
   } = useSettingsDraft();
 
   const [isSaving, setIsSaving] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
+  useEffect(() => {
+    if (window.location.hash === "#location") {
+      document.getElementById("location")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, []);
+
   const handleSave = async () => {
     setIsSaving(true);
     const result = await save();
     setIsSaving(false);
-    
+
     if (result.success) {
       setToast({ message: t("settings.saved") || "Settings saved successfully", type: "success" });
       return true;
@@ -63,68 +54,54 @@ export default function Settings() {
 
   const handleReset = () => {
     resetToDefaults();
-    setLocation(DEFAULT_LOCATION);
     setToast({ message: t("settings.reset.success") || "Settings reset to defaults", type: "success" });
   };
 
   const blocker = useBlocker(
     ({ currentLocation, nextLocation }) =>
-      isDirty && currentLocation.pathname !== nextLocation.pathname
+      isDirty && currentLocation.pathname !== nextLocation.pathname,
   );
 
   return (
     <>
       <main className={styles.root}>
         <h1 className={styles.pageTitle}>{t("settings.title")}</h1>
-      
-      <div className={styles.grid}>
-        <div className={styles.topSection}>
-          <div className={styles.timeFormatArea}>
-            <TimeFormatToggle
-              value={draftFormat}
-              onChange={setDraftFormat}
-            />
+
+        <div className={styles.grid}>
+          <div className={styles.topSection}>
+            <div className={styles.locationArea}>
+              <LocationSettings
+                draftLocation={draftLocation}
+                onLocationChange={setDraftLocation}
+              />
+            </div>
+            <div className={styles.timeFormatArea}>
+              <TimeFormatToggle value={draftFormat} onChange={setDraftFormat} />
+            </div>
           </div>
-          <div className={styles.languageArea}>
-            <LanguageToggle
-              value={draftLocale}
-              onChange={setDraftLocale}
-            />
-          </div>
-          <div className={styles.themeArea}>
-            <ThemeToggle
-              value={draftTheme}
-              onChange={setDraftTheme}
+
+          <div className={styles.bottomSection}>
+            <NotificationToggle
+              value={draftNotifications}
+              onChange={setDraftNotifications}
+              preferences={draftPrefs}
+              onPreferenceChange={setNotificationPreference}
             />
           </div>
         </div>
 
-        <div className={styles.bottomSection}>
-          <NotificationToggle
-            value={draftNotifications}
-            onChange={setDraftNotifications}
-            preferences={draftPrefs}
-            onPreferenceChange={setNotificationPreference}
+        <div className={styles.actionsBox}>
+          <SettingsActions
+            onSave={handleSave}
+            onReset={handleReset}
+            isDirty={isDirty}
+            isSaving={isSaving}
           />
         </div>
-      </div>
 
-      <div className={styles.actionsBox}>
-        <SettingsActions 
-          onSave={handleSave} 
-          onReset={handleReset} 
-          isDirty={isDirty}
-          isSaving={isSaving}
-        />
-      </div>
-
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
+        {toast && (
+          <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
+        )}
       </main>
 
       {blocker.state === "blocked" ? (
@@ -136,6 +113,7 @@ export default function Settings() {
             }
           }}
           onDiscard={() => {
+            discard();
             blocker.proceed();
           }}
           onCancel={() => {
@@ -146,4 +124,3 @@ export default function Settings() {
     </>
   );
 }
-

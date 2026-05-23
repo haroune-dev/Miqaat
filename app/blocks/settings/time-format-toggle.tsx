@@ -25,8 +25,10 @@ export function TimeFormatToggle({ className, value, onChange }: TimeFormatToggl
           onKeyDown={(e) => e.key === "Enter" && onChange("12h")}
         >
           <div className={style.preview}>5:30 PM</div>
-          <div className={style.label}>{t("settings.timeFormat.12h")}</div>
-          <div className={style.subLabel}>{t("settings.timeFormat.12h.desc")}</div>
+          <div className={style.optionText}>
+            <div className={style.label}>{t("settings.timeFormat.12h")}</div>
+            <div className={style.subLabel}>{t("settings.timeFormat.12h.desc")}</div>
+          </div>
         </div>
         <div
           className={classnames(style.option, value === "24h" && style.optionSelected)}
@@ -38,8 +40,10 @@ export function TimeFormatToggle({ className, value, onChange }: TimeFormatToggl
           onKeyDown={(e) => e.key === "Enter" && onChange("24h")}
         >
           <div className={style.preview}>17:30</div>
-          <div className={style.label}>{t("settings.timeFormat.24h")}</div>
-          <div className={style.subLabel}>{t("settings.timeFormat.24h.desc")}</div>
+          <div className={style.optionText}>
+            <div className={style.label}>{t("settings.timeFormat.24h")}</div>
+            <div className={style.subLabel}>{t("settings.timeFormat.24h.desc")}</div>
+          </div>
         </div>
       </div>
     </div>

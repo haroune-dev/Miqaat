@@ -12,20 +12,30 @@ export interface LocationDisplayProps {
 export function LocationDisplay({ className }: LocationDisplayProps) {
   const { location } = useAppContext();
   const { t, locale } = useLanguage();
+
+  const city = locale === "ar" ? location.cityAr || location.city : location.city;
+  const country = locale === "ar" ? location.countryAr || location.country : location.country;
+
   return (
     <div className={classnames(style.root, className)}>
-      <div className={style.locationInfo}>
-        <div className={style.icon}>
-          <MapPin size={20} />
+      <Link to="/settings#location" className={style.locationLink} aria-label={t("location.change")}>
+        <div className={style.icon} aria-hidden="true">
+          <MapPin size={22} strokeWidth={2.25} />
         </div>
         <div className={style.text}>
-          <span className={style.city}>{locale === "ar" ? (location.cityAr || location.city) : location.city}</span>
-          <span className={style.country}>{locale === "ar" ? (location.countryAr || location.country) : location.country}</span>
+          <span className={style.label}>{t("location.current")}</span>
+          <span className={style.city}>{city}</span>
+          <span className={style.country}>{country}</span>
         </div>
-      </div>
-      <Link to="/location" className={style.changeBtn} aria-label={t("location.change")}>
-        <Navigation size={14} />
-        {t("location.change")}
+      </Link>
+
+      <span className={style.divider} aria-hidden="true" />
+
+      <Link to="/settings#location" className={style.changeBtn}>
+        <span className={style.changeIcon} aria-hidden="true">
+          <Navigation size={16} strokeWidth={2.25} />
+        </span>
+        <span className={style.changeLabel}>{t("location.change")}</span>
       </Link>
     </div>
   );

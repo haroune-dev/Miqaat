@@ -1,4 +1,5 @@
-import { Moon, Sun, Cloud, Sunrise, Sunset, Star, SunDim } from "lucide-react";
+import { Moon, Sun, Sunrise, Sunset, Star, SunDim } from "lucide-react";
+import { CiCloudSun } from "react-icons/ci";
 import classnames from "classnames";
 import { useAppContext } from "~/context/app-context";
 import { useLanguage } from "~/i18n/language-context";
@@ -17,7 +18,7 @@ const PRAYER_ICONS: Record<string, React.ReactNode> = {
   "sun-dim": <SunDim size={28} />,
   sunrise: <Sunrise size={28} />,
   sunset: <Sunset size={28} />,
-  "cloud-sun": <Cloud size={28} />,
+  "cloud-sun": <CiCloudSun size={28} />,
   star: <Star size={28} />,
 };
 

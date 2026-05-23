@@ -72,24 +72,174 @@
 .printBtn {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-6);
+  justify-content: center;
+  gap: var(--space-3);
+  min-height: 3.25rem;
+  padding: calc(var(--space-2) * 0.9) var(--space-6);
   font-size: var(--text-sm);
-  font-weight: 600;
+  font-weight: 800;
   border: none;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-full);
   background: var(--color-primary);
   color: var(--color-text-inverse);
   cursor: pointer;
   transition: all 200ms ease-in-out;
   white-space: nowrap;
   box-shadow: var(--shadow-md);
+  overflow: hidden;
 }
 
 .printBtn:hover {
   background: var(--color-primary-dark);
   transform: translateY(-2px) scale(1.02);
   box-shadow: var(--shadow-lg);
+}
+
+.printer {
+  --border: var(--color-primary-dark);
+  --background: #ffffff;
+  cursor: pointer;
+  width: 42px;
+  height: 42px;
+  position: relative;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.18));
+}
+
+.printer::before,
+.printer::after {
+  content: "";
+  position: absolute;
+  box-shadow: inset 0 0 0 2px var(--border);
+  background: var(--background);
+}
+
+.printer::before {
+  left: 5px;
+  right: 5px;
+  bottom: 10px;
+  height: 14px;
+  border-radius: 3px;
+  z-index: 2;
+}
+
+.printer::after {
+  width: 26px;
+  height: 6px;
+  top: 10px;
+  left: 8px;
+  border-radius: 3px 3px 0 0;
+}
+
+.dot {
+  width: 24px;
+  height: 2px;
+  border-radius: 1px;
+  left: 9px;
+  bottom: 14px;
+  z-index: 4;
+  position: absolute;
+  background: var(--border);
+}
+
+.dot::before,
+.dot::after {
+  content: "";
+  position: absolute;
+  background: var(--border);
+  border-radius: 1px;
+  height: 2px;
+}
+
+.dot::before {
+  width: 2px;
+  right: 0;
+  top: -5px;
+}
+
+.dot::after {
+  width: 4px;
+  right: 3px;
+  top: -5px;
+}
+
+.paper {
+  position: absolute;
+  z-index: 1;
+  width: 18px;
+  height: 20px;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 2px var(--border);
+  background: var(--background);
+  left: 12px;
+  bottom: 20px;
+  display: flex;
+  justify-content: center;
+  transform: perspective(40px) translateY(0) rotateX(4deg) translateZ(0);
+  animation: paper 1.2s ease infinite;
+  animation-play-state: var(--state, paused);
+}
+
+.printerSvg {
+  display: block;
+  width: 8px;
+  height: 8px;
+  margin-top: 4px;
+}
+
+.output {
+  width: 32px;
+  height: 20px;
+  pointer-events: none;
+  top: 25px;
+  left: 5px;
+  z-index: 3;
+  overflow: hidden;
+  position: absolute;
+}
+
+.paperOut {
+  position: absolute;
+  z-index: 1;
+  width: 18px;
+  height: 20px;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 2px var(--border);
+  background: var(--background);
+  left: 7px;
+  bottom: 0;
+  transform: perspective(40px) rotateX(40deg) translateY(-12px) translateZ(6px);
+  animation: paper-out 1.2s ease infinite;
+  animation-play-state: var(--state, paused);
+}
+
+.paperOut::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 4px;
+  right: 3px;
+  height: 2px;
+  border-radius: 1px;
+  opacity: 0.5;
+  background: var(--border);
+  box-shadow: 0 3px 0 var(--border), 0 6px 0 var(--border);
+}
+
+.printBtn:hover .printer {
+  --state: running;
+}
+
+@keyframes paper {
+  50% {
+    transform: translateY(10px) translateZ(0);
+  }
+}
+
+@keyframes paper-out {
+  50% {
+    transform: perspective(40px) rotateX(30deg) translateY(-4px) translateZ(6px);
+  }
 }
 
 /* ── Month Navigation ────────────────────────────────── */

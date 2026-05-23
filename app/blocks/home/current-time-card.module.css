@@ -114,6 +114,7 @@
   line-height: 1;
   letter-spacing: -0.01em;
   margin-bottom: 4px;
+  transform: translateY(8px);
   direction: ltr;
   color: #fff;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
@@ -122,10 +123,13 @@
 /* ── Hijri date ── */
 .hijri {
   font-family: var(--family-body);
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.88);
-  font-weight: 500;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  font-size: 1rem;
+  color: #ffffff;
+  font-weight: 800;
+  line-height: 1.35;
+  margin-top: var(--space-6);
+  max-width: 100%;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
 }
 
 /* ── Small diamond ornament below badge ── */
@@ -140,18 +144,15 @@
   flex-shrink: 0;
 }
 
-.date {
-  font-size: var(--text-base);
-  opacity: 0.85;
-  margin-bottom: var(--space-2);
-}
-
 @media (max-width: 480px) {
   .root {
     padding: 28px var(--space-5);
   }
   .time {
     font-size: 1.75rem;
+  }
+  .hijri {
+    font-size: 0.95rem;
   }
   .timeWrapper {
     width: 160px;

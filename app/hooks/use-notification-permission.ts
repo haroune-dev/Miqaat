@@ -19,20 +19,37 @@ export function useNotificationPermission() {
 
   useEffect(() => {
     updatePermission();
-    
-    // Some browsers allow changing permissions without reload (rare but possible via settings)
-    // We can't easily listen to permission changes, but we check on focus.
-    window.addEventListener("focus", updatePermission);
-    return () => window.removeEventListener("focus", updatePermission);
-  }, [updatePermission]);
 
-  const requestPermission = useCallback(async () => {
-    if (typeof window === "undefined" || !("Notification" in window)) {
-      return "unsupported";
+    window.addEventListener("focus", updatePermission);
+    document.addEventListener("visibilitychange", updatePermission);
+
+    let permissionHandle: PermissionStatus | null = null;
+
+    if (typeof navigator !== "undefined" && navigator.permissions?.query) {
+      navigator.permissions
+        .query({ name: "notifications" as PermissionName })
+        .then((status) => {
+          permissionHandle = status;
+          status.onchange = () => updatePermission();
+        })
+        .catch(() => {
+          /* Permissions API unavailable for notifications */
+        });
     }
 
-    if (Notification.permission === "denied") {
-      return "denied";
+    return () => {
+      window.removeEventListener("focus", updatePermission);
+      document.removeEventListener("visibilitychange", updatePermission);
+      if (permissionHandle) {
+        permissionHandle.onchange = null;
+      }
+    };
+  }, [updatePermission]);
+
+  /** Request permission from this site (shows browser prompt when allowed). */
+  const requestPermission = useCallback(async () => {
+    if (typeof window === "undefined" || !("Notification" in window)) {
+      return "unsupported" as const;
     }
 
     const result = await Notification.requestPermission();
