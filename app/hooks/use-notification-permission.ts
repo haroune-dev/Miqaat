@@ -23,7 +23,7 @@ export function useNotificationPermission() {
     window.addEventListener("focus", updatePermission);
     document.addEventListener("visibilitychange", updatePermission);
 
-    let permissionHandle: PermissionStatus | null = null;
+    let permissionHandle: globalThis.PermissionStatus | null = null;
 
     if (typeof navigator !== "undefined" && navigator.permissions?.query) {
       navigator.permissions

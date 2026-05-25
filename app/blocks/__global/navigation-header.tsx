@@ -100,13 +100,18 @@ export function NavigationHeader({ className }: NavigationHeaderProps) {
           </span>
         </label>
 
-        <button
-          className={style.menuToggle}
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <input
+          className={style.toggleCheckbox}
+          id="toggle"
+          type="checkbox"
+          checked={isMenuOpen}
+          onChange={(event) => setIsMenuOpen(event.target.checked)}
+        />
+        <label className={style.hamburger} htmlFor="toggle" aria-label="Toggle menu">
+          <div className={style.bar}></div>
+          <div className={style.bar}></div>
+          <div className={style.bar}></div>
+        </label>
       </div>
     </nav>
   );

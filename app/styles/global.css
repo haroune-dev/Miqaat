@@ -105,11 +105,11 @@ button {
 }
 
 button:hover {
-  transform: scale(1.02);
+  /* Motion removed */
 }
 
 button:active {
-  transform: scale(0.98);
+  /* Motion removed */
 }
 
 @media print {

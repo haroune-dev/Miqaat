@@ -45,7 +45,6 @@
 }
 
 .logo:hover .logoIcon {
-  transform: scale(1.1) rotate(5deg);
   box-shadow: 0 6px 18px rgba(15, 23, 42, 0.14);
   border-color: #0f172a;
 }
@@ -345,21 +344,53 @@
   transform: translate(-275%, -275%);
 }
 
-.menuToggle {
+.toggleCheckbox {
   display: none;
-  background: rgba(15, 23, 42, 0.06);
-  border: 1px solid rgba(15, 23, 42, 0.16);
-  border-radius: var(--radius-sm);
-  color: #0f172a;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 35px;
+  height: 24px;
   cursor: pointer;
-  padding: var(--space-2);
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+  z-index: 110;
+}
+
+.hamburger .bar {
+  width: 100%;
+  height: 4px;
+  background-color: var(--color-text);
+  border-radius: 10px;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+  position: relative;
+}
+
+.toggleCheckbox:checked + .hamburger .bar:nth-child(2) {
+  transform: translate(0px, 10px);
+  opacity: 0;
+  transition-delay: 0.3s;
+}
+
+.toggleCheckbox:checked + .hamburger .bar:nth-child(3) {
+  transform: translate(0px, -10px);
+  transition-delay: 0s;
+}
+
+.toggleCheckbox:checked + .hamburger .bar:nth-child(1) {
+  transform: rotate(-45deg) scale(0.7);
+  transition-delay: 0.6s;
+}
+.toggleCheckbox:checked + .hamburger .bar:nth-child(3) {
+  transform: rotate(45deg) scale(0.7);
+  transition-delay: 0.6s;
 }
 
 @media (max-width: 768px) {
-  .menuToggle {
+  .hamburger {
     display: flex;
   }
 
