@@ -21,7 +21,7 @@ const LinkedinIcon = ({ size = 20 }: { size?: number }) => (
 );
 
 export function FooterInformation({ className }: FooterInformationProps) {
-  const { t } = useLanguage();
+  const { t, locale, setLocale } = useLanguage();
 
   const scrollToTop = () => {
     if (typeof window !== 'undefined') {
@@ -78,7 +78,7 @@ export function FooterInformation({ className }: FooterInformationProps) {
         {/* Bottom Bar */}
         <div className="w-full bg-white/[0.02] border border-white/5 rounded-xl px-6 py-4 flex flex-row items-center justify-between gap-8 max-[850px]:flex-col max-[850px]:text-center">
           <div className="flex-1 flex justify-start max-[850px]:justify-center">
-            <div className="flex gap-3">
+            <div className="flex gap-3 items-center">
                <a href="https://github.com/haroune-dev" target="_blank" rel="noreferrer" className={style.boxIcon}>
                  <GithubIcon size={18} />
                </a>
@@ -88,6 +88,23 @@ export function FooterInformation({ className }: FooterInformationProps) {
                <a href="mailto:zeraibharoune@gmail.com" className={style.boxIcon}>
                  <Mail size={18} />
                </a>
+               <span className={style.divider} />
+               <div className={style.langToggle}>
+                 <button
+                   onClick={() => setLocale('ar')}
+                   className={classnames(style.langBtn, locale === 'ar' && style.langBtnActive)}
+                   aria-label="العربية"
+                 >
+                   العربية
+                 </button>
+                 <button
+                   onClick={() => setLocale('en')}
+                   className={classnames(style.langBtn, locale === 'en' && style.langBtnActive)}
+                   aria-label="English"
+                 >
+                   English
+                 </button>
+               </div>
             </div>
           </div>
           

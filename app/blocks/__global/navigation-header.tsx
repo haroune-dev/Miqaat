@@ -1,7 +1,7 @@
 import { NavLink, Link, useLocation } from "react-router";
-import { Home, CalendarDays, Languages, ChevronDown, Check } from "lucide-react";
+import { Home, CalendarDays } from "lucide-react";
 import classnames from "classnames";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useColorScheme } from "@dazl/color-scheme/react";
 import { useLanguage } from "~/i18n/language-context";
 import { NotificationModal } from "~/blocks/notifications/notification-modal";
@@ -12,40 +12,15 @@ export interface NavigationHeaderProps {
 }
 
 export function NavigationHeader({ className }: NavigationHeaderProps) {
-  const { t, locale, setLocale } = useLanguage();
+  const { t } = useLanguage();
   const { resolvedScheme, setColorScheme } = useColorScheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
-  const [isLangOpen, setIsLangOpen] = useState(false);
-  const langRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
 
   useEffect(() => {
     setIsMenuOpen(false);
   }, [location]);
-
-  useEffect(() => {
-    if (!isLangOpen) return;
-    const handleClick = (e: MouseEvent) => {
-      if (langRef.current && !langRef.current.contains(e.target as Node)) {
-        setIsLangOpen(false);
-      }
-    };
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setIsLangOpen(false);
-    };
-    document.addEventListener("mousedown", handleClick);
-    window.addEventListener("keydown", handleEsc);
-    return () => {
-      document.removeEventListener("mousedown", handleClick);
-      window.removeEventListener("keydown", handleEsc);
-    };
-  }, [isLangOpen]);
-
-  const langOptions = [
-    { value: "ar" as const, label: "العربية" },
-    { value: "en" as const, label: "English" },
-  ];
 
   return (
     <nav className={classnames(style.root, className)} aria-label="Main navigation">
@@ -83,44 +58,6 @@ export function NavigationHeader({ className }: NavigationHeaderProps) {
       </div>
 
       <div className={style.actions}>
-        <div className={style.languageSelectWrapper} ref={langRef}>
-          <button
-            className={style.languageTrigger}
-            onClick={() => setIsLangOpen(!isLangOpen)}
-            aria-label={locale === "ar" ? "اختيار اللغة" : "Choose language"}
-            aria-haspopup="listbox"
-            aria-expanded={isLangOpen}
-          >
-            <Languages size={18} />
-            <span>{locale === "ar" ? "العربية" : "English"}</span>
-            <ChevronDown size={14} className={classnames(style.arrow, isLangOpen && style.arrowOpen)} />
-          </button>
-          <div
-            className={classnames(style.languageDropdown, isLangOpen && style.languageDropdownOpen)}
-            role="listbox"
-            aria-label={locale === "ar" ? "اختيار اللغة" : "Choose language"}
-          >
-            {langOptions.map((opt) => (
-              <button
-                key={opt.value}
-                className={classnames(
-                  style.languageOption,
-                  locale === opt.value && style.languageOptionActive,
-                )}
-                onClick={() => {
-                  setLocale(opt.value);
-                  setIsLangOpen(false);
-                }}
-                role="option"
-                aria-selected={locale === opt.value}
-              >
-                {opt.label}
-                {locale === opt.value && <Check size={14} />}
-              </button>
-            ))}
-          </div>
-        </div>
-
         <button
           className={style.bellBtn}
           onClick={() => setIsNotificationModalOpen(true)}
