@@ -93,8 +93,8 @@
 }
 
 .card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-sm);
   border-color: var(--color-border);
 }
 
@@ -103,7 +103,7 @@
   border-color: transparent;
   color: #1a2b3c;
   transform: scale(1.08);
-  box-shadow: var(--shadow-lg), var(--shadow-accent-glow);
+  box-shadow: var(--shadow-md);
   z-index: 10;
 }
 

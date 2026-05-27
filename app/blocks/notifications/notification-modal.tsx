@@ -1,0 +1,214 @@
+import { useEffect, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
+import { Bell, BellOff, X, Loader } from "lucide-react";
+import classnames from "classnames";
+import { useAppContext } from "~/context/app-context";
+import { useLanguage } from "~/i18n/language-context";
+import { useNotificationPermission } from "~/hooks/use-notification-permission";
+import type { TranslationKey } from "~/i18n/translations";
+import { formatTime } from "~/utils/time-utils";
+import style from "./notification-modal.module.css";
+
+export interface NotificationModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const PRAYERS = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
+
+export function NotificationModal({ isOpen, onClose }: NotificationModalProps) {
+  const {
+    notificationsEnabled,
+    notificationPreferences,
+    setNotificationsEnabled,
+    setNotificationPreference,
+    prayerTimes,
+  } = useAppContext();
+  const { t, locale } = useLanguage();
+  const { permission, isGranted, isDenied, isDefault, isUnsupported, requestPermission } =
+    useNotificationPermission();
+  const [isRequesting, setIsRequesting] = useState(false);
+  const [showDeniedGuide, setShowDeniedGuide] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
+  const handleMasterToggle = useCallback(async () => {
+    if (!notificationsEnabled) {
+      if (isUnsupported) return;
+      if (!isGranted) {
+        setIsRequesting(true);
+        const result = await requestPermission();
+        setIsRequesting(false);
+        if (result !== "granted") {
+          setShowDeniedGuide(true);
+          return;
+        }
+      }
+    }
+    setShowDeniedGuide(false);
+    setNotificationsEnabled(!notificationsEnabled);
+  }, [notificationsEnabled, isGranted, isUnsupported, requestPermission, setNotificationsEnabled]);
+
+  const needsPermission = isDenied || isDefault;
+
+  const showScheduled = isGranted && notificationsEnabled;
+
+  const getPrayerTime = (name: string): string | null => {
+    const prayer = prayerTimes.find((p) => p.name === name);
+    return prayer ? prayer.time : null;
+  };
+
+  if (!mounted) return null;
+
+  return createPortal(
+    <div
+      className={classnames(style.overlay, { [style.open]: isOpen })}
+      aria-hidden={!isOpen}
+      onClick={onClose}
+    >
+      <div
+        className={classnames(style.modal, { [style.open]: isOpen })}
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="notification-modal-title"
+      >
+        <button
+          className={style.closeBtn}
+          onClick={onClose}
+          aria-label={t("common.cancel")}
+        >
+          <X size={20} />
+        </button>
+
+        <div className={style.header}>
+          <h2 id="notification-modal-title" className={style.title}>
+            {t("notifications.modalTitle")}
+          </h2>
+          <p className={style.desc}>
+            {isGranted
+              ? t("settings.notifications.desc")
+              : isUnsupported
+                ? t("settings.notifications.unsupported")
+                : t("settings.notifications.desc")}
+          </p>
+        </div>
+
+        {needsPermission && (
+          <div className={style.permissionSection}>
+            <div className={style.permissionBar}>
+              <BellOff size={18} style={{ flexShrink: 0, opacity: 0.7 }} />
+              <p>
+                {isDenied
+                  ? t("notifications.browserBlocked")
+                  : t("notifications.noPermission")}
+              </p>
+              <button
+                className={style.permissionBtn}
+                onClick={handleMasterToggle}
+                disabled={isRequesting || isUnsupported}
+              >
+                {isRequesting ? (
+                  <Loader size={14} className={style.spinner} />
+                ) : isDenied ? (
+                  t("notifications.allowBrowser")
+                ) : (
+                  t("notifications.requestPermission")
+                )}
+              </button>
+            </div>
+            {showDeniedGuide && (
+              <p className={style.deniedGuide}>
+                {t("settings.notifications.enableFailed")}
+              </p>
+            )}
+          </div>
+        )}
+
+        <div className={style.masterToggle}>
+          <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
+            <Bell size={20} style={{ color: "var(--color-primary)" }} />
+            <span className={style.masterLabel}>
+              {t("notifications.masterToggle")}
+            </span>
+          </div>
+          <button
+            className={classnames(
+              style.toggle,
+              notificationsEnabled && style.toggleActive,
+              (isUnsupported) && style.toggleDisabled,
+            )}
+            onClick={handleMasterToggle}
+            disabled={isUnsupported}
+            role="switch"
+            aria-checked={notificationsEnabled}
+            aria-label={t("notifications.masterToggle")}
+          >
+            <span className={style.toggleThumb} />
+          </button>
+        </div>
+
+        <div className={style.prayersList}>
+          {PRAYERS.map((prayer) => {
+            const isEnabled =
+              notificationsEnabled && notificationPreferences[prayer] !== false;
+            const prayerTime = getPrayerTime(prayer);
+            return (
+              <div key={prayer} className={style.prayerRow}>
+                <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
+                  <span className={style.prayerName}>
+                    {t(`prayer.${prayer}` as TranslationKey)}
+                  </span>
+                  {prayerTime && (
+                    <span className={style.prayerTime} dir="ltr">
+                      {formatTime(prayerTime)}
+                    </span>
+                  )}
+                </div>
+                <button
+                  className={classnames(
+                    style.toggle,
+                    isEnabled && style.toggleActive,
+                    !notificationsEnabled && style.toggleDisabled,
+                  )}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setNotificationPreference(
+                      prayer,
+                      notificationPreferences[prayer] !== false ? false : true,
+                    );
+                  }}
+                  disabled={!notificationsEnabled}
+                  role="switch"
+                  aria-checked={isEnabled}
+                  aria-label={t(`prayer.${prayer}` as TranslationKey)}
+                >
+                  <span className={style.toggleThumb} />
+                </button>
+              </div>
+            );
+          })}
+        </div>
+
+        {showScheduled && (
+          <div className={style.scheduledInfo}>
+            {t("settings.notifications.scheduled")}
+          </div>
+        )}
+      </div>
+    </div>,
+    document.body,
+  );
+}

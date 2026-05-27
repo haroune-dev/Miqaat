@@ -14,7 +14,7 @@ export interface NextPrayerCountdownProps {
 
 
 export function NextPrayerCountdown({ className }: NextPrayerCountdownProps) {
-  const { nextPrayer, timeFormat } = useAppContext();
+  const { nextPrayer } = useAppContext();
   const { hours, minutes, seconds } = useCountdown(nextPrayer?.time ?? null);
   const { t, locale } = useLanguage();
 
@@ -64,19 +64,7 @@ export function NextPrayerCountdown({ className }: NextPrayerCountdownProps) {
         <div className={style.prayerTime}>
           <span>{t("home.startsAt")}</span>
           <strong>
-            {(() => {
-              const timeStr = formatTime(nextPrayer.time, timeFormat, locale);
-              const parts = timeStr.split(" ");
-              if (parts.length > 1) {
-                return (
-                  <>
-                    <span dir="ltr">{parts[0]}</span>
-                    <span className={style.periodPart}>{parts[1]}</span>
-                  </>
-                );
-              }
-              return <span>{timeStr}</span>;
-            })()}
+            <span dir="ltr">{formatTime(nextPrayer.time)}</span>
           </strong>
         </div>
       </div>

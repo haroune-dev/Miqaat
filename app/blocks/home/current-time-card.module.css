@@ -3,7 +3,7 @@
   border-radius: var(--radius-xl);
   padding: 36px var(--space-8);
   color: #fff;
-  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  box-shadow: var(--shadow-md);
   text-align: center;
   position: relative;
   display: flex;

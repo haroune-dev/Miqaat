@@ -248,33 +248,88 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-6);
-  background: var(--color-bg-card);
-  padding: var(--space-4);
-  border-radius: var(--radius-full);
+  padding: var(--space-3) var(--space-6);
   width: fit-content;
   margin: 0 auto;
+  background: var(--color-bg-card);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border-light);
   box-shadow: var(--shadow-sm);
 }
 
 .monthBtn {
+  -webkit-appearance: none;
+  appearance: none;
+  position: relative;
+  border-width: 0;
+  padding: 0 8px;
+  min-width: 3.5em;
+  min-height: 3.5em;
+  box-sizing: border-box;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
+.buttonTop {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border: none;
-  border-radius: var(--radius-full);
-  background: var(--color-bg-muted);
-  color: var(--color-text);
+  position: relative;
+  z-index: 2;
+  padding: 8px 16px;
+  transform: translateY(0);
+  color: var(--color-text-inverse);
   font-size: var(--text-xl);
-  cursor: pointer;
-  transition: all 200ms ease-in-out;
+  font-weight: 700;
+  background-image: linear-gradient(145deg, var(--color-primary-light), var(--color-primary));
+  text-shadow: 0 -1px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  transition: transform 0.3s, border-radius 0.3s, background 10s;
 }
 
-.monthBtn:hover {
-  background: var(--color-highlight);
-  color: var(--color-primary);
-  transform: scale(1.15);
+.monthBtn:active .buttonTop {
+  border-radius: 10px 10px 8px 8px / 8px;
+  transform: translateY(2px);
+  background-image: linear-gradient(145deg, var(--color-primary), var(--color-primary-dark));
+}
+
+.buttonBottom {
+  position: absolute;
+  z-index: 1;
+  bottom: 4px;
+  left: 4px;
+  border-radius: 20px;
+  padding-top: 6px;
+  width: calc(100% - 8px);
+  height: calc(100% - 10px);
+  background-image: linear-gradient(145deg, var(--color-primary), var(--color-primary-dark));
+  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.3);
+  transition: border-radius 0.2s, padding-top 0.2s;
+}
+
+.buttonBase {
+  position: absolute;
+  z-index: 0;
+  top: 4px;
+  left: 0;
+  border-radius: 20px;
+  width: 100%;
+  height: calc(100% - 4px);
+  background-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 0 1px 1px 0 rgba(255, 255, 255, 0.75),
+    inset 0 2px 2px rgba(0, 0, 0, 0.25);
+  transition: border-radius 0.2s, padding-top 0.2s;
+}
+
+.monthBtn:active .buttonBottom {
+  border-radius: 10px 10px 8px 8px / 8px;
+  padding-top: 0;
+}
+
+.monthBtn:active .buttonBase {
+  border-radius: 10px 10px 8px 8px / 8px;
 }
 
 .monthLabel {

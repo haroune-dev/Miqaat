@@ -24,7 +24,7 @@ const PRAYER_ICONS: Record<string, React.ReactNode> = {
 
 
 export function PrayerTimesGrid({ className }: PrayerTimesGridProps) {
-  const { prayerTimes, currentPrayer, timeFormat } = useAppContext();
+  const { prayerTimes, currentPrayer } = useAppContext();
   const { t, locale } = useLanguage();
 
   // Filter for only the 5 obligatory prayers + Duha (excluding Sunrise)
@@ -61,19 +61,7 @@ export function PrayerTimesGrid({ className }: PrayerTimesGridProps) {
                 {t(prayerKey)}
               </div>
               <div className={style.prayerTime}>
-                {(() => {
-                  const timeStr = formatTime(prayer.time, timeFormat, locale);
-                  const parts = timeStr.split(" ");
-                  if (parts.length > 1) {
-                    return (
-                      <>
-                        <span>{parts[0]}</span>
-                        <span className={style.periodPart}>{parts[1]}</span>
-                      </>
-                    );
-                  }
-                  return <span>{timeStr}</span>;
-                })()}
+                <span dir="ltr">{formatTime(prayer.time)}</span>
               </div>
             </div>
           );

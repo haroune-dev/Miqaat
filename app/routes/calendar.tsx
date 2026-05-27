@@ -17,7 +17,7 @@ function getWeekRange(date: Date): { start: number; end: number } {
 }
 
 export default function Calendar() {
-  const { location, timeFormat } = useAppContext();
+  const { location } = useAppContext();
   const { t, locale } = useLanguage();
   const [monthData, setMonthData] = useState<DayPrayerTimes[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -92,7 +92,7 @@ export default function Calendar() {
     })()
     : monthData;
 
-  const title = viewMode === "weekly" ? t("calendar.weekTitle") : t("calendar.title");
+  const title = viewMode === "weekly" ? t("calendar.weekTitle") : t("calendar.monthlyTitle");
 
   return (
     <main className={styles.root}>
@@ -139,11 +139,19 @@ export default function Calendar() {
 
       <div className={styles.monthNav}>
         <button className={styles.monthBtn} onClick={handlePrev} aria-label="Previous">
-          ‹
+          <div className={styles.buttonTop}>
+            <span>‹</span>
+          </div>
+          <div className={styles.buttonBottom} />
+          <div className={styles.buttonBase} />
         </button>
         <span className={styles.monthLabel}>{monthName}</span>
         <button className={styles.monthBtn} onClick={handleNext} aria-label="Next">
-          ›
+          <div className={styles.buttonTop}>
+            <span>›</span>
+          </div>
+          <div className={styles.buttonBottom} />
+          <div className={styles.buttonBase} />
         </button>
       </div>
       {isLoading ? (
@@ -159,7 +167,7 @@ export default function Calendar() {
           </button>
         </div>
       ) : (
-        <CalendarGrid data={displayData} timeFormat={timeFormat} />
+        <CalendarGrid data={displayData} />
       )}
     </main>
   );

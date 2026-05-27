@@ -5,7 +5,6 @@ import { fetchPrayerTimes } from "~/services/api";
 import { useLanguage } from "~/i18n/language-context";
 
 const STORAGE_KEY_LOCATION = "prayerApp_location";
-const STORAGE_KEY_FORMAT = "prayerApp_timeFormat";
 const STORAGE_KEY_NOTIFICATIONS = "prayerApp_notifications";
 const STORAGE_KEY_NOTIFICATION_PREFS = "prayerApp_notificationPrefs";
 
@@ -38,7 +37,6 @@ function saveToStorage<T>(key: string, value: T): void {
 
 export interface PrayerAppState {
   location: Location;
-  timeFormat: "12h" | "24h";
   prayerTimes: PrayerTime[];
   currentPrayer: PrayerTime | null;
   nextPrayer: PrayerTime | null;
@@ -47,7 +45,6 @@ export interface PrayerAppState {
   notificationsEnabled: boolean;
   notificationPreferences: Record<string, boolean>;
   setLocation: (loc: Location) => void;
-  setTimeFormat: (f: "12h" | "24h") => void;
   setNotificationsEnabled: (enabled: boolean) => void;
   setNotificationPreference: (prayerName: string, enabled: boolean) => void;
   refreshPrayerTimes: () => Promise<void>;
@@ -92,9 +89,6 @@ export function usePrayerTimes(): PrayerAppState {
   const { t } = useLanguage();
   const [location, setLocationState] = useState<Location>(
     () => loadFromStorage<Location>(STORAGE_KEY_LOCATION, DEFAULT_LOCATION),
-  );
-  const [timeFormat, setFormatState] = useState<"12h" | "24h">(
-    () => loadFromStorage<"12h" | "24h">(STORAGE_KEY_FORMAT, "12h"),
   );
   const [notificationsEnabled, setNotificationsEnabledState] = useState<boolean>(
     () => loadFromStorage<boolean>(STORAGE_KEY_NOTIFICATIONS, false),
@@ -146,13 +140,6 @@ export function usePrayerTimes(): PrayerAppState {
     saveToStorage(STORAGE_KEY_LOCATION, loc);
   };
 
-
-
-  const setTimeFormat = (f: "12h" | "24h") => {
-    setFormatState(f);
-    saveToStorage(STORAGE_KEY_FORMAT, f);
-  };
-
   const setNotificationsEnabled = (enabled: boolean) => {
     setNotificationsEnabledState(enabled);
     saveToStorage(STORAGE_KEY_NOTIFICATIONS, enabled);
@@ -166,7 +153,6 @@ export function usePrayerTimes(): PrayerAppState {
 
   return {
     location,
-    timeFormat,
     prayerTimes,
     currentPrayer,
     nextPrayer,
@@ -175,7 +161,6 @@ export function usePrayerTimes(): PrayerAppState {
     notificationsEnabled,
     notificationPreferences,
     setLocation,
-    setTimeFormat,
     setNotificationsEnabled,
     setNotificationPreference,
     refreshPrayerTimes: loadPrayerTimes,

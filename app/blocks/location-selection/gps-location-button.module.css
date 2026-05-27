@@ -22,12 +22,12 @@
     background 0.2s ease,
     box-shadow 0.2s ease,
     filter 0.2s ease;
-  box-shadow: var(--shadow-sm), 0 4px 14px color-mix(in srgb, var(--color-primary) 28%, transparent);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn:hover:not(:disabled) {
   filter: brightness(1.06);
-  box-shadow: var(--shadow-md), 0 6px 18px color-mix(in srgb, var(--color-primary) 34%, transparent);
+  box-shadow: var(--shadow-sm);
 }
 
 .btnLoading {

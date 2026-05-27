@@ -13,13 +13,14 @@ interface LanguageContextValue {
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
 function loadLocale(): Locale {
+  if (typeof window === "undefined") return "ar";
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw === "ar" || raw === "en") return raw;
   } catch {
     // ignore
   }
-  return "en";
+  return "ar";
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {

@@ -24,7 +24,7 @@ const PRAYER_ICONS: Record<string, React.ReactNode> = {
 
 
 export function CurrentPrayerHighlight({ className }: CurrentPrayerHighlightProps) {
-  const { currentPrayer, prayerTimes, timeFormat } = useAppContext();
+  const { currentPrayer, prayerTimes } = useAppContext();
   const { t, locale } = useLanguage();
   const prayerStatus = usePrayerStatus(prayerTimes);
 
@@ -61,19 +61,7 @@ export function CurrentPrayerHighlight({ className }: CurrentPrayerHighlightProp
         <div className={style.footer}>
           <div className={style.timeLabel}>{t("home.prayerTime")}</div>
           <div className={style.time}>
-            {(() => {
-              const timeStr = formatTime(currentPrayer.time, timeFormat, locale);
-              const parts = timeStr.split(" ");
-              if (parts.length > 1) {
-                return (
-                  <>
-                    <span dir="ltr">{parts[0]}</span>
-                    <span className={style.periodPart}>{parts[1]}</span>
-                  </>
-                );
-              }
-              return <span>{timeStr}</span>;
-            })()}
+            <span dir="ltr">{formatTime(currentPrayer.time)}</span>
           </div>
         </div>
       )}

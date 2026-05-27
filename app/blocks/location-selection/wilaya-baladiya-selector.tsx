@@ -1,6 +1,7 @@
 import { MapPin, Loader, CheckCircle, Search, ChevronDown } from "lucide-react";
 import classnames from "classnames";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import type { Wilaya } from "~/data/prayer-data";
 import { useLanguage } from "~/i18n/language-context";
 import styles from "./wilaya-baladiya-selector.module.css";
@@ -19,6 +20,12 @@ export interface WilayaSelectorProps {
   hideConfirm?: boolean;
 }
 
+interface MenuPosition {
+  top: number;
+  left: number;
+  width: number;
+}
+
 export function WilayaSelector({
   className,
   wilayas,
@@ -35,17 +42,48 @@ export function WilayaSelector({
   const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const [menuPos, setMenuPos] = useState<MenuPosition>({ top: 0, left: 0, width: 0 });
 
+  // Compute the menu position from the trigger button's bounding rect
+  const updateMenuPosition = useCallback(() => {
+    if (!triggerRef.current) return;
+    const rect = triggerRef.current.getBoundingClientRect();
+    setMenuPos({
+      top: rect.bottom + 8,
+      left: rect.left,
+      width: rect.width,
+    });
+  }, []);
+
+  // Recompute position when dropdown opens and on scroll/resize
   useEffect(() => {
+    if (!isOpen) return;
+    updateMenuPosition();
+
+    window.addEventListener("scroll", updateMenuPosition, true);
+    window.addEventListener("resize", updateMenuPosition);
+    return () => {
+      window.removeEventListener("scroll", updateMenuPosition, true);
+      window.removeEventListener("resize", updateMenuPosition);
+    };
+  }, [isOpen, updateMenuPosition]);
+
+  // Close on click outside (handles both trigger and portal menu)
+  useEffect(() => {
+    if (!isOpen) return;
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+      const clickedTrigger = triggerRef.current?.contains(target);
+      const clickedMenu = menuRef.current?.contains(target);
+      if (!clickedTrigger && !clickedMenu) {
         setIsOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [isOpen]);
 
   const filteredWilayas = wilayas.filter(
     (w) =>
@@ -53,6 +91,64 @@ export function WilayaSelector({
       w.nameAr.includes(searchQuery) ||
       w.id.toString().includes(searchQuery),
   );
+
+  const dropdownMenu = isOpen
+    ? createPortal(
+        <div
+          ref={menuRef}
+          className={styles.menu}
+          role="listbox"
+          style={{
+            top: menuPos.top,
+            left: menuPos.left,
+            width: menuPos.width,
+          }}
+        >
+          <div className={styles.searchWrap}>
+            <div className={styles.searchField}>
+              <Search size={16} className={styles.searchIcon} aria-hidden="true" />
+              <input
+                type="text"
+                className={styles.searchInput}
+                placeholder={t("location.wilaya.search")}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                autoFocus
+              />
+            </div>
+          </div>
+          <div className={styles.list}>
+            {filteredWilayas.length > 0 ? (
+              filteredWilayas.map((w) => (
+                <button
+                  key={w.id}
+                  type="button"
+                  role="option"
+                  aria-selected={selectedWilaya?.id === w.id}
+                  className={classnames(
+                    styles.item,
+                    selectedWilaya?.id === w.id && styles.itemSelected,
+                  )}
+                  onClick={() => {
+                    onWilayaChange(w);
+                    setIsOpen(false);
+                    setSearchQuery("");
+                  }}
+                >
+                  <span className={styles.itemId}>
+                    {w.id}. {w.name}
+                  </span>
+                  <span className={styles.itemName}>{w.nameAr}</span>
+                </button>
+              ))
+            ) : (
+              <div className={styles.empty}>{t("location.wilaya.noResults")}</div>
+            )}
+          </div>
+        </div>,
+        document.body,
+      )
+    : null;
 
   return (
     <div className={classnames(styles.root, className)}>
@@ -70,8 +166,9 @@ export function WilayaSelector({
             <Loader size={14} className={styles.spinner} />
           </div>
         ) : (
-          <div className={styles.dropdown} ref={dropdownRef}>
+          <div className={styles.dropdown}>
             <button
+              ref={triggerRef}
               id="wilaya-select-trigger"
               type="button"
               className={classnames(styles.trigger, isOpen && styles.triggerOpen)}
@@ -90,52 +187,7 @@ export function WilayaSelector({
                 aria-hidden="true"
               />
             </button>
-
-            {isOpen && (
-              <div className={styles.menu} role="listbox">
-                <div className={styles.searchWrap}>
-                  <div className={styles.searchField}>
-                    <Search size={16} className={styles.searchIcon} aria-hidden="true" />
-                    <input
-                      type="text"
-                      className={styles.searchInput}
-                      placeholder={t("location.wilaya.search")}
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      autoFocus
-                    />
-                  </div>
-                </div>
-                <div className={styles.list}>
-                  {filteredWilayas.length > 0 ? (
-                    filteredWilayas.map((w) => (
-                      <button
-                        key={w.id}
-                        type="button"
-                        role="option"
-                        aria-selected={selectedWilaya?.id === w.id}
-                        className={classnames(
-                          styles.item,
-                          selectedWilaya?.id === w.id && styles.itemSelected,
-                        )}
-                        onClick={() => {
-                          onWilayaChange(w);
-                          setIsOpen(false);
-                          setSearchQuery("");
-                        }}
-                      >
-                        <span className={styles.itemId}>
-                          {w.id}. {w.name}
-                        </span>
-                        <span className={styles.itemName}>{w.nameAr}</span>
-                      </button>
-                    ))
-                  ) : (
-                    <div className={styles.empty}>{t("location.wilaya.noResults")}</div>
-                  )}
-                </div>
-              </div>
-            )}
+            {dropdownMenu}
           </div>
         )}
 

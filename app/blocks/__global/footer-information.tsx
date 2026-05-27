@@ -93,7 +93,6 @@ export function FooterInformation({ className }: FooterInformationProps) {
           
           <div className="flex-none text-center">
             <p className={style.copyLine1}>haroune zeraib &copy; 2026</p>
-            <p className={style.copyLine2}>{t("footer.subCopy")}</p>
           </div>
 
           <div className="flex-1 flex justify-end max-[850px]:justify-center">

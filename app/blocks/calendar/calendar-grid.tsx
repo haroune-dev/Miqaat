@@ -9,13 +9,12 @@ import { formatTime } from "~/utils/time-utils";
 export interface CalendarGridProps {
   className?: string;
   data: DayPrayerTimes[];
-  timeFormat: "12h" | "24h";
 }
 
 const PRAYER_COLUMNS = ["Fajr", "Sunrise", "Duha", "Dhuhr", "Asr", "Maghrib", "Isha"] as const;
 
 
-export function CalendarGrid({ className, data, timeFormat }: CalendarGridProps) {
+export function CalendarGrid({ className, data }: CalendarGridProps) {
   const { t, locale } = useLanguage();
   const today = new Date();
   const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
@@ -23,10 +22,10 @@ export function CalendarGrid({ className, data, timeFormat }: CalendarGridProps)
   return (
     <div className={classnames(style.root, className)}>
       <div className={style.tableWrapper}>
-        <table className={style.table}>
+        <table className={style.table} dir={locale === "ar" ? "rtl" : "ltr"}>
           <thead>
             <tr className={style.headerRow}>
-              <th className={style.th}>{t("calendar.day")}</th>
+              <th className={classnames(style.th, style.dayTh)}>{t("calendar.day")}</th>
               {PRAYER_COLUMNS.map((name) => {
                 const key = `prayer.${name}` as TranslationKey;
                 return (
@@ -37,7 +36,7 @@ export function CalendarGrid({ className, data, timeFormat }: CalendarGridProps)
               })}
             </tr>
           </thead>
-          <tbody>
+          <tbody className={style.tbody}>
             {data.map((row) => {
               const isToday = row.date === todayStr;
               return (
@@ -60,7 +59,7 @@ export function CalendarGrid({ className, data, timeFormat }: CalendarGridProps)
                     const prayer = row.times.find((p) => p.name === name);
                     return (
                       <td key={name} className={style.td}>
-                        {prayer ? formatTime(prayer.time, timeFormat, locale) : "—"}
+                        {prayer ? formatTime(prayer.time) : "—"}
                       </td>
                     );
                   })}

@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
-import { formatTime } from "~/utils/time-utils";
 
 
 export interface ClockState {
   now: Date;
   timeString: string;
   timeOnly: string;
-  period: string;
   dateString: string;
   hijriDate: string;
 }
@@ -78,7 +76,7 @@ function toHijri(date: Date): { day: number; month: number; year: number } {
   return { day: hijriDay, month: hijriMonth, year: hijriYear };
 }
 
-export function useClock(timeFormat: "12h" | "24h", locale: "en" | "ar" = "en"): ClockState {
+export function useClock(locale: "en" | "ar" = "en"): ClockState {
   const [now, setNow] = useState(new Date());
 
   useEffect(() => {
@@ -86,29 +84,12 @@ export function useClock(timeFormat: "12h" | "24h", locale: "en" | "ar" = "en"):
     return () => clearInterval(tick);
   }, []);
 
-  const timeParts = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
-  const timeString = formatTime(timeParts, timeFormat, locale);
-
   const h = now.getHours();
   const m = now.getMinutes();
   const s = now.getSeconds();
-  
-  let timeOnly = "";
-  if (timeFormat === "24h") {
-    timeOnly = `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
-  } else {
-    const h12 = h % 12 || 12;
-    timeOnly = `${h12}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
-  }
 
-  let period = "";
-  if (timeFormat === "12h") {
-    if (locale === "ar") {
-      period = h >= 12 ? "مساءً" : "صباحاً";
-    } else {
-      period = h >= 12 ? "PM" : "AM";
-    }
-  }
+  const timeOnly = `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  const timeString = timeOnly;
 
   const dateString = now.toLocaleDateString(locale === "ar" ? "ar-DZ" : "en-US", {
     weekday: "long",
@@ -124,5 +105,5 @@ export function useClock(timeFormat: "12h" | "24h", locale: "en" | "ar" = "en"):
     ? `${weekdayName}، ${hijri.day} ${monthName} ${hijri.year} هـ`
     : `${weekdayName}, ${hijri.day} ${monthName} ${hijri.year} AH`;
 
-  return { now, timeString, timeOnly, period, dateString, hijriDate };
+  return { now, timeString, timeOnly, dateString, hijriDate };
 }

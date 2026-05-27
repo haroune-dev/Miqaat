@@ -7,7 +7,7 @@ const en = {
   "nav.home": "Home",
   "nav.location": "Location",
   "nav.calendar": "Calendar",
-  "nav.settings": "Settings",
+  "nav.notifications": "Notifications",
   "nav.logo.prayer": "miqaat",
   "nav.logo.times": "",
 
@@ -65,6 +65,7 @@ const en = {
 
   // Calendar page
   "calendar.title": "Prayer Times Calendar",
+  "calendar.monthlyTitle": "Monthly Prayer Calendar",
   "calendar.weekTitle": "Weekly Prayer Calendar",
   "calendar.day": "Day",
   "calendar.today": "Today",
@@ -73,19 +74,11 @@ const en = {
   "calendar.print": "Print",
   "calendar.error": "Failed to load calendar data. Please check your connection.",
 
-  // Settings page
-  "settings.title": "Settings",
-
+  // Settings (location) keys used by LocationModal
   "settings.location": "Location",
   "settings.location.desc": "Choose your wilaya in Algeria to get accurate prayer times for your area.",
   "settings.location.current": "Selected location",
 
-  "settings.timeFormat": "Time Format",
-  "settings.timeFormat.desc": "Choose how prayer times are displayed throughout the app.",
-  "settings.timeFormat.12h": "12-Hour",
-  "settings.timeFormat.12h.desc": "AM / PM format",
-  "settings.timeFormat.24h": "24-Hour",
-  "settings.timeFormat.24h.desc": "Military format",
   "settings.notifications": "Prayer Notifications",
   "settings.notifications.desc": "Receive a notification 1 minute before each prayer",
   "settings.notifications.enabled": "Enabled",
@@ -100,16 +93,16 @@ const en = {
   "settings.notifications.enableRequesting": "Requesting permission…",
   "settings.notifications.enableFailed": "Permission was not granted. If you previously blocked notifications, allow them for this site in the address bar menu, then tap the button again.",
 
-  "settings.save": "Save Settings",
-  "settings.reset": "Reset to Defaults",
-  "settings.unsavedChanges": "You have unsaved changes",
-  "settings.unsavedChanges.message": "You have unsaved changes. If you leave now, these changes will be lost.",
-  "settings.unsavedChanges.cancel": "Cancel",
-  "settings.unsavedChanges.discard": "Discard",
-  "settings.unsavedChanges.save": "Save",
-  "settings.saving": "Saving...",
-  "settings.saved": "Settings saved successfully",
-  "settings.reset.success": "Settings reset to defaults",
+  // Common
+  "common.cancel": "Cancel",
+
+  // Notifications modal
+  "notifications.modalTitle": "Notification Control Center",
+  "notifications.masterToggle": "Enable all notifications",
+  "notifications.browserBlocked": "Notifications are blocked in your browser settings.",
+  "notifications.allowBrowser": "Allow in browser",
+  "notifications.noPermission": "Notification permission not granted.",
+  "notifications.requestPermission": "Enable Notifications",
 
 
   // Footer
@@ -118,10 +111,9 @@ const en = {
   "footer.about": "About",
   "footer.links": "Links",
   "footer.contact": "Contact",
-  "footer.slogan": "A site to display prayer times in Algerian Wilayas",
   "footer.contactDesc": "You can leave a message for me",
   "footer.sendMessage": "Send a Message",
-  "footer.subCopy": "Miqaat - Prayer times in Algeria",
+  "footer.slogan": "A site to display prayer times in Algerian Wilayas",
   "footer.copy": "PrayerTimes App. All rights reserved.",
 
   // Notifications
@@ -138,7 +130,7 @@ const ar: Record<TranslationKey, string> = {
   "nav.home": "الرئيسية",
   "nav.location": "الموقع",
   "nav.calendar": "التقويم",
-  "nav.settings": "الإعدادات",
+  "nav.notifications": "الإشعارات",
   "nav.logo.prayer": "ميقات",
   "nav.logo.times": "",
 
@@ -196,6 +188,7 @@ const ar: Record<TranslationKey, string> = {
 
   // Calendar page
   "calendar.title": "تقويم أوقات الصلاة",
+  "calendar.monthlyTitle": "تقويم الصلاة الشهري",
   "calendar.weekTitle": "تقويم الصلاة الأسبوعي",
   "calendar.day": "اليوم",
   "calendar.today": "اليوم",
@@ -204,19 +197,11 @@ const ar: Record<TranslationKey, string> = {
   "calendar.print": "طباعة",
   "calendar.error": "فشل في تحميل بيانات التقويم. يرجى التحقق من الاتصال.",
 
-  // Settings page
-  "settings.title": "الإعدادات",
-
+  // Settings (location) keys used by LocationModal
   "settings.location": "الموقع",
   "settings.location.desc": "اختر ولايتك في الجزائر للحصول على أوقات صلاة دقيقة لمنطقتك.",
   "settings.location.current": "الموقع المحدد",
 
-  "settings.timeFormat": "تنسيق الوقت",
-  "settings.timeFormat.desc": "اختر كيف يتم عرض أوقات الصلاة في التطبيق.",
-  "settings.timeFormat.12h": "12 ساعة",
-  "settings.timeFormat.12h.desc": "تنسيق صباحي/مسائي",
-  "settings.timeFormat.24h": "24 ساعة",
-  "settings.timeFormat.24h.desc": "تنسيق 24 ساعة",
   "settings.notifications": "إشعارات الصلاة",
   "settings.notifications.desc": "تلقي إشعار قبل دقيقة واحدة من كل صلاة",
   "settings.notifications.enabled": "مفعّل",
@@ -231,16 +216,16 @@ const ar: Record<TranslationKey, string> = {
   "settings.notifications.enableRequesting": "جاري طلب الإذن…",
   "settings.notifications.enableFailed": "لم يُمنح الإذن بعد. إذا كنت قد رفضت الإشعارات سابقاً، اسمح بها لهذا الموقع من قائمة شريط العنوان ثم اضغط الزر مرة أخرى.",
 
-  "settings.save": "حفظ الإعدادات",
-  "settings.reset": "إعادة تعيين",
-  "settings.unsavedChanges": "لديك تغييرات غير محفوظة",
-  "settings.unsavedChanges.message": "لديك تغييرات غير محفوظة. إذا غادرت الآن، سيتم فقدان هذه التغييرات.",
-  "settings.unsavedChanges.cancel": "إلغاء",
-  "settings.unsavedChanges.discard": "تجاهل",
-  "settings.unsavedChanges.save": "حفظ",
-  "settings.saving": "جاري الحفظ...",
-  "settings.saved": "تم حفظ الإعدادات بنجاح",
-  "settings.reset.success": "تمت إعادة الإعدادات الافتراضية",
+  // Common
+  "common.cancel": "إلغاء",
+
+  // Notifications modal
+  "notifications.modalTitle": "مركز التحكم في الإشعارات",
+  "notifications.masterToggle": "تفعيل جميع الإشعارات",
+  "notifications.browserBlocked": "الإشعارات محظورة في إعدادات المتصفح.",
+  "notifications.allowBrowser": "السماح في المتصفح",
+  "notifications.noPermission": "لم يتم منح إذن الإشعارات.",
+  "notifications.requestPermission": "تفعيل الإشعارات",
 
 
   // Footer
@@ -249,10 +234,9 @@ const ar: Record<TranslationKey, string> = {
   "footer.about": "حول",
   "footer.links": "روابط",
   "footer.contact": "تواصل",
-  "footer.slogan": "موقع لعرض أوقات الصلاة في ولايات الجزائر",
   "footer.contactDesc": "يمكنك ترك رسالة لي",
   "footer.sendMessage": "أرسل رسالة",
-  "footer.subCopy": "ميقات - أوقات الصلاة في الجزائر",
+  "footer.slogan": "موقع لعرض أوقات الصلاة في ولايات الجزائر",
   "footer.copy": "جميع الحقوق محفوظة.",
 
   // Notifications

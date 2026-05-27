@@ -1,9 +1,10 @@
 import { NavLink, Link, useLocation } from "react-router";
-import { Settings, Home, CalendarDays, Menu, X, Languages } from "lucide-react";
+import { Home, CalendarDays, Languages, ChevronDown, Check } from "lucide-react";
 import classnames from "classnames";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useColorScheme } from "@dazl/color-scheme/react";
 import { useLanguage } from "~/i18n/language-context";
+import { NotificationModal } from "~/blocks/notifications/notification-modal";
 import style from "./navigation-header.module.css";
 
 export interface NavigationHeaderProps {
@@ -14,11 +15,37 @@ export function NavigationHeader({ className }: NavigationHeaderProps) {
   const { t, locale, setLocale } = useLanguage();
   const { resolvedScheme, setColorScheme } = useColorScheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
+  const [isLangOpen, setIsLangOpen] = useState(false);
+  const langRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
 
   useEffect(() => {
     setIsMenuOpen(false);
   }, [location]);
+
+  useEffect(() => {
+    if (!isLangOpen) return;
+    const handleClick = (e: MouseEvent) => {
+      if (langRef.current && !langRef.current.contains(e.target as Node)) {
+        setIsLangOpen(false);
+      }
+    };
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsLangOpen(false);
+    };
+    document.addEventListener("mousedown", handleClick);
+    window.addEventListener("keydown", handleEsc);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      window.removeEventListener("keydown", handleEsc);
+    };
+  }, [isLangOpen]);
+
+  const langOptions = [
+    { value: "ar" as const, label: "العربية" },
+    { value: "en" as const, label: "English" },
+  ];
 
   return (
     <nav className={classnames(style.root, className)} aria-label="Main navigation">
@@ -52,32 +79,55 @@ export function NavigationHeader({ className }: NavigationHeaderProps) {
             </span>
             <span className={style.navLinkTitle}>{t("nav.calendar")}</span>
           </NavLink>
-          <NavLink
-            to="/settings"
-            className={({ isActive }) => classnames(style.navLink, isActive && style.navLinkActive)}
-            aria-label={t("nav.settings")}
-          >
-            <span className={style.navLinkIcon}>
-              <Settings size={22} />
-            </span>
-            <span className={style.navLinkTitle}>{t("nav.settings")}</span>
-          </NavLink>
         </div>
       </div>
 
       <div className={style.actions}>
-        <label className={style.languageSelectWrapper}>
-          <Languages size={18} />
-          <select
-            className={style.languageSelect}
-            value={locale}
-            onChange={(event) => setLocale(event.target.value as "ar" | "en")}
+        <div className={style.languageSelectWrapper} ref={langRef}>
+          <button
+            className={style.languageTrigger}
+            onClick={() => setIsLangOpen(!isLangOpen)}
+            aria-label={locale === "ar" ? "اختيار اللغة" : "Choose language"}
+            aria-haspopup="listbox"
+            aria-expanded={isLangOpen}
+          >
+            <Languages size={18} />
+            <span>{locale === "ar" ? "العربية" : "English"}</span>
+            <ChevronDown size={14} className={classnames(style.arrow, isLangOpen && style.arrowOpen)} />
+          </button>
+          <div
+            className={classnames(style.languageDropdown, isLangOpen && style.languageDropdownOpen)}
+            role="listbox"
             aria-label={locale === "ar" ? "اختيار اللغة" : "Choose language"}
           >
-            <option value="ar">العربية</option>
-            <option value="en">English</option>
-          </select>
-        </label>
+            {langOptions.map((opt) => (
+              <button
+                key={opt.value}
+                className={classnames(
+                  style.languageOption,
+                  locale === opt.value && style.languageOptionActive,
+                )}
+                onClick={() => {
+                  setLocale(opt.value);
+                  setIsLangOpen(false);
+                }}
+                role="option"
+                aria-selected={locale === opt.value}
+              >
+                {opt.label}
+                {locale === opt.value && <Check size={14} />}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <button
+          className={style.bellBtn}
+          onClick={() => setIsNotificationModalOpen(true)}
+          aria-label={t("nav.notifications")}
+        >
+          <svg viewBox="0 0 448 512" className={style.bellIcon}><path d="M224 0c-17.7 0-32 14.3-32 32V49.9C119.5 61.4 64 124.2 64 200v33.4c0 45.4-15.5 89.5-43.8 124.9L5.3 377c-5.8 7.2-6.9 17.1-2.9 25.4S14.8 416 24 416H424c9.2 0 17.6-5.3 21.6-13.6s2.9-18.2-2.9-25.4l-14.9-18.6C399.5 322.9 384 278.8 384 233.4V200c0-75.8-55.5-138.6-128-150.1V32c0-17.7-14.3-32-32-32zm0 96h8c57.4 0 104 46.6 104 104v33.4c0 47.9 13.9 94.6 39.7 134.6H72.3C98.1 328 112 281.3 112 233.4V200c0-57.4 46.6-104 104-104h8zm64 352H224 160c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7s18.7-28.3 18.7-45.3z"></path></svg>
+        </button>
 
         <label className={style.switch} aria-label="Toggle dark mode">
           <input
@@ -113,6 +163,11 @@ export function NavigationHeader({ className }: NavigationHeaderProps) {
           <div className={style.bar}></div>
         </label>
       </div>
+
+      <NotificationModal
+        isOpen={isNotificationModalOpen}
+        onClose={() => setIsNotificationModalOpen(false)}
+      />
     </nav>
   );
 }

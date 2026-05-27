@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+
 import { MapPin, Navigation } from "lucide-react";
 import classnames from "classnames";
 import { useAppContext } from "~/context/app-context";
@@ -7,9 +7,10 @@ import style from "./location-display.module.css";
 
 export interface LocationDisplayProps {
   className?: string;
+  onOpenModal: () => void;
 }
 
-export function LocationDisplay({ className }: LocationDisplayProps) {
+export function LocationDisplay({ className, onOpenModal }: LocationDisplayProps) {
   const { location } = useAppContext();
   const { t, locale } = useLanguage();
 
@@ -18,7 +19,7 @@ export function LocationDisplay({ className }: LocationDisplayProps) {
 
   return (
     <div className={classnames(style.root, className)}>
-      <Link to="/settings#location" className={style.locationLink} aria-label={t("location.change")}>
+      <div className={style.locationLink}>
         <div className={style.icon} aria-hidden="true">
           <MapPin size={22} strokeWidth={2.25} />
         </div>
@@ -27,16 +28,16 @@ export function LocationDisplay({ className }: LocationDisplayProps) {
           <span className={style.city}>{city}</span>
           <span className={style.country}>{country}</span>
         </div>
-      </Link>
+      </div>
 
       <span className={style.divider} aria-hidden="true" />
 
-      <Link to="/settings#location" className={style.changeBtn}>
+      <button onClick={onOpenModal} className={style.changeBtn}>
         <span className={style.changeIcon} aria-hidden="true">
           <Navigation size={16} strokeWidth={2.25} />
         </span>
         <span className={style.changeLabel}>{t("location.change")}</span>
-      </Link>
+      </button>
     </div>
   );
 }

@@ -51,7 +51,7 @@
 
 .countdownLabel {
   color: var(--color-text-muted);
-  font-size: var(--text-md);
+  font-size: var(--text-sm);
   font-weight: 900;
   letter-spacing: 0.04em;
 }
@@ -62,7 +62,7 @@
   direction: ltr;
   align-items: flex-end;
   justify-content: center;
-  gap: var(--space-1);
+  gap: var(--space-3);
 }
 
 .unit {
@@ -79,8 +79,8 @@
   color: var(--color-primary);
   background: rgba(0, 0, 0, 0.04);
   border-radius: var(--radius-md);
-  min-width: 2.75rem;
-  padding: var(--space-1) var(--space-2);
+  min-width: 3.25rem;
+  padding: var(--space-1) var(--space-3);
   line-height: 1;
   letter-spacing: 0.02em;
   border: 1px solid rgba(0, 0, 0, 0.08);
