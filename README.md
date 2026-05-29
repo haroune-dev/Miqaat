@@ -31,25 +31,20 @@
 *   ⏳ **Live Countdown**: Real-time updates and countdowns to the next prayer time.
 *   📅 **Comprehensive Calendar**: View weekly and monthly prayer schedules with an elegant, printable layout.
 *   🔔 **Smart Notifications**: Frontend-scheduled notifications firing 1 minute before each prayer.
+*   📖 **Hijri Date Display**: Accurate Islamic date fetched from the Aladhan API, displayed alongside the live clock.
 
 ## 📸 Screenshots
 
 ### 🏠 Home Dashboard
 Comprehensive view of current and upcoming prayer times with a live clock.
 <p align="center">
-  <img src="images/Pasted image.png" alt="Home Screen" width="800" />
-</p>
-
-### 📍 Location Selection
-an interface for choosing your location via list or GPS.
-<p align="center">
-  <img src="images/Pasted image (2).png" alt="Location Selection" width="500" />
+  <img src="images/Screenshot From 2026-05-29 18-34-39.png" alt="Home Screen" width="800" />
 </p>
 
 ### 🗓️ Prayer Calendar
 weekly/monthly prayer time calendar.
 <p align="center">
-  <img src="images/Pasted image (3).png" alt="Calendar View" width="800" />
+  <img src="images/Screenshot From 2026-05-29 18-35-28.png" alt="Calendar View" width="800" />
 </p>
 
 ## 🛠️ Tech Stack
@@ -91,14 +86,20 @@ The project follows a modular and scalable architecture, separating UI concerns 
 
 
 ## 🔌 API Integration
-Miqaat leverages the [Adhan DZ API](https://adhan-dz.dexter21767.com) to provide accurate, real-time data specifically for Algeria.
+Miqaat integrates with two external APIs for accurate prayer times and Islamic date conversion.
 
-### Data Fetching
+### Prayer Times — Adhan DZ API
 *   **Source**: [adhan-dz.dexter21767.com](https://adhan-dz.dexter21767.com)
 *   **Endpoints**:
     - `/cities`: Fetches a comprehensive list of Algerian Wilayas and Baladiyas.
     - `/prayerTimes`: Retrieves daily or monthly prayer schedules based on the selected city ID and date range.
 *   **Implementation**: Logic is centralized in [prayerApi.ts](file:///home/haroune-dev/Desktop/Miqaat/app/services/prayerApi.ts) (raw fetch layer) and [api.ts](file:///home/haroune-dev/Desktop/Miqaat/app/services/api.ts) (application mapping).
+
+### Hijri Date — Aladhan Islamic Calendar API
+*   **Source**: [aladhan.com/islamic-calendar-api](https://aladhan.com/islamic-calendar-api)
+*   **Endpoint**:
+    - `/v1/gToH`: Converts Gregorian dates to Hijri with accurate month/weekday names in English and Arabic.
+*   **Implementation**: [`fetchHijriDate()`](file:///home/haroune-dev/Desktop/Miqaat/app/services/api.ts) in the service layer, called from [`current-time-card.tsx`](file:///home/haroune-dev/Desktop/Miqaat/app/blocks/home/current-time-card.tsx). Falls back to a client-side approximate algorithm if the API is unavailable.
 
 
 ## 🏁 Getting Started
