@@ -220,6 +220,45 @@ export async function fetchMonthlyPrayerTimes(
   return allEntries;
 }
 
+/* ------------------------------------------------------------------ */
+/*  Hijri Date API (Aladhan)                                           */
+/* ------------------------------------------------------------------ */
+
+export interface HijriDateInfo {
+  day: number;
+  month: string;
+  monthAr: string;
+  year: number;
+  weekday: string;
+  weekdayAr: string;
+  formatted: string;
+  formattedAr: string;
+}
+
+export async function fetchHijriDate(): Promise<HijriDateInfo> {
+  const now = new Date();
+  const dd = String(now.getDate()).padStart(2, "0");
+  const mm = String(now.getMonth() + 1).padStart(2, "0");
+  const yyyy = now.getFullYear();
+  const res = await fetch(`https://api.aladhan.com/v1/gToH?date=${dd}-${mm}-${yyyy}`);
+  if (!res.ok) throw new Error("Failed to fetch Hijri date");
+  const json = await res.json();
+  const hijri = json.data.hijri;
+
+  return {
+    day: Number(hijri.day),
+    month: hijri.month.en,
+    monthAr: hijri.month.ar,
+    year: Number(hijri.year),
+    weekday: hijri.weekday.en,
+    weekdayAr: hijri.weekday.ar,
+    formatted: `${hijri.weekday.en}, ${hijri.day} ${hijri.month.en} ${hijri.year} AH`,
+    formattedAr: `${hijri.weekday.ar}، ${hijri.day} ${hijri.month.ar} ${hijri.year} هـ`,
+  };
+}
+
+/* ------------------------------------------------------------------ */
+
 /** Find the nearest wilaya for GPS coordinates using static metadata. */
 export async function findNearestLocation(
   lat: number,

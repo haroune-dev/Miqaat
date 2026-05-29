@@ -16,11 +16,11 @@ export function NavigationHeader({ className }: NavigationHeaderProps) {
   const { resolvedScheme, setColorScheme } = useColorScheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
-  const location = useLocation();
+  const routerLocation = useLocation();
 
   useEffect(() => {
     setIsMenuOpen(false);
-  }, [location]);
+  }, [routerLocation]);
 
   return (
     <nav className={classnames(style.root, className)} aria-label="Main navigation">

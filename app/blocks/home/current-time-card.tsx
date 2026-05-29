@@ -1,6 +1,8 @@
+import { useState, useEffect } from "react";
 import classnames from "classnames";
 import { useClock } from "~/hooks/use-clock";
 import { useLanguage } from "~/i18n/language-context";
+import { fetchHijriDate, type HijriDateInfo } from "~/services/api";
 import style from "./current-time-card.module.css";
 
 export interface CurrentTimeCardProps {
@@ -9,7 +11,16 @@ export interface CurrentTimeCardProps {
 
 export function CurrentTimeCard({ className }: CurrentTimeCardProps) {
   const { locale } = useLanguage();
-  const { timeOnly, hijriDate } = useClock(locale);
+  const clock = useClock(locale);
+  const [hijriInfo, setHijriInfo] = useState<HijriDateInfo | null>(null);
+
+  useEffect(() => {
+    fetchHijriDate().then(setHijriInfo).catch(() => {});
+  }, []);
+
+  const hijriDate = hijriInfo
+    ? (locale === "ar" ? hijriInfo.formattedAr : hijriInfo.formatted)
+    : clock.hijriDate;
 
   return (
     <div className={classnames(style.root, "transition-all duration-300 hover:shadow-xl hover:-translate-y-1", className)}>
@@ -24,7 +35,7 @@ export function CurrentTimeCard({ className }: CurrentTimeCardProps) {
             direction: "ltr"
           }}
         >
-          <span dir="ltr">{timeOnly}</span>
+          <span dir="ltr">{clock.timeOnly}</span>
         </div>
         <div className={style.hijri}>{hijriDate}</div>
       </div>
