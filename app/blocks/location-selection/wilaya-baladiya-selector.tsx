@@ -46,7 +46,6 @@ export function WilayaSelector({
   const menuRef = useRef<HTMLDivElement>(null);
   const [menuPos, setMenuPos] = useState<MenuPosition>({ top: 0, left: 0, width: 0 });
 
-  // Compute the menu position from the trigger button's bounding rect
   const updateMenuPosition = useCallback(() => {
     if (!triggerRef.current) return;
     const rect = triggerRef.current.getBoundingClientRect();
@@ -57,7 +56,6 @@ export function WilayaSelector({
     });
   }, []);
 
-  // Recompute position when dropdown opens and on scroll/resize
   useEffect(() => {
     if (!isOpen) return;
     updateMenuPosition();
@@ -70,7 +68,6 @@ export function WilayaSelector({
     };
   }, [isOpen, updateMenuPosition]);
 
-  // Close on click outside (handles both trigger and portal menu)
   useEffect(() => {
     if (!isOpen) return;
     const handleClickOutside = (event: MouseEvent) => {

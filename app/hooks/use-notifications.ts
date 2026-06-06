@@ -1,14 +1,6 @@
 import { useEffect, useRef, useCallback } from "react";
 import type { PrayerTime } from "~/data/prayer-data";
 
-/**
- * Robust frontend notification scheduler.
- * Uses periodic polling and visibility checks to ensure notifications fire
- * even if the browser throttles background timers.
- *
- * Note: Since this is a frontend-only React app without a Service Worker push implementation,
- * notifications will only work while the tab is open.
- */
 export function useNotifications(
   prayerTimes: PrayerTime[],
   enabled: boolean,

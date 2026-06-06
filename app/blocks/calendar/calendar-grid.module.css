@@ -42,7 +42,6 @@
   border: none;
 }
 
-/* Rounded corners for the table header using modern logical properties */
 .th:first-child {
   border-start-start-radius: var(--radius-lg);
 }
@@ -59,7 +58,6 @@
   transition: background-color 0.15s ease;
 }
 
-/* Subtle zebra striping for alternate rows */
 .row:nth-child(even) {
   background-color: color-mix(in srgb, var(--color-primary) 2%, transparent);
 }
@@ -68,7 +66,6 @@
   background-color: var(--color-highlight) !important;
 }
 
-/* Premium, highly visible but clean "Today" row highlight */
 .rowToday {
   background-color: color-mix(in srgb, var(--color-accent) 12%, var(--color-bg-card)) !important;
   font-weight: 600;
@@ -78,7 +75,6 @@
   background-color: color-mix(in srgb, var(--color-accent) 18%, var(--color-bg-card)) !important;
 }
 
-/* Clean cell borders */
 .td {
   padding: var(--space-4) var(--space-3);
   text-align: center;
@@ -91,17 +87,14 @@
   border-inline-end: 1px solid color-mix(in srgb, var(--color-border-light) 40%, transparent);
 }
 
-/* Remove end border for the last cell in each row */
 .td:last-child {
   border-inline-end: none;
 }
 
-/* Remove bottom border for the last row cells to preserve table container radius */
 .row:last-child .td {
   border-bottom: none;
 }
 
-/* Bottom-left/right rounding for the last row's outer cells */
 .row:last-child .td:first-child {
   border-end-start-radius: var(--radius-lg);
 }
@@ -169,7 +162,6 @@
   }
 }
 
-/* ── Print Styles ────────────────────────────────────── */
 @media print {
   .root {
     width: 100%;
@@ -347,7 +339,6 @@
   }
 }
 
-/* ── Print Styles ────────────────────────────────────── */
 @media print {
   .root {
     width: 100%;

@@ -18,7 +18,6 @@ function loadLocale(): Locale {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw === "ar" || raw === "en") return raw;
   } catch {
-    // ignore
   }
   return "ar";
 }
@@ -31,7 +30,6 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     try {
       localStorage.setItem(STORAGE_KEY, l);
     } catch {
-      // ignore
     }
   }, []);
 

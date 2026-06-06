@@ -44,8 +44,23 @@ export function NotificationModal({ isOpen, onClose }: NotificationModalProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
+  const allPrayersEnabled = PRAYERS.every((p) => notificationPreferences[p] !== false);
+  const masterIsActive = notificationsEnabled && allPrayersEnabled;
+
+  useEffect(() => {
+    if (notificationsEnabled) {
+      const anyEnabled = PRAYERS.some((p) => notificationPreferences[p] !== false);
+      if (!anyEnabled) {
+        setNotificationsEnabled(false);
+      }
+    }
+  }, [notificationPreferences, notificationsEnabled, setNotificationsEnabled]);
+
   const handleMasterToggle = useCallback(async () => {
-    if (!notificationsEnabled) {
+    if (masterIsActive) {
+      setNotificationsEnabled(false);
+      PRAYERS.forEach((p) => setNotificationPreference(p, false));
+    } else {
       if (isUnsupported) return;
       if (!isGranted) {
         setIsRequesting(true);
@@ -56,14 +71,16 @@ export function NotificationModal({ isOpen, onClose }: NotificationModalProps) {
           return;
         }
       }
+      setShowDeniedGuide(false);
+      setNotificationsEnabled(true);
+      PRAYERS.forEach((p) => setNotificationPreference(p, true));
     }
-    setShowDeniedGuide(false);
-    setNotificationsEnabled(!notificationsEnabled);
-  }, [notificationsEnabled, isGranted, isUnsupported, requestPermission, setNotificationsEnabled]);
+  }, [masterIsActive, isGranted, isUnsupported, requestPermission, setNotificationsEnabled, setNotificationPreference]);
 
   const needsPermission = isDenied || isDefault;
 
-  const showScheduled = isGranted && notificationsEnabled;
+  const anyPrayerEnabled = notificationsEnabled && PRAYERS.some((p) => notificationPreferences[p] !== false);
+  const showScheduled = isGranted && anyPrayerEnabled;
 
   const getPrayerTime = (name: string): string | null => {
     const prayer = prayerTimes.find((p) => p.name === name);
@@ -147,13 +164,13 @@ export function NotificationModal({ isOpen, onClose }: NotificationModalProps) {
           <button
             className={classnames(
               style.toggle,
-              notificationsEnabled && style.toggleActive,
+              masterIsActive && style.toggleActive,
               (isUnsupported) && style.toggleDisabled,
             )}
             onClick={handleMasterToggle}
             disabled={isUnsupported}
             role="switch"
-            aria-checked={notificationsEnabled}
+            aria-checked={masterIsActive}
             aria-label={t("notifications.masterToggle")}
           >
             <span className={style.toggleThumb} />
@@ -181,16 +198,34 @@ export function NotificationModal({ isOpen, onClose }: NotificationModalProps) {
                   className={classnames(
                     style.toggle,
                     isEnabled && style.toggleActive,
-                    !notificationsEnabled && style.toggleDisabled,
+                    isUnsupported && style.toggleDisabled,
                   )}
-                  onClick={(e) => {
+                  onClick={async (e) => {
                     e.stopPropagation();
-                    setNotificationPreference(
-                      prayer,
-                      notificationPreferences[prayer] !== false ? false : true,
-                    );
+                    if (!notificationsEnabled) {
+                      if (isUnsupported) return;
+                      if (!isGranted) {
+                        setIsRequesting(true);
+                        const result = await requestPermission();
+                        setIsRequesting(false);
+                        if (result !== "granted") {
+                          setShowDeniedGuide(true);
+                          return;
+                        }
+                      }
+                      setShowDeniedGuide(false);
+                      setNotificationsEnabled(true);
+                      PRAYERS.forEach((p) => {
+                        setNotificationPreference(p, p === prayer);
+                      });
+                    } else {
+                      setNotificationPreference(
+                        prayer,
+                        notificationPreferences[prayer] !== false ? false : true,
+                      );
+                    }
                   }}
-                  disabled={!notificationsEnabled}
+                  disabled={isUnsupported}
                   role="switch"
                   aria-checked={isEnabled}
                   aria-label={t(`prayer.${prayer}` as TranslationKey)}

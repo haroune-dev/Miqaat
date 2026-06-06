@@ -1,19 +1,6 @@
 @import "tailwindcss/theme" layer(theme);
 @import "tailwindcss/utilities" layer(utilities);
 
-/*
- * ── Tailwind ↔ Design Token Bridge ──────────────────────
- * Preflight is intentionally excluded — the project already
- * has its own reset.css.
- *
- * Spacing uses @theme (not inline) so --spacing-* variables
- * are emitted and utilities like gap-5, px-6 work at runtime.
- *
- * Colors use @theme inline because theme.css already defines
- * the --color-* variables — no need to emit duplicates.
- */
-
-/* Spacing must be emitted since no other file defines --spacing-* */
 @theme {
   --spacing-1: 0.25rem;
   --spacing-2: 0.5rem;
@@ -26,20 +13,17 @@
   --spacing-12: 3rem;
   --spacing-16: 4rem;
 
-  /* ── Border Radius ── */
   --radius-sm: 0.5rem;
   --radius-md: 0.75rem;
   --radius-lg: 1rem;
   --radius-xl: 1.5rem;
   --radius-full: 9999px;
 
-  /* ── Font Families ── */
   --font-display: "Cormorant Garamond", "Noto Sans Arabic", Georgia, serif;
   --font-body: "DM Sans", "Noto Sans Arabic", system-ui, sans-serif;
   --font-mono: "Roboto Mono", "Courier New", monospace;
   --font-brand-ar: "Changa", system-ui, sans-serif;
 
-  /* ── Font Sizes ── */
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
@@ -51,7 +35,6 @@
   --text-4xl: 3.5rem;
 }
 
-/* Colors reference existing theme.css vars — use inline to avoid duplication */
 @theme inline {
   --color-primary: var(--color-primary);
   --color-primary-light: var(--color-primary-light);
@@ -73,10 +56,8 @@
   --color-warning: var(--color-warning);
 }
 
-/* ── Dark mode: class strategy matching @dazl/color-scheme ── */
 @custom-variant dark (&:where(.dark-theme, .dark-theme *));
 
-/* ── RTL variant ── */
 @custom-variant rtl (&:where([dir="rtl"], [dir="rtl"] *));
 
 html, body {
@@ -84,7 +65,6 @@ html, body {
   position: relative;
 }
 
-/* Hide an element visually without hiding it from screen readers. */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -97,19 +77,9 @@ html, body {
   border-width: 0;
 }
 
-/* ── Print: hide nav + footer globally ───────────────── */
-/* ── Global Micro-interactions ───────────────────────── */
 button {
   transition: all 200ms ease-in-out;
   cursor: pointer;
-}
-
-button:hover {
-  /* Motion removed */
-}
-
-button:active {
-  /* Motion removed */
 }
 
 @media print {
@@ -123,7 +93,6 @@ button:active {
   }
 }
 
-/* ── Arabic Typography Overrides ── */
 :root[lang="ar"],
 [dir="rtl"] {
   --font-display: "Amiri", Georgia, serif;
@@ -131,7 +100,6 @@ button:active {
   --font-body: "Tajawal", system-ui, sans-serif;
 }
 
-/* Ensure all headings and section titles use Amiri when language is Arabic */
 :root[lang="ar"] h1,
 :root[lang="ar"] h2,
 :root[lang="ar"] h3,
@@ -150,4 +118,3 @@ button:active {
 [class*="blockedTitle"] {
   font-family: "Amiri", Georgia, serif !important;
 }
-

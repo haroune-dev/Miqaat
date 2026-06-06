@@ -8,15 +8,11 @@ const STORAGE_KEY_LOCATION = "prayerApp_location";
 const STORAGE_KEY_NOTIFICATIONS = "prayerApp_notifications";
 const STORAGE_KEY_NOTIFICATION_PREFS = "prayerApp_notificationPrefs";
 
-
-
 function loadFromStorage<T>(key: string, fallback: T): T {
   try {
     const raw = localStorage.getItem(key);
     if (!raw) return fallback;
     const parsed = JSON.parse(raw);
-
-    // For location, ensure new fields exist for backward compatibility
     if (key === STORAGE_KEY_LOCATION) {
       return { ...fallback, ...parsed } as T;
     }
@@ -31,7 +27,6 @@ function saveToStorage<T>(key: string, value: T): void {
   try {
     localStorage.setItem(key, JSON.stringify(value));
   } catch {
-    // ignore
   }
 }
 
@@ -55,7 +50,7 @@ function determineCurrent(
 ): { current: PrayerTime | null; next: PrayerTime | null } {
   const now = new Date();
   const nowMinutes = now.getHours() * 60 + now.getMinutes();
-  const prayers = times; // Use all events including Sunrise and Duha as timeline boundaries
+  const prayers = times;
   let current: PrayerTime | null = null;
   let next: PrayerTime | null = null;
 
@@ -119,12 +114,10 @@ export function usePrayerTimes(): PrayerAppState {
     }
   }, [location, t]);
 
-  // Fetch on mount and when location changes
   useEffect(() => {
     loadPrayerTimes();
   }, [loadPrayerTimes]);
 
-  // Recalculate current/next prayer every minute
   useEffect(() => {
     if (prayerTimes.length === 0) return;
     const interval = setInterval(() => {
@@ -145,11 +138,13 @@ export function usePrayerTimes(): PrayerAppState {
     saveToStorage(STORAGE_KEY_NOTIFICATIONS, enabled);
   };
 
-  const setNotificationPreference = (prayerName: string, enabled: boolean) => {
-    const newPrefs = { ...notificationPreferences, [prayerName]: enabled };
-    setNotificationPreferencesState(newPrefs);
-    saveToStorage(STORAGE_KEY_NOTIFICATION_PREFS, newPrefs);
-  };
+  const setNotificationPreference = useCallback((prayerName: string, enabled: boolean) => {
+    setNotificationPreferencesState((prev) => {
+      const newPrefs = { ...prev, [prayerName]: enabled };
+      saveToStorage(STORAGE_KEY_NOTIFICATION_PREFS, newPrefs);
+      return newPrefs;
+    });
+  }, []);
 
   return {
     location,

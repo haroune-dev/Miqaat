@@ -31,7 +31,6 @@ export function AdditionalInfoSection({ className }: AdditionalInfoSectionProps)
     const maghribMin = parseTimeToMinutes(maghrib.time);
     let fajrMin = parseTimeToMinutes(fajr.time);
 
-    // Fajr is the next day
     if (fajrMin <= maghribMin) {
       fajrMin += 1440;
     }

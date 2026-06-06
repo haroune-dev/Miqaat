@@ -194,7 +194,6 @@
   gap: var(--space-3);
 }
 
-/* Toggle switch */
 .toggle {
   position: relative;
   width: 2.75rem;
@@ -230,10 +229,6 @@
 
 .toggleActive .toggleThumb {
   transform: translateX(1.25rem);
-}
-
-:global([dir="rtl"]) .toggleActive .toggleThumb {
-  transform: translateX(-1.25rem);
 }
 
 .scheduledInfo {

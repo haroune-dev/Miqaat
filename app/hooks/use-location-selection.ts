@@ -38,14 +38,12 @@ export function useLocationSelection(initialCityId?: number): LocationSelectionS
     }
   }, []);
 
-  // Fetch wilayas on mount
   useEffect(() => {
     let cancelled = false;
     loadWilayas(cancelled);
     return () => { cancelled = true; };
   }, [loadWilayas]);
 
-  // Sync dropdown with the active or draft location
   useEffect(() => {
     if (initialCityId == null || wilayas.length === 0) return;
     const match = wilayas.find((w) => w.cityId === initialCityId);

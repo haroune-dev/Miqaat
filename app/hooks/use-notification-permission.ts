@@ -2,10 +2,6 @@ import { useState, useEffect, useCallback } from "react";
 
 export type PermissionStatus = NotificationPermission | "unsupported";
 
-/**
- * Hook to manage and request browser notification permissions.
- * Provides a clean interface for UI components to handle different permission states.
- */
 export function useNotificationPermission() {
   const [permission, setPermission] = useState<PermissionStatus>("default");
 
@@ -33,8 +29,7 @@ export function useNotificationPermission() {
           status.onchange = () => updatePermission();
         })
         .catch(() => {
-          /* Permissions API unavailable for notifications */
-        });
+                  });
     }
 
     return () => {
@@ -46,8 +41,7 @@ export function useNotificationPermission() {
     };
   }, [updatePermission]);
 
-  /** Request permission from this site (shows browser prompt when allowed). */
-  const requestPermission = useCallback(async () => {
+    const requestPermission = useCallback(async () => {
     if (typeof window === "undefined" || !("Notification" in window)) {
       return "unsupported" as const;
     }

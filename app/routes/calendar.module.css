@@ -21,7 +21,6 @@
   font-weight: 700;
 }
 
-/* ── Toolbar: Toggle + Print ─────────────────────────── */
 .toolbar {
   display: flex;
   align-items: center;
@@ -242,7 +241,6 @@
   }
 }
 
-/* ── Month Navigation ────────────────────────────────── */
 .monthNav {
   display: flex;
   align-items: center;
@@ -341,7 +339,6 @@
   text-align: center;
 }
 
-/* ── Responsive ──────────────────────────────────────── */
 @media (max-width: 640px) {
   .monthNav {
     gap: var(--space-4);
@@ -408,7 +405,6 @@
   }
 }
 
-/* ── Print Styles ────────────────────────────────────── */
 @media print {
   .toolbar,
   .monthBtn,

@@ -3,7 +3,6 @@ export type Locale = "en" | "ar";
 export type TranslationKey = keyof typeof en;
 
 const en = {
-  // Navigation
   "nav.home": "Home",
   "nav.location": "Location",
   "nav.calendar": "Calendar",
@@ -11,7 +10,6 @@ const en = {
   "nav.logo.prayer": "miqaat",
   "nav.logo.times": "",
 
-  // Location page
   "location.title": "Choose Location",
   "location.subtitle": "Select your Wilaya in Algeria to get accurate prayer times.",
   "location.wilaya.label": "Wilaya (Province)",
@@ -32,7 +30,6 @@ const en = {
   "location.change": "Change Location",
   "location.current": "Your location",
 
-  // Home page
   "home.currentPrayer": "Current Prayer",
   "home.prayerTime": "Prayer Time",
   "home.nextPrayer": "Next Prayer",
@@ -46,7 +43,6 @@ const en = {
   "home.forbiddenPrayer": "Forbidden prayer times (except fard)",
   "home.duha": "Prayer of Duha",
 
-  // Prayer names
   "prayer.Fajr": "Fajr",
   "prayer.Sunrise": "Sunrise",
   "prayer.Duha": "Duha",
@@ -55,7 +51,6 @@ const en = {
   "prayer.Maghrib": "Maghrib",
   "prayer.Isha": "Isha",
 
-  // Additional info
   "info.sunrise": "Sunrise",
   "info.sunset": "Sunset",
   "info.hijriDate": "Hijri Date",
@@ -63,7 +58,6 @@ const en = {
   "info.midnight": "Midnight",
   "info.lastThird": "Last Third of the Night",
 
-  // Calendar page
   "calendar.title": "Prayer Times Calendar",
   "calendar.monthlyTitle": "Monthly Prayer Calendar",
   "calendar.weekTitle": "Weekly Prayer Calendar",
@@ -74,7 +68,6 @@ const en = {
   "calendar.print": "Print",
   "calendar.error": "Failed to load calendar data. Please check your connection.",
 
-  // Settings (location) keys used by LocationModal
   "settings.location": "Location",
   "settings.location.desc": "Choose your wilaya in Algeria to get accurate prayer times for your area.",
   "settings.location.current": "Selected location",
@@ -93,10 +86,8 @@ const en = {
   "settings.notifications.enableRequesting": "Requesting permission…",
   "settings.notifications.enableFailed": "Permission was not granted. If you previously blocked notifications, allow them for this site in the address bar menu, then tap the button again.",
 
-  // Common
   "common.cancel": "Cancel",
 
-  // Notifications modal
   "notifications.modalTitle": "Notification Control Center",
   "notifications.masterToggle": "Enable all notifications",
   "notifications.browserBlocked": "Notifications are blocked in your browser settings.",
@@ -105,7 +96,6 @@ const en = {
   "notifications.requestPermission": "Enable Notifications",
 
 
-  // Footer
   "footer.privacy": "Privacy Policy",
   "footer.terms": "Terms of Service",
   "footer.about": "About",
@@ -116,17 +106,14 @@ const en = {
   "footer.slogan": "A site to display prayer times in Algerian Wilayas",
   "footer.copy": "PrayerTimes App. All rights reserved.",
 
-  // Notifications
   "notification.title": "Prayer Time Approaching",
   "notification.body": "{prayer} prayer in 1 minute",
 
-  // Errors
   "error.fetchPrayer": "Failed to fetch prayer times. Please check your connection.",
   "error.retry": "Try Again",
 } as const;
 
 const ar: Record<TranslationKey, string> = {
-  // Navigation
   "nav.home": "الرئيسية",
   "nav.location": "الموقع",
   "nav.calendar": "التقويم",
@@ -134,7 +121,6 @@ const ar: Record<TranslationKey, string> = {
   "nav.logo.prayer": "ميقات",
   "nav.logo.times": "",
 
-  // Location page
   "location.title": "اختر الموقع",
   "location.subtitle": "اختر ولايتك لتحصل على اوقات الصلاة حسب مركز الولاية",
   "location.wilaya.label": "الولاية",
@@ -155,7 +141,6 @@ const ar: Record<TranslationKey, string> = {
   "location.change": "تغيير الموقع",
   "location.current": "موقعك الحالي",
 
-  // Home page
   "home.currentPrayer": "الصلاة الحالية",
   "home.prayerTime": "وقت الصلاة",
   "home.nextPrayer": "الصلاة القادمة",
@@ -169,7 +154,6 @@ const ar: Record<TranslationKey, string> = {
   "home.forbiddenPrayer": "وقت نهي (الا الفريضة)",
   "home.duha": "صلاة الضحى",
 
-  // Prayer names
   "prayer.Fajr": "الفجر",
   "prayer.Sunrise": "الشروق",
   "prayer.Duha": "الضحى",
@@ -178,7 +162,6 @@ const ar: Record<TranslationKey, string> = {
   "prayer.Maghrib": "المغرب",
   "prayer.Isha": "العشاء",
 
-  // Additional info
   "info.sunrise": "الشروق",
   "info.sunset": "الغروب",
   "info.hijriDate": "التاريخ الهجري",
@@ -186,7 +169,6 @@ const ar: Record<TranslationKey, string> = {
   "info.midnight": "منتصف الليل",
   "info.lastThird": "ثلث الليل الأخير",
 
-  // Calendar page
   "calendar.title": "تقويم أوقات الصلاة",
   "calendar.monthlyTitle": "تقويم الصلاة الشهري",
   "calendar.weekTitle": "تقويم الصلاة الأسبوعي",
@@ -197,7 +179,6 @@ const ar: Record<TranslationKey, string> = {
   "calendar.print": "طباعة",
   "calendar.error": "فشل في تحميل بيانات التقويم. يرجى التحقق من الاتصال.",
 
-  // Settings (location) keys used by LocationModal
   "settings.location": "الموقع",
   "settings.location.desc": "اختر ولايتك في الجزائر للحصول على أوقات صلاة دقيقة لمنطقتك.",
   "settings.location.current": "الموقع المحدد",
@@ -216,10 +197,8 @@ const ar: Record<TranslationKey, string> = {
   "settings.notifications.enableRequesting": "جاري طلب الإذن…",
   "settings.notifications.enableFailed": "لم يُمنح الإذن بعد. إذا كنت قد رفضت الإشعارات سابقاً، اسمح بها لهذا الموقع من قائمة شريط العنوان ثم اضغط الزر مرة أخرى.",
 
-  // Common
   "common.cancel": "إلغاء",
 
-  // Notifications modal
   "notifications.modalTitle": "مركز التحكم في الإشعارات",
   "notifications.masterToggle": "تفعيل جميع الإشعارات",
   "notifications.browserBlocked": "الإشعارات محظورة في إعدادات المتصفح.",
@@ -228,7 +207,6 @@ const ar: Record<TranslationKey, string> = {
   "notifications.requestPermission": "تفعيل الإشعارات",
 
 
-  // Footer
   "footer.privacy": "سياسة الخصوصية",
   "footer.terms": "شروط الخدمة",
   "footer.about": "حول",
@@ -239,11 +217,9 @@ const ar: Record<TranslationKey, string> = {
   "footer.slogan": "موقع لعرض أوقات الصلاة في ولايات الجزائر",
   "footer.copy": "جميع الحقوق محفوظة.",
 
-  // Notifications
   "notification.title": "اقتراب وقت الصلاة",
   "notification.body": "صلاة {prayer} بعد دقيقة واحدة",
 
-  // Errors
   "error.fetchPrayer": "فشل في تحميل بيانات التقويم. يرجى التحقق من الاتصال.",
   "error.retry": "إعادة المحاولة",
 };

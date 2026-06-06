@@ -1,7 +1,4 @@
 
-/**
- * Formats a time string (HH:mm or HH:mm:ss) into strict 24-hour format.
- */
 export function formatTime(timeStr: string): string {
   const parts = timeStr.split(":");
   const h = Number(parts[0]);
@@ -13,9 +10,6 @@ export function formatTime(timeStr: string): string {
   return res;
 }
 
-/**
- * Converts total minutes (e.g. 1260 => 21:00) to a 24-hour time string.
- */
 export function formatMinutesToTime(totalMinutes: number): string {
   const roundedMinutes = Math.round(totalMinutes);
   const normalized = ((roundedMinutes % 1440) + 1440) % 1440;

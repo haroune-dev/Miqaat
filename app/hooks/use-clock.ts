@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 
-
 export interface ClockState {
   now: Date;
   timeString: string;
@@ -40,10 +39,6 @@ const HIJRI_MONTHS = {
   ]
 };
 
-/**
- * Approximate Gregorian-to-Hijri conversion.
- * Accurate to within ±1 day for modern dates.
- */
 function toHijri(date: Date): { day: number; month: number; year: number } {
   const jd =
     Math.floor((14 + date.getMonth() + 1) / 12);

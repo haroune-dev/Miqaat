@@ -12,7 +12,6 @@
   justify-content: center;
 }
 
-/* ── Islamic star badge (two overlapping rounded squares) ── */
 .timeWrapper {
   position: relative;
   z-index: 1;
@@ -26,9 +25,6 @@
   padding: 24px;
 }
 
-/* =========================
-   Main Premium Layer
-========================= */
 .timeWrapper::before {
   content: "";
   position: absolute;
@@ -36,8 +32,7 @@
   z-index: -2;
   border-radius: 16px;
 
-  /* Premium dark gradient */
-  background:
+    background:
     linear-gradient(
       145deg,
       rgba(22, 36, 74, 0.96),
@@ -56,9 +51,6 @@
     box-shadow 0.35s ease;
 }
 
-/* =========================
-   Glass Reflection Layer
-========================= */
 .timeWrapper::after {
   content: "";
   position: absolute;
@@ -67,8 +59,7 @@
   border-radius: 16px;
   transform: rotate(45deg);
 
-  /* Premium dark gradient (rotated square) */
-  background:
+    background:
     linear-gradient(
       145deg,
       rgba(22, 36, 74, 0.96),
@@ -87,9 +78,6 @@
     box-shadow 0.35s ease;
 }
 
-/* =========================
-   Hover Effect
-========================= */
 .timeWrapper:hover::before {
   transform: translateY(-2px) scale(1.01);
   box-shadow:
@@ -106,7 +94,6 @@
     inset 0 -4px 10px rgba(0, 0, 0, 0.38);
 }
 
-/* ── Time text ── */
 .time {
   font-family: var(--family-mono);
   font-size: 2.25rem;
@@ -120,7 +107,6 @@
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
 }
 
-/* ── Hijri date ── */
 .hijri {
   font-family: var(--family-body);
   font-size: 1rem;
@@ -132,7 +118,6 @@
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
 }
 
-/* ── Small diamond ornament below badge ── */
 .diamond {
   position: relative;
   z-index: 1;

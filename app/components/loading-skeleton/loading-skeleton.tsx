@@ -2,7 +2,7 @@ import classnames from "classnames";
 
 export interface LoadingSkeletonProps {
   className?: string;
-  /** Number of skeleton rows to render */
+
   rows?: number;
 }
 

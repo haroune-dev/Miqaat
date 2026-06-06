@@ -1,7 +1,3 @@
-/* Prayer Times App – Design Tokens */
-
-/* Google Fonts are loaded via root.tsx links */
-
 :root {
   --family-display: "Cormorant Garamond", "Noto Sans Arabic", Georgia, serif;
   --family-brand-ar: "Changa", system-ui, sans-serif;
@@ -36,7 +32,6 @@
   --radius-full: 9999px;
 }
 
-/* ── Light Theme ───────────────────────────────────────────────── */
 :root,
 :root.light-theme {
   --color-primary: #1a5276;
@@ -71,7 +66,6 @@
   --shadow-accent-glow: 0 0 8px rgba(201, 168, 76, 0.2);
 }
 
-/* ── Dark Theme ────────────────────────────────────────────────── */
 :root.dark-theme {
   --color-primary: #2e86c1;
   --color-primary-light: #5dade2;
@@ -104,7 +98,6 @@
   --shadow-accent-glow: 0 0 8px rgba(244, 208, 63, 0.15);
 }
 
-/* ── Arabic Typography Overrides ── */
 :root[lang="ar"],
 [dir="rtl"] {
   --family-display: "Amiri", Georgia, serif;

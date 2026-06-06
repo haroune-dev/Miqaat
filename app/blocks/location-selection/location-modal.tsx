@@ -33,7 +33,6 @@ export function LocationModal({ isOpen, onClose }: LocationModalProps) {
   const { location, setLocation } = useAppContext();
   const locationState = useLocationSelection(location.cityId);
 
-  // Close when pressing Escape
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -56,7 +55,6 @@ export function LocationModal({ isOpen, onClose }: LocationModalProps) {
     locationState.detectGPSLocation();
   }, [locationState]);
 
-  // When GPS location is successfully detected and we have a new location
   useEffect(() => {
     const loc = locationState.getSelectedLocation();
     if (!loc || loc.cityId === location.cityId) return;

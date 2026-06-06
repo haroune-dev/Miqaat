@@ -1,6 +1,3 @@
-/* Service Worker – Prayer Times PWA */
-/* This is a placeholder. Replace with workbox or custom caching strategy. */
-
 const CACHE_NAME = "prayer-times-v1";
 const STATIC_ASSETS = ["/", "/manifest.json", "/favicon.svg"];
 

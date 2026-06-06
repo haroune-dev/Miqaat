@@ -2,10 +2,10 @@ export type PrayerName = "Fajr" | "Sunrise" | "Duha" | "Dhuhr" | "Asr" | "Maghri
 
 export interface PrayerTime {
   name: PrayerName;
-  time: string; // "HH:MM" 24h
+  time: string;
   label: string;
   icon: string;
-  isPrayer: boolean; // false for Sunrise
+  isPrayer: boolean;
 }
 
 export interface Location {

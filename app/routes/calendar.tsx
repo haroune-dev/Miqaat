@@ -9,7 +9,7 @@ import styles from "./calendar.module.css";
 type ViewMode = "weekly" | "monthly";
 
 function getWeekRange(date: Date): { start: number; end: number } {
-  const dayOfWeek = date.getDay(); // 0=Sun
+  const dayOfWeek = date.getDay();
   const dateNum = date.getDate();
   const start = dateNum - dayOfWeek;
   const end = start + 6;
@@ -84,7 +84,6 @@ export default function Calendar() {
     window.print();
   }, []);
 
-  // Filter data based on view mode
   const displayData = viewMode === "weekly"
     ? (() => {
       const { start, end } = getWeekRange(currentDate);
@@ -98,7 +97,7 @@ export default function Calendar() {
     <main className={styles.root}>
       <h1 className={styles.pageTitle}>{title}</h1>
 
-      {/* View mode toggle + Print */}
+      {}
       <div className={styles.toolbar}>
         <div className={styles.viewToggle}>
           <button

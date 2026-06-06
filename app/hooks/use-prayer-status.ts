@@ -3,15 +3,6 @@ import type { PrayerTime } from "~/data/prayer-data";
 
 export type PrayerStatus = "forbidden" | "duha" | null;
 
-/**
- * Determines the current prayer status based on Sunrise and Dhuhr times.
- *
- * Timeline:
- *  - Sunrise → Sunrise + 15 min:       "forbidden" (nafl prayer prohibited)
- *  - Sunrise + 15 min → Dhuhr - 15 min: "duha"      (Duha prayer time)
- *  - Dhuhr - 15 min → Dhuhr:            "forbidden" (nafl prayer prohibited)
- *  - Otherwise:                          null
- */
 export function usePrayerStatus(prayerTimes: PrayerTime[]): PrayerStatus {
   const [status, setStatus] = useState<PrayerStatus>(null);
 
@@ -44,7 +35,7 @@ export function usePrayerStatus(prayerTimes: PrayerTime[]): PrayerStatus {
     };
 
     calc();
-    const interval = setInterval(calc, 15000); // re-check every 15 seconds
+    const interval = setInterval(calc, 15000);
     return () => clearInterval(interval);
   }, [prayerTimes]);
 

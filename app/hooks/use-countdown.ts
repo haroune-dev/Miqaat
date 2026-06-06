@@ -7,9 +7,6 @@ export interface CountdownState {
   totalSeconds: number;
 }
 
-/**
- * Calculates and updates countdown to a target time ("HH:MM" 24h).
- */
 export function useCountdown(targetTime: string | null): CountdownState {
   const [remaining, setRemaining] = useState(0);
 
@@ -22,7 +19,7 @@ export function useCountdown(targetTime: string | null): CountdownState {
       const target = new Date();
       target.setHours(h, m, 0, 0);
       let diff = Math.floor((target.getTime() - now.getTime()) / 1000);
-      if (diff < 0) diff += 86400; // next day
+      if (diff < 0) diff += 86400;
       setRemaining(diff);
     };
 

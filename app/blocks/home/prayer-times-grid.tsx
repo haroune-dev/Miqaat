@@ -27,7 +27,6 @@ export function PrayerTimesGrid({ className }: PrayerTimesGridProps) {
   const { prayerTimes, currentPrayer } = useAppContext();
   const { t, locale } = useLanguage();
 
-  // Filter for only the 5 obligatory prayers + Duha (excluding Sunrise)
   const mainPrayers = ["Fajr", "Duha", "Dhuhr", "Asr", "Maghrib", "Isha"];
   const displayPrayers = prayerTimes.filter((p) => mainPrayers.includes(p.name));
 

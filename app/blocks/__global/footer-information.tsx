@@ -32,7 +32,7 @@ export function FooterInformation({ className }: FooterInformationProps) {
   return (
     <div className={classnames(style.root, "px-6 py-8 pb-4 flex flex-col items-center", className)}>
       <div className="w-full max-w-[1000px] flex flex-col items-center text-center">
-        {/* Top Header */}
+        {}
         <div className="flex flex-col items-center gap-1 mb-3">
           <Link to="/" className={classnames(style.brand, "flex items-center gap-4")}>
             <span className={style.brandText}>{t("nav.logo.prayer")}</span>
@@ -41,10 +41,10 @@ export function FooterInformation({ className }: FooterInformationProps) {
           <p className={style.slogan}>{t("footer.slogan")}</p>
         </div>
 
-        {/* Main Sections */}
+        {}
         <div className="w-full mb-8 py-8 border-t border-white/5 flex justify-center">
           <div className="grid grid-cols-2 gap-12 w-full max-w-[800px] max-[850px]:grid-cols-1">
-            {/* Links Section */}
+            {}
             <div className="flex flex-col items-center text-center gap-4">
               <h4 className={style.gridTitle}>{t("footer.links")}</h4>
               <div className="flex flex-col gap-3 w-full max-w-[200px]">
@@ -61,7 +61,7 @@ export function FooterInformation({ className }: FooterInformationProps) {
               </div>
             </div>
 
-            {/* Contact Section */}
+            {}
             <div className="flex flex-col items-center text-center gap-4">
               <h4 className={style.gridTitle}>{t("footer.contact")}</h4>
               <div className="flex flex-col items-center gap-4 w-full max-w-[300px]">
@@ -75,7 +75,7 @@ export function FooterInformation({ className }: FooterInformationProps) {
           </div>
         </div>
 
-        {/* Bottom Bar */}
+        {}
         <div className="w-full bg-white/[0.02] border border-white/5 rounded-xl px-6 py-4 flex flex-row items-center justify-between gap-8 max-[850px]:flex-col max-[850px]:text-center">
           <div className="flex-1 flex justify-start max-[850px]:justify-center">
             <div className="flex gap-3 items-center">

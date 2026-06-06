@@ -7,13 +7,6 @@ import {
   type ApiPrayerTimesEntry,
 } from "./prayerApi";
 
-/* ------------------------------------------------------------------ */
-/*  Static Wilaya Metadata                                            */
-/*  The API only returns Arabic city names and IDs.                   */
-/*  This table maps API city IDs → English names + coordinates        */
-/*  (needed for GPS nearest-city matching and bilingual display).     */
-/* ------------------------------------------------------------------ */
-
 interface WilayaMeta {
   cityId: number;
   name: string;
@@ -93,21 +86,11 @@ const WILAYA_META: Record<number, WilayaMeta> = {
   69: { cityId: 69, name: "Beni Ounif", nameAr: "بني ونيف", latitude: 32.05, longitude: -1.25 },
 };
 
-/* ------------------------------------------------------------------ */
-/*  API → App Type Mappers                                            */
-/* ------------------------------------------------------------------ */
-
-/**
- * Normalize time strings from API (e.g. "4:32") to "HH:MM" format.
- */
 function normalizeTime(t: string): string {
   const [h, m] = t.split(":").map(Number);
   return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
 }
 
-/**
- * Calculate Duha time as 15 minutes after Sunrise.
- */
 function calculateDuha(sunriseTime: string): string {
   const [h, m] = sunriseTime.split(":").map(Number);
   const totalMinutes = h * 60 + m + 15;
@@ -116,10 +99,6 @@ function calculateDuha(sunriseTime: string): string {
   return `${String(newH).padStart(2, "0")}:${String(newM).padStart(2, "0")}`;
 }
 
-/**
- * Map an API prayer times entry to the app's PrayerTime[] format.
- * Shurooq → Sunrise, Duha → Sunrise + 15 mins.
- */
 function mapApiEntryToPrayerTimes(entry: ApiPrayerTimesEntry): PrayerTime[] {
   const sunrise = normalizeTime(entry.Shurooq);
   const duha = calculateDuha(entry.Shurooq);
@@ -135,11 +114,6 @@ function mapApiEntryToPrayerTimes(entry: ApiPrayerTimesEntry): PrayerTime[] {
   ];
 }
 
-/* ------------------------------------------------------------------ */
-/*  Public API Functions                                              */
-/* ------------------------------------------------------------------ */
-
-/** Fetch all wilayas (cities) from the API, enriched with metadata. */
 export async function fetchWilayas(): Promise<Wilaya[]> {
   const cities = await fetchCities();
   return cities.map((city, index) => {
@@ -155,7 +129,6 @@ export async function fetchWilayas(): Promise<Wilaya[]> {
   });
 }
 
-/** Fetch today's prayer times for a given city. */
 export async function fetchPrayerTimes(cityId: number): Promise<PrayerTime[]> {
   const entries = await fetchDailyPrayerTimes(cityId);
   if (!entries || entries.length === 0) {
@@ -164,9 +137,8 @@ export async function fetchPrayerTimes(cityId: number): Promise<PrayerTime[]> {
   return mapApiEntryToPrayerTimes(entries[0]);
 }
 
-/** Fetch prayer times for an entire month. */
 export interface DayPrayerTimes {
-  date: string; // "YYYY-MM-DD"
+  date: string;
   day: number;
   times: PrayerTime[];
 }
@@ -174,7 +146,7 @@ export interface DayPrayerTimes {
 export async function fetchMonthlyPrayerTimes(
   cityId: number,
   year: number,
-  month: number, // 0-indexed
+  month: number,
 ): Promise<DayPrayerTimes[]> {
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const allEntries: DayPrayerTimes[] = [];
@@ -220,10 +192,6 @@ export async function fetchMonthlyPrayerTimes(
   return allEntries;
 }
 
-/* ------------------------------------------------------------------ */
-/*  Hijri Date API (Aladhan)                                           */
-/* ------------------------------------------------------------------ */
-
 export interface HijriDateInfo {
   day: number;
   month: string;
@@ -257,14 +225,10 @@ export async function fetchHijriDate(): Promise<HijriDateInfo> {
   };
 }
 
-/* ------------------------------------------------------------------ */
-
-/** Find the nearest wilaya for GPS coordinates using static metadata. */
 export async function findNearestLocation(
   lat: number,
   lng: number,
 ): Promise<{ wilaya: Wilaya } | null> {
-  // Use the static metadata table for distance calculations
   const entries = Object.values(WILAYA_META);
   let nearest: WilayaMeta | null = null;
   let minDist = Infinity;
