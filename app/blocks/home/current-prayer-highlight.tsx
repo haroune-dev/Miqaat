@@ -1,4 +1,4 @@
-import { Moon, Sun, Cloud, Sunrise, Sunset, Star, AlertTriangle, SunDim } from "lucide-react";
+import { CircleDot, Moon, Sun, Cloud, Sunrise, Sunset, Star, AlertTriangle, SunDim } from "lucide-react";
 import classnames from "classnames";
 import { useAppContext } from "~/context/app-context";
 import { useLanguage } from "~/i18n/language-context";
@@ -25,7 +25,7 @@ const PRAYER_ICONS: Record<string, React.ReactNode> = {
 
 export function CurrentPrayerHighlight({ className }: CurrentPrayerHighlightProps) {
   const { currentPrayer, prayerTimes } = useAppContext();
-  const { t, locale } = useLanguage();
+  const { t } = useLanguage();
   const prayerStatus = usePrayerStatus(prayerTimes);
 
   if (!currentPrayer) return null;
@@ -45,6 +45,7 @@ export function CurrentPrayerHighlight({ className }: CurrentPrayerHighlightProp
   return (
     <div className={classnames(style.root, "transition-all duration-300 hover:shadow-xl hover:-translate-y-1", className)}>
       <div className={style.header}>
+        <CircleDot size={18} aria-hidden="true" />
         <span className={style.headerLabel}>{t("home.currentPrayer")}</span>
       </div>
 

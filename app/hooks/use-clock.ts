@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 export interface ClockState {
-  now: Date;
+  now: Date | null;
   timeString: string;
   timeOnly: string;
   dateString: string;
@@ -72,12 +72,24 @@ function toHijri(date: Date): { day: number; month: number; year: number } {
 }
 
 export function useClock(locale: "en" | "ar" = "en"): ClockState {
-  const [now, setNow] = useState(new Date());
+  const [now, setNow] = useState<Date | null>(null);
 
   useEffect(() => {
-    const tick = setInterval(() => setNow(new Date()), 1000);
+    const updateClock = () => setNow(new Date());
+    updateClock();
+    const tick = setInterval(updateClock, 1000);
     return () => clearInterval(tick);
   }, []);
+
+  if (!now) {
+    return {
+      now: null,
+      timeString: "--:--:--",
+      timeOnly: "--:--:--",
+      dateString: "",
+      hijriDate: "",
+    };
+  }
 
   const h = now.getHours();
   const m = now.getMinutes();

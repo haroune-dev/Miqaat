@@ -16,13 +16,12 @@ export interface NextPrayerCountdownProps {
 export function NextPrayerCountdown({ className }: NextPrayerCountdownProps) {
   const { nextPrayer } = useAppContext();
   const { hours, minutes, seconds } = useCountdown(nextPrayer?.time ?? null);
-  const { t, locale } = useLanguage();
+  const { t } = useLanguage();
 
   if (!nextPrayer) return null;
 
   const prayerKey = `prayer.${nextPrayer.name}` as TranslationKey;
   const prayerName = t(prayerKey);
-  const displayPrayerName = locale === "ar" && nextPrayer.isPrayer ? `صلاة ${prayerName}` : prayerName;
 
   return (
     <div className={classnames(style.root, "transition-all duration-300 hover:shadow-xl hover:-translate-y-1", className)}>
@@ -32,7 +31,7 @@ export function NextPrayerCountdown({ className }: NextPrayerCountdownProps) {
       </div>
 
       <div className={style.content}>
-        <div className={style.prayerName}>{displayPrayerName}</div>
+        <div className={style.prayerName}>{prayerName}</div>
         <div className={style.countdownLabel}>{t("home.remainingTime")}</div>
         <div className={style.countdown} dir="ltr">
           {hours !== "00" && (

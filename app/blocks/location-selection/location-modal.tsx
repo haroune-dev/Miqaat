@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { MapPin, X } from "lucide-react";
 import classnames from "classnames";
 import type { Location, Wilaya } from "~/data/prayer-data";
@@ -32,23 +32,42 @@ export function LocationModal({ isOpen, onClose }: LocationModalProps) {
   const { t, locale } = useLanguage();
   const { location, setLocation } = useAppContext();
   const locationState = useLocationSelection(location.cityId);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+
+  const handleClose = useCallback(() => {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    onClose();
+  }, [onClose]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    previousFocusRef.current =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null;
+
+    return () => {
+      previousFocusRef.current?.focus({ preventScroll: true });
+      previousFocusRef.current = null;
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") handleClose();
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [isOpen, handleClose]);
 
   const handleWilayaChange = useCallback(
     (wilaya: Wilaya) => {
       locationState.selectWilaya(wilaya);
       setLocation(wilayaToLocation(wilaya));
-      onClose();
+      handleClose();
     },
-    [locationState, setLocation, onClose],
+    [locationState, setLocation, handleClose],
   );
 
   const handleGPSDetect = useCallback(() => {
@@ -59,29 +78,30 @@ export function LocationModal({ isOpen, onClose }: LocationModalProps) {
     const loc = locationState.getSelectedLocation();
     if (!loc || loc.cityId === location.cityId) return;
     setLocation(loc);
-    onClose();
-  }, [locationState.selectedWilaya, location.cityId, setLocation, locationState.getSelectedLocation, onClose]);
+    handleClose();
+  }, [locationState.selectedWilaya, location.cityId, setLocation, locationState.getSelectedLocation, handleClose]);
 
 
   const city = locale === "ar" ? location.cityAr || location.city : location.city;
   const country = locale === "ar" ? location.countryAr || location.country : location.country;
 
+  if (!isOpen) return null;
+
   return (
-    <div 
-      className={classnames(style.overlay, { [style.open]: isOpen })} 
-      aria-hidden={!isOpen}
-      onClick={onClose}
+    <div
+      className={classnames(style.overlay, style.open)}
+      onClick={handleClose}
     >
-      <div 
-        className={classnames(style.modal, { [style.open]: isOpen })}
+      <div
+        className={classnames(style.modal, style.open)}
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-labelledby="location-modal-title"
       >
-        <button 
-          className={style.closeBtn} 
-          onClick={onClose}
+        <button
+          className={style.closeBtn}
+          onClick={handleClose}
           aria-label={t("common.cancel")}
         >
           <X size={20} />

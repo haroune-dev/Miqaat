@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import { Bell, BellOff, X, Loader } from "lucide-react";
 import classnames from "classnames";
@@ -30,19 +30,38 @@ export function NotificationModal({ isOpen, onClose }: NotificationModalProps) {
   const [isRequesting, setIsRequesting] = useState(false);
   const [showDeniedGuide, setShowDeniedGuide] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  const handleClose = useCallback(() => {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    onClose();
+  }, [onClose]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    previousFocusRef.current =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null;
+
+    return () => {
+      previousFocusRef.current?.focus({ preventScroll: true });
+      previousFocusRef.current = null;
+    };
+  }, [isOpen]);
+
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") handleClose();
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [isOpen, handleClose]);
 
   const allPrayersEnabled = PRAYERS.every((p) => notificationPreferences[p] !== false);
   const masterIsActive = notificationsEnabled && allPrayersEnabled;
@@ -87,16 +106,15 @@ export function NotificationModal({ isOpen, onClose }: NotificationModalProps) {
     return prayer ? prayer.time : null;
   };
 
-  if (!mounted) return null;
+  if (!mounted || !isOpen) return null;
 
   return createPortal(
     <div
-      className={classnames(style.overlay, { [style.open]: isOpen })}
-      aria-hidden={!isOpen}
-      onClick={onClose}
+      className={classnames(style.overlay, style.open)}
+      onClick={handleClose}
     >
       <div
-        className={classnames(style.modal, { [style.open]: isOpen })}
+        className={classnames(style.modal, style.open)}
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
@@ -104,7 +122,7 @@ export function NotificationModal({ isOpen, onClose }: NotificationModalProps) {
       >
         <button
           className={style.closeBtn}
-          onClick={onClose}
+          onClick={handleClose}
           aria-label={t("common.cancel")}
         >
           <X size={20} />
