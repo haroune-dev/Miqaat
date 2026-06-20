@@ -31,7 +31,18 @@ export function NavigationHeader({ className }: NavigationHeaderProps) {
         </span>
       </Link>
 
-      <div className={classnames(style.navWrapper, isMenuOpen && style.navWrapperOpen)}>
+      <button
+        className={classnames(style.mobileBackdrop, isMenuOpen && style.mobileBackdropOpen)}
+        type="button"
+        aria-label="Close menu"
+        tabIndex={isMenuOpen ? 0 : -1}
+        onClick={() => setIsMenuOpen(false)}
+      />
+
+      <div
+        id="mobile-navigation-menu"
+        className={classnames(style.navWrapper, isMenuOpen && style.navWrapperOpen)}
+      >
         <div className={style.nav}>
           <NavLink
             to="/"
@@ -88,18 +99,17 @@ export function NavigationHeader({ className }: NavigationHeaderProps) {
           </span>
         </label>
 
-        <input
-          className={style.toggleCheckbox}
-          id="toggle"
-          type="checkbox"
-          checked={isMenuOpen}
-          onChange={(event) => setIsMenuOpen(event.target.checked)}
-        />
-        <label className={style.hamburger} htmlFor="toggle" aria-label="Toggle menu">
+        <button
+          className={classnames(style.hamburger, isMenuOpen && style.hamburgerOpen)}
+          type="button"
+          aria-label="Toggle menu"
+          aria-controls="mobile-navigation-menu"
+          aria-expanded={isMenuOpen}
+          onClick={() => setIsMenuOpen((isOpen) => !isOpen)}
+        >
           <div className={style.bar}></div>
           <div className={style.bar}></div>
-          <div className={style.bar}></div>
-        </label>
+        </button>
       </div>
 
       <NotificationModal

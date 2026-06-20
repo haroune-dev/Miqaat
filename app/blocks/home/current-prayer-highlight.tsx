@@ -1,4 +1,4 @@
-import { CircleDot, Moon, Sun, Cloud, Sunrise, Sunset, Star, AlertTriangle, SunDim } from "lucide-react";
+import { AlertTriangle, CircleDot } from "lucide-react";
 import classnames from "classnames";
 import { useAppContext } from "~/context/app-context";
 import { useLanguage } from "~/i18n/language-context";
@@ -6,22 +6,12 @@ import { usePrayerStatus } from "~/hooks/use-prayer-status";
 import type { TranslationKey } from "~/i18n/translations";
 import style from "./current-prayer-highlight.module.css";
 import { formatTime } from "~/utils/time-utils";
+import { renderPrayerIcon } from "./prayer-icons";
 
 
 export interface CurrentPrayerHighlightProps {
   className?: string;
 }
-
-const PRAYER_ICONS: Record<string, React.ReactNode> = {
-  moon: <Moon size={28} />,
-  sun: <Sun size={28} />,
-  "sun-dim": <SunDim size={28} />,
-  sunrise: <Sunrise size={28} />,
-  sunset: <Sunset size={28} />,
-  "cloud-sun": <Cloud size={28} />,
-  star: <Star size={28} />,
-};
-
 
 export function CurrentPrayerHighlight({ className }: CurrentPrayerHighlightProps) {
   const { currentPrayer, prayerTimes } = useAppContext();
@@ -32,14 +22,14 @@ export function CurrentPrayerHighlight({ className }: CurrentPrayerHighlightProp
 
   const prayerKey = `prayer.${currentPrayer.name}` as TranslationKey;
   let displayName = t(prayerKey);
-  let displayIcon = PRAYER_ICONS[currentPrayer.icon] ?? <Star size={28} />;
+  let displayIcon = renderPrayerIcon(currentPrayer.icon);
 
   if (prayerStatus === "forbidden") {
     displayName = t("home.forbiddenPrayer");
     displayIcon = <AlertTriangle size={28} />;
   } else if (prayerStatus === "duha") {
     displayName = t("home.duha");
-    displayIcon = <SunDim size={28} />;
+    displayIcon = renderPrayerIcon("sun-dim");
   }
 
   return (

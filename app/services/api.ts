@@ -1,11 +1,14 @@
 import type { PrayerTime, Wilaya } from "~/data/prayer-data";
 import {
-  fetchCities,
-  fetchDailyPrayerTimes,
-  fetchPrayerTimesRange,
-  formatDate,
-  type ApiPrayerTimesEntry,
-} from "./prayerApi";
+  fetchAlAdhanAnnualCalendar,
+  mapAlAdhanDayToPrayerTimes,
+} from "./alAdhanService";
+
+export interface DayPrayerTimes {
+  date: string;
+  day: number;
+  times: PrayerTime[];
+}
 
 interface WilayaMeta {
   cityId: number;
@@ -86,110 +89,78 @@ const WILAYA_META: Record<number, WilayaMeta> = {
   69: { cityId: 69, name: "Beni Ounif", nameAr: "بني ونيف", latitude: 32.05, longitude: -1.25 },
 };
 
-function normalizeTime(t: string): string {
-  const [h, m] = t.split(":").map(Number);
-  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
-}
-
-function calculateDuha(sunriseTime: string): string {
-  const [h, m] = sunriseTime.split(":").map(Number);
-  const totalMinutes = h * 60 + m + 15;
-  const newH = Math.floor(totalMinutes / 60);
-  const newM = totalMinutes % 60;
-  return `${String(newH).padStart(2, "0")}:${String(newM).padStart(2, "0")}`;
-}
-
-function mapApiEntryToPrayerTimes(entry: ApiPrayerTimesEntry): PrayerTime[] {
-  const sunrise = normalizeTime(entry.Shurooq);
-  const duha = calculateDuha(entry.Shurooq);
-
-  return [
-    { name: "Fajr", label: "Fajr", time: normalizeTime(entry.Fajr), icon: "moon", isPrayer: true },
-    { name: "Sunrise", label: "Sunrise", time: sunrise, icon: "sunrise", isPrayer: false },
-    { name: "Duha", label: "Duha", time: duha, icon: "sun-dim", isPrayer: true },
-    { name: "Dhuhr", label: "Dhuhr", time: normalizeTime(entry.Dhuhr), icon: "sun", isPrayer: true },
-    { name: "Asr", label: "Asr", time: normalizeTime(entry.Asr), icon: "cloud-sun", isPrayer: true },
-    { name: "Maghrib", label: "Maghrib", time: normalizeTime(entry.Maghrib), icon: "sunset", isPrayer: true },
-    { name: "Isha", label: "Isha", time: normalizeTime(entry.Isha), icon: "star", isPrayer: true },
-  ];
-}
+// Helper removed because it is now handled by mapAlAdhanDayToPrayerTimes
 
 export async function fetchWilayas(): Promise<Wilaya[]> {
-  const cities = await fetchCities();
-  return cities.map((city, index) => {
-    const meta = WILAYA_META[city._id];
+  return Object.values(WILAYA_META).map((meta, index) => {
     return {
       id: index + 1,
-      cityId: city._id,
-      name: meta?.name ?? city.MADINA_NAME,
-      nameAr: meta?.nameAr ?? city.MADINA_NAME,
-      latitude: meta?.latitude ?? 36.75,
-      longitude: meta?.longitude ?? 3.06,
+      cityId: meta.cityId,
+      name: meta.name,
+      nameAr: meta.nameAr,
+      latitude: meta.latitude,
+      longitude: meta.longitude,
     };
   });
 }
 
 export async function fetchPrayerTimes(cityId: number): Promise<PrayerTime[]> {
-  const entries = await fetchDailyPrayerTimes(cityId);
-  if (!entries || entries.length === 0) {
-    throw new Error("No prayer times data returned from API.");
-  }
-  return mapApiEntryToPrayerTimes(entries[0]);
-}
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1); // "1" to "12"
+  const day = String(now.getDate()).padStart(2, "0"); // "01" to "31"
+  
+  const meta = WILAYA_META[cityId];
+  if (!meta) throw new Error(`Wilaya metadata not found for cityId: ${cityId}`);
 
-export interface DayPrayerTimes {
-  date: string;
-  day: number;
-  times: PrayerTime[];
+  const calendar = await fetchAlAdhanAnnualCalendar(
+    cityId,
+    meta.name,
+    meta.latitude,
+    meta.longitude,
+    year
+  );
+
+  const monthData = calendar.data[month];
+  if (!monthData) throw new Error("No prayer times data returned from API for this month.");
+
+  const todayEntry = monthData.find(d => d.date.gregorian.date.startsWith(`${day}-`));
+  if (!todayEntry) throw new Error("No prayer times data returned from API for today.");
+
+  return mapAlAdhanDayToPrayerTimes(todayEntry);
 }
 
 export async function fetchMonthlyPrayerTimes(
   cityId: number,
   year: number,
-  month: number,
+  month: number, // 0-indexed (0 = Jan, 11 = Dec)
 ): Promise<DayPrayerTimes[]> {
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const allEntries: DayPrayerTimes[] = [];
-  
-  let currentStartDay = 1;
-  while (currentStartDay <= daysInMonth) {
-    const currentEndDay = Math.min(currentStartDay + 14, daysInMonth);
-    const startDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(currentStartDay).padStart(2, "0")}`;
-    const endDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(currentEndDay).padStart(2, "0")}`;
+  const meta = WILAYA_META[cityId];
+  if (!meta) throw new Error(`Wilaya metadata not found for cityId: ${cityId}`);
+
+  const calendar = await fetchAlAdhanAnnualCalendar(
+    cityId,
+    meta.name,
+    meta.latitude,
+    meta.longitude,
+    year
+  );
+
+  const monthStr = String(month + 1);
+  const monthData = calendar.data[monthStr];
+  if (!monthData) return [];
+
+  return monthData.map((dayEntry) => {
+    // AlAdhan date.gregorian.date is "DD-MM-YYYY"
+    const [d, m, y] = dayEntry.date.gregorian.date.split("-");
+    const isoDate = `${y}-${m}-${d}`;
     
-    try {
-      const entries = await fetchPrayerTimesRange(cityId, startDate, endDate);
-      
-      const mappedEntries = entries.map((entry) => {
-        const d = new Date(entry.GeoDate);
-        return {
-          date: entry.GeoDate,
-          day: d.getDate(),
-          times: mapApiEntryToPrayerTimes(entry),
-        };
-      });
-
-      const entriesMap = new Map(mappedEntries.map((e) => [e.date, e]));
-
-      for (let day = currentStartDay; day <= currentEndDay; day++) {
-        const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-        if (entriesMap.has(dateStr)) {
-          allEntries.push(entriesMap.get(dateStr)!);
-        } else {
-          allEntries.push({ date: dateStr, day, times: [] });
-        }
-      }
-    } catch (e) {
-      for (let day = currentStartDay; day <= currentEndDay; day++) {
-        const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-        allEntries.push({ date: dateStr, day, times: [] });
-      }
-    }
-    
-    currentStartDay = currentEndDay + 1;
-  }
-
-  return allEntries;
+    return {
+      date: isoDate,
+      day: Number(d),
+      times: mapAlAdhanDayToPrayerTimes(dayEntry)
+    };
+  });
 }
 
 export interface HijriDateInfo {

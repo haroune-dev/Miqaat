@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { MapPin, X } from "lucide-react";
 import classnames from "classnames";
 import type { Location, Wilaya } from "~/data/prayer-data";
@@ -33,6 +34,11 @@ export function LocationModal({ isOpen, onClose }: LocationModalProps) {
   const { location, setLocation } = useAppContext();
   const locationState = useLocationSelection(location.cityId);
   const previousFocusRef = useRef<HTMLElement | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleClose = useCallback(() => {
     if (document.activeElement instanceof HTMLElement) {
@@ -85,15 +91,15 @@ export function LocationModal({ isOpen, onClose }: LocationModalProps) {
   const city = locale === "ar" ? location.cityAr || location.city : location.city;
   const country = locale === "ar" ? location.countryAr || location.country : location.country;
 
-  if (!isOpen) return null;
+  if (!mounted) return null;
 
-  return (
+  return createPortal(
     <div
-      className={classnames(style.overlay, style.open)}
+      className={classnames(style.overlay, isOpen && style.open)}
       onClick={handleClose}
     >
       <div
-        className={classnames(style.modal, style.open)}
+        className={classnames(style.modal, isOpen && style.open)}
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
@@ -160,6 +166,7 @@ export function LocationModal({ isOpen, onClose }: LocationModalProps) {
           />
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

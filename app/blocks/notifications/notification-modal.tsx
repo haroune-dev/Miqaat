@@ -106,15 +106,15 @@ export function NotificationModal({ isOpen, onClose }: NotificationModalProps) {
     return prayer ? prayer.time : null;
   };
 
-  if (!mounted || !isOpen) return null;
+  if (!mounted) return null;
 
   return createPortal(
     <div
-      className={classnames(style.overlay, style.open)}
+      className={classnames(style.overlay, isOpen && style.open)}
       onClick={handleClose}
     >
       <div
-        className={classnames(style.modal, style.open)}
+        className={classnames(style.modal, isOpen && style.open)}
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"

@@ -11,12 +11,17 @@
   padding: var(--space-4);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s cubic-bezier(0.32, 0.72, 0, 1), backdrop-filter 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  visibility: hidden;
+  transition: 
+    opacity 0.3s cubic-bezier(0.32, 0.72, 0, 1), 
+    backdrop-filter 0.3s cubic-bezier(0.32, 0.72, 0, 1),
+    visibility 0.3s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 .overlay.open {
   opacity: 1;
   pointer-events: auto;
+  visibility: visible;
 }
 
 .modal {

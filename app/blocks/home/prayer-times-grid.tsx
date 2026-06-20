@@ -1,31 +1,19 @@
-import { Moon, Sun, Sunrise, Sunset, Star, SunDim } from "lucide-react";
-import { CiCloudSun } from "react-icons/ci";
 import classnames from "classnames";
 import { useAppContext } from "~/context/app-context";
 import { useLanguage } from "~/i18n/language-context";
 import type { TranslationKey } from "~/i18n/translations";
 import style from "./prayer-times-grid.module.css";
 import { formatTime } from "~/utils/time-utils";
+import { renderPrayerIcon } from "./prayer-icons";
 
 
 export interface PrayerTimesGridProps {
   className?: string;
 }
 
-const PRAYER_ICONS: Record<string, React.ReactNode> = {
-  moon: <Moon size={28} />,
-  sun: <Sun size={28} />,
-  "sun-dim": <SunDim size={28} />,
-  sunrise: <Sunrise size={28} />,
-  sunset: <Sunset size={28} />,
-  "cloud-sun": <CiCloudSun size={28} />,
-  star: <Star size={28} />,
-};
-
-
 export function PrayerTimesGrid({ className }: PrayerTimesGridProps) {
   const { prayerTimes, currentPrayer } = useAppContext();
-  const { t, locale } = useLanguage();
+  const { t } = useLanguage();
 
   const mainPrayers = ["Fajr", "Duha", "Dhuhr", "Asr", "Maghrib", "Isha"];
   const displayPrayers = prayerTimes.filter((p) => mainPrayers.includes(p.name));
@@ -54,7 +42,7 @@ export function PrayerTimesGrid({ className }: PrayerTimesGridProps) {
                 </div>
               )}
               <div className={style.iconWrapper}>
-                {PRAYER_ICONS[prayer.icon] ?? <Star size={28} />}
+                {renderPrayerIcon(prayer.icon)}
               </div>
               <div className={style.prayerName}>
                 {t(prayerKey)}

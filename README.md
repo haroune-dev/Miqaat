@@ -20,18 +20,18 @@
   <a href="#-getting-started">Getting Started</a>
 </p>
 
-## ✨ Overview
+##  Overview
 **Miqaat** is a web application designed to provide accurate prayer times specifically for users in Algeria.
 
 ## 🌐 Live Demo
 [View App](https://miqaat-eight.vercel.app/)
 
-## 🚀 Key Features
-*   📍 **Dynamic Location Selection**: Easily choose your Wilaya using an interface or by using automatic GPS detection.
-*   ⏳ **Live Countdown**: Real-time updates and countdowns to the next prayer time.
-*   📅 **Comprehensive Calendar**: View weekly and monthly prayer schedules with an elegant, printable layout.
-*   🔔 **Smart Notifications**: Frontend-scheduled notifications firing 1 minute before each prayer.
-*   📖 **Hijri Date Display**: Accurate Islamic date fetched from the Aladhan API, displayed alongside the live clock.
+##  Key Features
+*    **Dynamic Location Selection**: Easily choose your Wilaya using an interface or by using automatic GPS detection.
+*    **Live Countdown**: Real-time updates and countdowns to the next prayer time.
+*    **Comprehensive Calendar**: View weekly and monthly prayer schedules with an elegant, printable layout.
+*    **Smart Notifications**: Frontend-scheduled notifications firing 1 minute before each prayer.
+*    **Hijri Date Display**: Accurate Islamic date fetched from the Aladhan API, displayed alongside the live clock.
 
 ## 📸 Screenshots
 
@@ -58,7 +58,6 @@ weekly/monthly prayer time calendar.
 *   **Deployment**: Optimized production build via Vite
 
 ## 🏗️ Project Architecture
-The project follows a modular and scalable architecture, separating UI concerns from business logic and data fetching.
 
 ### 🧩 System Overview
 - **UI Layer**
@@ -71,7 +70,7 @@ The project follows a modular and scalable architecture, separating UI concerns 
   - LocalStorage
 - **Data Layer**
   - API Services
-  - External Adhan API
+  - External AlAdhan API
   - Static Data / Types
 
 ### 📁 Directory Breakdown
@@ -88,12 +87,12 @@ The project follows a modular and scalable architecture, separating UI concerns 
 ## 🔌 API Integration
 Miqaat integrates with two external APIs for accurate prayer times and Islamic date conversion.
 
-### Prayer Times — Adhan DZ API
-*   **Source**: [adhan-dz.dexter21767.com](https://adhan-dz.dexter21767.com)
+### Prayer Times — AlAdhan API
+*   **Source**: [aladhan.com](https://aladhan.com)
 *   **Endpoints**:
-    - `/cities`: Fetches a comprehensive list of Algerian Wilayas and Baladiyas.
-    - `/prayerTimes`: Retrieves daily or monthly prayer schedules based on the selected city ID and date range.
-*   **Implementation**: Logic is centralized in [prayerApi.ts](file:///home/haroune-dev/Desktop/Miqaat/app/services/prayerApi.ts) (raw fetch layer) and [api.ts](file:///home/haroune-dev/Desktop/Miqaat/app/services/api.ts) (application mapping).
+    - `/v1/calendarByCity`: Fetches a full annual calendar for the 58 traditional Algerian Wilayas using their city names.
+    - `/v1/calendarByAddress`: Fetches a full annual calendar using coordinates for the newly established southern wilayas.
+*   **Implementation**: Logic is centralized in [alAdhanService.ts](file:///home/haroune-dev/Desktop/Miqaat/app/services/alAdhanService.ts) (fetching, caching, and mapping) and [api.ts](file:///home/haroune-dev/Desktop/Miqaat/app/services/api.ts) (application mapping). All requests use `method=19` (Algerian Ministry of Religious Affairs and Endowments).
 
 ### Hijri Date — Aladhan Islamic Calendar API
 *   **Source**: [aladhan.com/islamic-calendar-api](https://aladhan.com/islamic-calendar-api)
@@ -102,7 +101,7 @@ Miqaat integrates with two external APIs for accurate prayer times and Islamic d
 *   **Implementation**: [`fetchHijriDate()`](file:///home/haroune-dev/Desktop/Miqaat/app/services/api.ts) in the service layer, called from [`current-time-card.tsx`](file:///home/haroune-dev/Desktop/Miqaat/app/blocks/home/current-time-card.tsx). Falls back to a client-side approximate algorithm if the API is unavailable.
 
 
-## 🏁 Getting Started
+##  Getting Started
 
 ### Prerequisites
 *   Node.js (LTS version recommended)
@@ -121,13 +120,13 @@ Miqaat integrates with two external APIs for accurate prayer times and Islamic d
    ```bash
    npm run dev
    ```
-## 🔮 Future Improvements
+##  Future Improvements
 *   [ ] Full Offline Data Persistence (Service Worker).
 *   [ ] Support for Baladiyas (Sub-provinces).
 *   [ ] Multi-language Expansion (French support).
 *   [ ] Advanced Analytics & Insights.
 
-## 👤 Author
+##  Author
 **Haroune-dev**
 
 ---
