@@ -326,7 +326,7 @@
 
 .langTrack {
   position: relative;
-  width: 164px;
+  width: 148px;
   height: 42px;
   border-radius: 999px;
   background: #ffffff;
@@ -432,6 +432,7 @@
 @media (max-width: 768px) {
   .root {
     z-index: 300;
+    padding: var(--space-4) var(--space-5);
   }
 
   .logoText {
@@ -441,6 +442,10 @@
   .logoIcon {
     width: 3.25rem;
     height: 3.25rem;
+  }
+
+  .actions {
+    gap: var(--space-5);
   }
 
   .actions::after {
@@ -741,5 +746,15 @@
   :global([dir="rtl"]) .navLinkActive .navLinkTitle {
     transform: none;
     opacity: 1;
+  }
+}
+
+@media (max-width: 375px) {
+  .hamburger {
+    left: calc(100vw - 30px);
+  }
+
+  :global([dir="rtl"]) .hamburger {
+    left: 30px;
   }
 }
