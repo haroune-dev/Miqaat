@@ -1,4 +1,4 @@
-# 🌙 ميقات | Miqaat
+# ميقات | Miqaat
 > Accurate prayer times for Algerian Wilayas.
 
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
