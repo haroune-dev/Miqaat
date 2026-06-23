@@ -170,8 +170,8 @@
 @media (max-width: 640px) {
   .root {
     flex-wrap: wrap;
-    padding: calc(var(--space-4) * 0.6) var(--space-4);
-    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    gap: var(--space-4);
   }
 
   .divider {
