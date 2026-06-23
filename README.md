@@ -8,7 +8,7 @@
 [![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)](https://reactrouter.com/)
 
 <p align="center">
-  <img src="images/photo_2026-04-21_06-54-32.jpg" alt="Miqaat Logo" width="200" />
+  <img src="public/logo.jpg" alt="Miqaat Logo" width="200" />
 </p>
 
 <p align="center">
@@ -38,13 +38,13 @@
 ### 🏠 Home Dashboard
 Comprehensive view of current and upcoming prayer times with a live clock.
 <p align="center">
-  <img src="images/Screenshot From 2026-05-29 18-34-39.png" alt="Home Screen" width="800" />
+  <img src="public/Pasted image (2).png" alt="Home Screen" width="800" />
 </p>
 
 ### 🗓️ Prayer Calendar
 weekly/monthly prayer time calendar.
 <p align="center">
-  <img src="images/Screenshot From 2026-05-29 18-35-28.png" alt="Calendar View" width="800" />
+  <img src="images/Pasted image (4).png"alt="Calendar View" width="800" />
 </p>
 
 ## 🛠️ Tech Stack
