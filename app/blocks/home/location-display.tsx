@@ -15,7 +15,6 @@ export function LocationDisplay({ className, onOpenModal }: LocationDisplayProps
   const { t, locale } = useLanguage();
 
   const city = locale === "ar" ? location.cityAr || location.city : location.city;
-  const country = locale === "ar" ? location.countryAr || location.country : location.country;
 
   return (
     <div className={classnames(style.root, className)}>
@@ -24,9 +23,7 @@ export function LocationDisplay({ className, onOpenModal }: LocationDisplayProps
           <MapPin size={22} strokeWidth={2.25} />
         </div>
         <div className={style.text}>
-          <span className={style.label}>{t("location.current")}</span>
           <span className={style.city}>{city}</span>
-          <span className={style.country}>{country}</span>
         </div>
       </div>
 

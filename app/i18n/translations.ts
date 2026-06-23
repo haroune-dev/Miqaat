@@ -7,6 +7,7 @@ const en = {
   "nav.location": "Location",
   "nav.calendar": "Calendar",
   "nav.notifications": "Notifications",
+  "nav.language": "Language",
   "nav.logo.prayer": "miqaat",
   "nav.logo.times": "",
 
@@ -19,7 +20,7 @@ const en = {
   "location.wilaya.noResults": "No matching wilayas found",
   "location.clear": "Clear selection",
   "location.confirm": "Confirm Location",
-  "location.or": "OR",
+  "location.or": "Or choose manually",
   "location.gps.detect": "Use my GPS location",
   "location.gps.detecting": "Detecting location...",
   "location.gps.success": "Location detected!",
@@ -69,7 +70,6 @@ const en = {
   "calendar.error": "Failed to load calendar data. Please check your connection.",
 
   "settings.location": "Location",
-  "settings.location.desc": "Choose your wilaya in Algeria to get accurate prayer times for your area.",
   "settings.location.current": "Selected location",
 
   "settings.notifications": "Prayer Notifications",
@@ -118,6 +118,7 @@ const ar: Record<TranslationKey, string> = {
   "nav.location": "الموقع",
   "nav.calendar": "التقويم",
   "nav.notifications": "الإشعارات",
+  "nav.language": "اللغة",
   "nav.logo.prayer": "ميقات",
   "nav.logo.times": "",
 
@@ -130,7 +131,7 @@ const ar: Record<TranslationKey, string> = {
   "location.wilaya.noResults": "لا توجد نتائج مطابقة",
   "location.clear": "مسح الاختيار",
   "location.confirm": "تأكيد الموقع",
-  "location.or": "أو",
+  "location.or": "أو اختر يدوياً",
   "location.gps.detect": "استخدم موقعي GPS",
   "location.gps.detecting": "جاري تحديد الموقع...",
   "location.gps.success": "تم تحديد الموقع!",
@@ -180,7 +181,6 @@ const ar: Record<TranslationKey, string> = {
   "calendar.error": "فشل في تحميل بيانات التقويم. يرجى التحقق من الاتصال.",
 
   "settings.location": "الموقع",
-  "settings.location.desc": "اختر ولايتك في الجزائر للحصول على أوقات صلاة دقيقة لمنطقتك.",
   "settings.location.current": "الموقع المحدد",
 
   "settings.notifications": "إشعارات الصلاة",

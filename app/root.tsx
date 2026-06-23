@@ -39,9 +39,7 @@ function InnerLayout({ children }: { children: React.ReactNode }) {
       </head>
       <body className={styles.body}>
         <AppProvider>
-          <header>
-            <NavigationHeader />
-          </header>
+          <NavigationHeader />
           <div className={styles.pageContent}>{children}</div>
           <footer>
             <FooterInformation />

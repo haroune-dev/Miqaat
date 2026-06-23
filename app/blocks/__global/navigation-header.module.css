@@ -315,134 +315,83 @@
   display: none;
 }
 
-.switch {
-  font-size: 17px;
+.langSwitcher {
+  display: flex;
+  align-items: center;
+}
+
+.langSwitcher input[type="checkbox"] {
+  display: none;
+}
+
+.langTrack {
   position: relative;
-  display: inline-block;
-  width: 3.5em;
-  height: 2em;
+  width: 164px;
+  height: 42px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid var(--color-border-light);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.10);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  cursor: pointer;
+  overflow: hidden;
+  box-sizing: border-box;
   flex-shrink: 0;
 }
 
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+.langLabelAr,
+.langLabelEn {
+  font-size: 0.82rem;
+  font-weight: 800;
+  z-index: 2;
+  transition: color 0.45s ease;
+  user-select: none;
+  line-height: 1;
 }
 
-.slider {
+.langLabelAr {
+  color: rgba(0, 0, 0, 0.45);
+  padding-inline-end: 4px;
+}
+
+.langSwitcher input:checked ~ .langTrack .langLabelAr {
+  color: #ffffff;
+}
+
+.langLabelEn {
+  color: #ffffff;
+  padding-inline-start: 4px;
+}
+
+.langSwitcher input:checked ~ .langTrack .langLabelEn {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.langKnob {
   position: absolute;
-  cursor: pointer;
-  inset: 0;
-  background-color: #333;
-  transition: 0.4s;
-  border-radius: 30px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  box-sizing: border-box;
+  inset-inline-start: calc(50% + 0px);
+  top: 4px;
+  width: calc(50% - 4px);
+  height: calc(100% - 8px);
+  border-radius: 999px;
+  background: #000000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  z-index: 1;
+  transition:
+    inset-inline-start 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+    inset-inline-end 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.switch input:focus-visible + .slider {
-  outline: 3px solid color-mix(in srgb, var(--color-accent) 60%, transparent);
-  outline-offset: 3px;
+.langSwitcher input:checked ~ .langTrack .langKnob {
+  inset-inline-start: 4px;
 }
 
-.circle {
-  position: absolute;
-  height: 1.4em;
-  width: 1.4em;
-  border-radius: 20px;
-  left: 0.3em;
-  bottom: 0.3em;
-  background-color: #fff000;
-  transform: rotate(360deg) translateX(0);
-  box-shadow: 0 0 14px rgba(255, 240, 0, 0.3);
-  transition: 0.4s;
-}
-
-:global(.dark-theme) .slider {
-  background-color: #20242b;
-  border-color: rgba(244, 208, 63, 0.36);
-  box-shadow:
-    0 8px 18px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(255, 255, 255, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14);
-}
-
-:global(.dark-theme) .circle {
-  box-shadow: 0 0 16px rgba(255, 240, 0, 0.45);
-}
-
-.switch input:checked + .slider .circle {
-  transform: rotate(0deg) translateX(1.5em);
-}
-
-.switch input:checked + .slider .circle .shine {
-  transform: translate(0%, 0%);
-}
-
-.switch input:checked + .slider .circle .moon {
-  left: -10%;
-  opacity: 1;
-  transform: translateY(-60%);
-}
-
-.moon {
-  position: absolute;
-  left: -100%;
-  top: 50%;
-  opacity: 0;
-  background-color: #333;
-  width: 1.25rem;
-  height: 1.25rem;
-  border-radius: 99999px;
-  transform: translateY(-50%);
-  transition: all 0.4s;
-}
-
-.shine {
-  display: block;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0.25rem;
-  height: 0.25rem;
-  background-color: #fff000;
-  border-radius: 1rem;
-  transition: all 0.4s;
-}
-
-.shine1 {
-  transform: translate(-50%, -375%);
-}
-
-.shine2 {
-  transform: translate(175%, -275%);
-}
-
-.shine3 {
-  transform: translate(275%, -50%);
-}
-
-.shine4 {
-  transform: translate(175%, 175%);
-}
-
-.shine5 {
-  transform: translate(-50%, 275%);
-}
-
-.shine6 {
-  transform: translate(-275%, 175%);
-}
-
-.shine7 {
-  transform: translate(-375%, -50%);
-}
-
-.shine8 {
-  transform: translate(-275%, -275%);
+:global(.dark-theme) .langTrack {
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.20);
 }
 
 .hamburger {
@@ -483,6 +432,15 @@
 @media (max-width: 768px) {
   .root {
     z-index: 300;
+  }
+
+  .logoText {
+    display: none;
+  }
+
+  .logoIcon {
+    width: 3.25rem;
+    height: 3.25rem;
   }
 
   .actions::after {

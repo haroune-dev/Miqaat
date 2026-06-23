@@ -24,7 +24,7 @@ export function NotificationModal({ isOpen, onClose }: NotificationModalProps) {
     setNotificationPreference,
     prayerTimes,
   } = useAppContext();
-  const { t, locale } = useLanguage();
+  const { t } = useLanguage();
   const { permission, isGranted, isDenied, isDefault, isUnsupported, requestPermission } =
     useNotificationPermission();
   const [isRequesting, setIsRequesting] = useState(false);
@@ -97,9 +97,6 @@ export function NotificationModal({ isOpen, onClose }: NotificationModalProps) {
   }, [masterIsActive, isGranted, isUnsupported, requestPermission, setNotificationsEnabled, setNotificationPreference]);
 
   const needsPermission = isDenied || isDefault;
-
-  const anyPrayerEnabled = notificationsEnabled && PRAYERS.some((p) => notificationPreferences[p] !== false);
-  const showScheduled = isGranted && anyPrayerEnabled;
 
   const getPrayerTime = (name: string): string | null => {
     const prayer = prayerTimes.find((p) => p.name === name);
@@ -190,9 +187,7 @@ export function NotificationModal({ isOpen, onClose }: NotificationModalProps) {
             role="switch"
             aria-checked={masterIsActive}
             aria-label={t("notifications.masterToggle")}
-          >
-            <span className={style.toggleThumb} />
-          </button>
+          />
         </div>
 
         <div className={style.prayersList}>
@@ -247,19 +242,12 @@ export function NotificationModal({ isOpen, onClose }: NotificationModalProps) {
                   role="switch"
                   aria-checked={isEnabled}
                   aria-label={t(`prayer.${prayer}` as TranslationKey)}
-                >
-                  <span className={style.toggleThumb} />
-                </button>
+                />
               </div>
             );
           })}
         </div>
 
-        {showScheduled && (
-          <div className={style.scheduledInfo}>
-            {t("settings.notifications.scheduled")}
-          </div>
-        )}
       </div>
     </div>,
     document.body,

@@ -21,13 +21,16 @@
   transition:
     background 0.2s ease,
     box-shadow 0.2s ease,
-    filter 0.2s ease;
+    filter 0.2s ease,
+    transform 0.2s ease;
   box-shadow: var(--shadow-sm);
+  transform: translateY(0);
 }
 
 .btn:hover:not(:disabled) {
   filter: brightness(1.06);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--color-primary) 25%, transparent);
+  transform: translateY(-1px);
 }
 
 .btnLoading {
@@ -44,6 +47,7 @@
 .btnSuccess:hover:not(:disabled) {
   background: color-mix(in srgb, var(--color-success) 14%, var(--color-bg-card));
   color: var(--color-success);
+  transform: translateY(-1px);
 }
 
 .spinner {

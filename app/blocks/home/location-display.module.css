@@ -42,13 +42,9 @@
   height: 3.25rem;
   flex-shrink: 0;
   border-radius: var(--radius-lg);
-  color: var(--color-text-inverse);
-  background: var(--color-primary);
-  box-shadow:
-    var(--shadow-sm),
-    0 6px 18px color-mix(in srgb, var(--color-primary) 35%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+  color: var(--color-text-muted);
+  background: var(--color-bg-card-alt);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .locationLink:hover .icon {
@@ -168,16 +164,13 @@
 }
 
 :global(.dark-theme) .icon {
-  box-shadow:
-    var(--shadow-sm),
-    0 6px 20px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  background: var(--color-bg-muted);
 }
 
 @media (max-width: 640px) {
   .root {
     flex-wrap: wrap;
-    padding: var(--space-4);
+    padding: calc(var(--space-4) * 0.6) var(--space-4);
     gap: var(--space-3);
   }
 
@@ -197,5 +190,10 @@
 
   .city {
     font-size: var(--text-lg);
+  }
+
+  .icon {
+    width: 2.75rem;
+    height: 2.75rem;
   }
 }

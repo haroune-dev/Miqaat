@@ -21,7 +21,7 @@ const LinkedinIcon = ({ size = 20 }: { size?: number }) => (
 );
 
 export function FooterInformation({ className }: FooterInformationProps) {
-  const { t, locale, setLocale } = useLanguage();
+  const { t } = useLanguage();
 
   const scrollToTop = () => {
     if (typeof window !== 'undefined') {
@@ -89,23 +89,7 @@ export function FooterInformation({ className }: FooterInformationProps) {
                  <Mail size={18} />
                </a>
                <span className={style.divider} />
-               <div className={style.langToggle}>
-                 <button
-                   onClick={() => setLocale('ar')}
-                   className={classnames(style.langBtn, locale === 'ar' && style.langBtnActive)}
-                   aria-label="العربية"
-                 >
-                   العربية
-                 </button>
-                 <button
-                   onClick={() => setLocale('en')}
-                   className={classnames(style.langBtn, locale === 'en' && style.langBtnActive)}
-                   aria-label="English"
-                 >
-                   English
-                 </button>
-               </div>
-            </div>
+             </div>
           </div>
           
           <div className="flex-none text-center">

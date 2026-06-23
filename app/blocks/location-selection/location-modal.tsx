@@ -30,7 +30,7 @@ function wilayaToLocation(wilaya: Wilaya): Location {
 }
 
 export function LocationModal({ isOpen, onClose }: LocationModalProps) {
-  const { t, locale } = useLanguage();
+  const { t } = useLanguage();
   const { location, setLocation } = useAppContext();
   const locationState = useLocationSelection(location.cityId);
   const previousFocusRef = useRef<HTMLElement | null>(null);
@@ -88,9 +88,6 @@ export function LocationModal({ isOpen, onClose }: LocationModalProps) {
   }, [locationState.selectedWilaya, location.cityId, setLocation, locationState.getSelectedLocation, handleClose]);
 
 
-  const city = locale === "ar" ? location.cityAr || location.city : location.city;
-  const country = locale === "ar" ? location.countryAr || location.country : location.country;
-
   if (!mounted) return null;
 
   return createPortal(
@@ -117,21 +114,9 @@ export function LocationModal({ isOpen, onClose }: LocationModalProps) {
           <h2 id="location-modal-title" className={style.title}>
             {t("settings.location")}
           </h2>
-          <p className={style.desc}>{t("settings.location.desc")}</p>
         </div>
 
-        <div className={style.currentLocation}>
-          <div className={style.currentIcon} aria-hidden="true">
-            <MapPin size={20} />
-          </div>
-          <div className={style.currentText}>
-            <span className={style.currentLabel}>{t("settings.location.current")}</span>
-            <span className={style.currentCity}>{city}</span>
-            <span className={style.currentCountry}>{country}</span>
-          </div>
-        </div>
-
-        <div className={style.body}>
+<div className={style.body}>
           <GPSLocationButton
             isDetecting={locationState.isDetectingGPS}
             isSuccess={false}

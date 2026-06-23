@@ -12,18 +12,29 @@ export interface NavigationHeaderProps {
 }
 
 export function NavigationHeader({ className }: NavigationHeaderProps) {
-  const { t } = useLanguage();
+  const { t, locale, setLocale } = useLanguage();
   const { resolvedScheme, setColorScheme } = useColorScheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
+  const [optimisticAr, setOptimisticAr] = useState(locale === "ar");
   const routerLocation = useLocation();
 
   useEffect(() => {
     setIsMenuOpen(false);
   }, [routerLocation]);
 
+  useEffect(() => {
+    setOptimisticAr(locale === "ar");
+  }, [locale]);
+
+  const handleLangToggle = () => {
+    const next = !optimisticAr;
+    setOptimisticAr(next);
+    setTimeout(() => setLocale(next ? "ar" : "en"), 450);
+  };
+
   return (
-    <nav className={classnames(style.root, className)} aria-label="Main navigation">
+    <header className={classnames(style.root, className)} role="banner">
       <Link to="/" className={style.logo} aria-label="Prayer Times home">
         <img src="/logo.jpg" alt="Logo" className={style.logoIcon} style={{ objectFit: "cover", background: "transparent", padding: 0 }} />
         <span className={style.logoText}>
@@ -78,25 +89,17 @@ export function NavigationHeader({ className }: NavigationHeaderProps) {
           <span className={style.bellArrow} aria-hidden="true">⌄</span>
         </button>
 
-        <label className={style.switch} aria-label="Toggle dark mode">
+        <label className={style.langSwitcher} aria-label={t("nav.language")}>
           <input
             type="checkbox"
-            checked={resolvedScheme === "dark"}
-            onChange={(event) => setColorScheme(event.target.checked ? "dark" : "light")}
+            checked={optimisticAr}
+            onChange={handleLangToggle}
           />
-          <span className={style.slider}>
-            <span className={style.circle}>
-              <span className={classnames(style.shine, style.shine1)}></span>
-              <span className={classnames(style.shine, style.shine2)}></span>
-              <span className={classnames(style.shine, style.shine3)}></span>
-              <span className={classnames(style.shine, style.shine4)}></span>
-              <span className={classnames(style.shine, style.shine5)}></span>
-              <span className={classnames(style.shine, style.shine6)}></span>
-              <span className={classnames(style.shine, style.shine7)}></span>
-              <span className={classnames(style.shine, style.shine8)}></span>
-              <span className={style.moon}></span>
-            </span>
-          </span>
+          <div className={style.langTrack}>
+            <span className={style.langLabelAr}>العربية</span>
+            <span className={style.langLabelEn}>English</span>
+            <div className={style.langKnob}></div>
+          </div>
         </label>
 
         <button
@@ -116,6 +119,6 @@ export function NavigationHeader({ className }: NavigationHeaderProps) {
         isOpen={isNotificationModalOpen}
         onClose={() => setIsNotificationModalOpen(false)}
       />
-    </nav>
+    </header>
   );
 }
