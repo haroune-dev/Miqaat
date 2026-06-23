@@ -44,7 +44,7 @@ Comprehensive view of current and upcoming prayer times with a live clock.
 ### 🗓️ Prayer Calendar
 weekly/monthly prayer time calendar.
 <p align="center">
-  <img src="images/Pasted image (4).png"alt="Calendar View" width="800" />
+  <img src="public/Pasted image (4).png" alt="Calendar View" width="800" />
 </p>
 
 ## 🛠️ Tech Stack
