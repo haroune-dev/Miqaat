@@ -1,49 +1,92 @@
-.overlay {
+.backdrop {
   position: fixed;
   inset: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  z-index: 999;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.15) 100%);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  padding: var(--space-4);
   opacity: 0;
   pointer-events: none;
-  visibility: hidden;
-  transition: 
-    opacity 0.3s cubic-bezier(0.32, 0.72, 0, 1), 
-    backdrop-filter 0.3s cubic-bezier(0.32, 0.72, 0, 1),
-    visibility 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  transition: opacity 300ms ease;
 }
 
-.overlay.open {
+.backdropVisible {
   opacity: 1;
   pointer-events: auto;
-  visibility: visible;
 }
 
-.modal {
-  position: relative;
-  width: 100%;
-  max-width: 480px;
-  max-height: 90vh;
-  overflow-y: auto;
+.morphContainer {
+  position: fixed;
+  z-index: 1000;
+  overflow: hidden;
+  border: 0.2rem solid rgba(255, 255, 255, 0.08);
   background-color: var(--color-bg-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
-  padding: var(--space-6);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  opacity: 0;
-  transform: translateY(16px) scale(0.98);
-  transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: width, height, border-radius, transform, left, top;
+  transition:
+    width 400ms cubic-bezier(0.32, 0.72, 0, 1),
+    height 400ms cubic-bezier(0.32, 0.72, 0, 1),
+    left 400ms cubic-bezier(0.32, 0.72, 0, 1),
+    top 400ms cubic-bezier(0.32, 0.72, 0, 1),
+    border-radius 400ms cubic-bezier(0.32, 0.72, 0, 1),
+    border-color 200ms ease,
+    background-color 400ms ease,
+    box-shadow 400ms ease;
+  padding: 0;
 }
 
-.modal.open {
-  opacity: 1;
-  transform: translateY(0) scale(1);
+.content {
+  position: relative;
+  padding: var(--space-6);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
+
+.content > * {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity 300ms ease-out, transform 300ms ease-out;
+}
+
+.contentVisible > * {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.contentVisible > .header { transition-delay: 316ms; }
+.contentVisible > .permissionSection { transition-delay: 339ms; }
+.contentVisible > .masterToggle { transition-delay: 363ms; }
+.contentVisible > .prayersList { transition-delay: 386ms; }
+
+.prayerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 300ms ease-out, transform 300ms ease-out, background-color 0.15s ease;
+}
+
+.prayerRow:hover {
+  background-color: var(--color-bg-muted);
+}
+
+.contentVisible .prayerRow {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.contentVisible .prayerRow:nth-child(1) { transition-delay: 410ms; }
+.contentVisible .prayerRow:nth-child(2) { transition-delay: 433ms; }
+.contentVisible .prayerRow:nth-child(3) { transition-delay: 456ms; }
+.contentVisible .prayerRow:nth-child(4) { transition-delay: 480ms; }
+.contentVisible .prayerRow:nth-child(5) { transition-delay: 502ms; }
 
 .closeBtn {
   position: absolute;
@@ -60,6 +103,8 @@
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;
+  z-index: 1;
+  pointer-events: auto;
 }
 
 .closeBtn:hover {
@@ -166,20 +211,6 @@
   flex-direction: column;
   gap: var(--space-1);
 }
-
-.prayerRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-md);
-  transition: background-color 0.15s ease;
-}
-
-.prayerRow:hover {
-  background-color: var(--color-bg-muted);
-}
-
 .prayerName {
   font-size: var(--text-base);
   color: var(--color-text);
@@ -286,15 +317,15 @@
   }
 }
 
-.modal::-webkit-scrollbar {
+.content::-webkit-scrollbar {
   width: 6px;
 }
 
-.modal::-webkit-scrollbar-track {
+.content::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.modal::-webkit-scrollbar-thumb {
+.content::-webkit-scrollbar-thumb {
   background-color: var(--color-text-muted);
   border-radius: var(--radius-full);
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef, useLayoutEffect } from "react";
 import { useAppContext } from "~/context/app-context";
 import { useLanguage } from "~/i18n/language-context";
 import { fetchMonthlyPrayerTimes, type DayPrayerTimes } from "~/services/api";
@@ -18,13 +18,27 @@ function getWeekRange(date: Date): { start: number; end: number } {
 
 export default function Calendar() {
   const { location } = useAppContext();
-  const { t, locale } = useLanguage();
+  const { t, locale, dir } = useLanguage();
   const [monthData, setMonthData] = useState<DayPrayerTimes[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
   const [viewMode, setViewMode] = useState<ViewMode>("monthly");
   const [currentDate, setCurrentDate] = useState(() => new Date());
+  const viewKnobRef = useRef<HTMLSpanElement>(null);
+  const prevDirRef = useRef(dir);
+
+  useEffect(() => {
+    if (prevDirRef.current === dir) return;
+    const knob = viewKnobRef.current;
+    if (knob) {
+      knob.style.setProperty("transition", "none", "important");
+      requestAnimationFrame(() => {
+        knob.style.removeProperty("transition");
+      });
+    }
+    prevDirRef.current = dir;
+  }, [dir]);
 
   useEffect(() => {
     let cancelled = false;
@@ -99,20 +113,16 @@ export default function Calendar() {
 
       {}
       <div className={styles.toolbar}>
-        <div className={styles.viewToggle}>
-          <button
-            className={`${styles.toggleBtn} ${viewMode === "weekly" ? styles.toggleBtnActive : ""}`}
-            onClick={() => setViewMode("weekly")}
-          >
-            {t("calendar.weekly")}
-          </button>
-          <button
-            className={`${styles.toggleBtn} ${viewMode === "monthly" ? styles.toggleBtnActive : ""}`}
-            onClick={() => setViewMode("monthly")}
-          >
-            {t("calendar.monthly")}
-          </button>
-        </div>
+        <label className={styles.viewToggle}>
+          <input
+            type="checkbox"
+            checked={viewMode === "weekly"}
+            onChange={(e) => setViewMode(e.target.checked ? "weekly" : "monthly")}
+          />
+          <span className={styles.onText}>{t("calendar.weekly")}</span>
+          <span className={styles.offText}>{t("calendar.monthly")}</span>
+          <span ref={viewKnobRef} className={styles.knob}></span>
+        </label>
         <button className={styles.printBtn} onClick={handlePrint} aria-label="Print">
           <span className={styles.printer} aria-hidden="true">
             <span className={styles.paper}>

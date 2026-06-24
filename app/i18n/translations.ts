@@ -29,7 +29,10 @@ const en = {
   "location.gps.error.failed": "Could not determine your location. Please select your Wilaya manually.",
   "location.gps.error.denied": "Location access was denied. Please select your Wilaya from the dropdown below.",
   "location.change": "Change Location",
+  "location.changeShort": "Change",
   "location.current": "Your location",
+  "location.done": "Done!",
+  "location.doneFull": "Location changed!",
 
   "home.currentPrayer": "Current Prayer",
   "home.prayerTime": "Prayer Time",
@@ -140,7 +143,10 @@ const ar: Record<TranslationKey, string> = {
   "location.gps.error.failed": "تعذر تحديد موقعك. يرجى اختيار ولايتك يدوياً.",
   "location.gps.error.denied": "تم رفض الوصول إلى الموقع. يرجى اختيار ولايتك من القائمة أدناه.",
   "location.change": "تغيير الموقع",
+  "location.changeShort": "تغيير",
   "location.current": "موقعك الحالي",
+  "location.done": "تم!",
+  "location.doneFull": "تم تغيير الموقع",
 
   "home.currentPrayer": "الصلاة الحالية",
   "home.prayerTime": "وقت الصلاة",

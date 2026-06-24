@@ -120,11 +120,6 @@ Miqaat integrates with two external APIs for accurate prayer times and Islamic d
    ```bash
    npm run dev
    ```
-##  Future Improvements
-*   [ ] Full Offline Data Persistence (Service Worker).
-*   [ ] Support for Baladiyas (Sub-provinces).
-*   [ ] Multi-language Expansion (French support).
-*   [ ] Advanced Analytics & Insights.
 
 ##  Author
 **Haroune-dev**

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useAppContext } from "~/context/app-context";
 import { useLanguage } from "~/i18n/language-context";
 import { LoadingSkeleton } from "~/components/loading-skeleton/loading-skeleton";
@@ -15,10 +15,11 @@ export default function Home() {
   const { isLoading, error, refreshPrayerTimes } = useAppContext();
   const { t } = useLanguage();
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const locationBtnRef = useRef<HTMLButtonElement>(null);
 
   return (
     <main className={styles.root}>
-      <LocationDisplay onOpenModal={() => setIsLocationModalOpen(true)} />
+      <LocationDisplay isModalOpen={isLocationModalOpen} onOpenModal={() => setIsLocationModalOpen(true)} buttonRef={locationBtnRef} />
       <CurrentTimeCard />
       {isLoading ? (
         <LoadingSkeleton rows={6} />
@@ -46,6 +47,7 @@ export default function Home() {
       <LocationModal 
         isOpen={isLocationModalOpen} 
         onClose={() => setIsLocationModalOpen(false)} 
+        buttonRef={locationBtnRef}
       />
     </main>
   );

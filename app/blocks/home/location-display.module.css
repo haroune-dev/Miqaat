@@ -87,11 +87,17 @@
 }
 
 .divider {
-  width: 1px;
+  width: 2px;
   align-self: stretch;
   margin-block: var(--space-1);
-  background: var(--color-border);
+  background: #000000;
+  opacity: 0.7;
   flex-shrink: 0;
+  border-radius: 1px;
+}
+
+:global(.dark-theme) .divider {
+  background: rgba(255, 255, 255, 0.5);
 }
 
 .changeBtn {
@@ -147,6 +153,10 @@
   white-space: nowrap;
 }
 
+.changeLabelShort {
+  display: none;
+}
+
 :global([lang="ar"]) .label {
   letter-spacing: 0;
   text-transform: none;
@@ -167,11 +177,225 @@
   background: var(--color-bg-muted);
 }
 
+.animBtn {
+  display: table;
+  outline: none;
+  border: none;
+  background: none;
+  padding: 0;
+  position: relative;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+
+.animInner {
+  padding: 12px 24px;
+  color: var(--color-text-inverse);
+  position: relative;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-primary) 88%, white) 0%,
+    var(--color-primary) 50%,
+    color-mix(in srgb, var(--color-primary) 94%, black) 100%
+  );
+  box-shadow:
+    0 4px 12px rgba(15, 23, 42, 0.12),
+    0 8px 24px rgba(15, 23, 42, 0.10),
+    0 1px 3px rgba(15, 23, 42, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.10),
+    inset 0 3px 8px rgba(255, 255, 255, 0.06),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.06),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.30),
+    inset 0 -1.5px 0 rgba(0, 0, 0, 0.12);
+  transform: translateY(0) translateZ(0);
+  gap: 10px;
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.25s ease;
+}
+
+.animInner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.08) 20%,
+    rgba(255, 255, 255, 0.02) 40%,
+    transparent 55%
+  );
+  transition: background 0.35s ease;
+}
+
+.animBtn:hover .animInner {
+  transform: translateY(-2px) translateZ(0);
+  border-color: rgba(255, 255, 255, 0.30);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-primary) 92%, white) 0%,
+    var(--color-primary) 45%,
+    color-mix(in srgb, var(--color-primary) 92%, black) 100%
+  );
+  box-shadow:
+    0 8px 22px rgba(15, 23, 42, 0.16),
+    0 14px 40px rgba(15, 23, 42, 0.10),
+    0 2px 4px rgba(15, 23, 42, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.14),
+    inset 0 3px 8px rgba(255, 255, 255, 0.10),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.04),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.36),
+    inset 0 -1.5px 0 rgba(0, 0, 0, 0.08);
+}
+
+.animBtn:active .animInner {
+  transform: translateY(4px) translateZ(0);
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.10),
+    0 0 0 rgba(15, 23, 42, 0),
+    0 0 0 rgba(15, 23, 42, 0),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+    inset 0 1px 2px rgba(0, 0, 0, 0.06),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.20);
+}
+
+:global(.dark-theme) .animInner {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-primary) 60%, white) 0%,
+    color-mix(in srgb, var(--color-primary) 85%, black) 50%,
+    color-mix(in srgb, var(--color-primary) 70%, black) 100%
+  );
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.35),
+    0 8px 24px rgba(0, 0, 0, 0.30),
+    0 1px 3px rgba(0, 0, 0, 0.25),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+    inset 0 3px 8px rgba(255, 255, 255, 0.04),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.10),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1.5px 0 rgba(0, 0, 0, 0.18);
+}
+
+:global(.dark-theme) .animInner::before {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.10) 0%,
+    rgba(255, 255, 255, 0.04) 20%,
+    rgba(255, 255, 255, 0.01) 40%,
+    transparent 55%
+  );
+}
+
+:global(.dark-theme) .animBtn:hover .animInner {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-primary) 65%, white) 0%,
+    color-mix(in srgb, var(--color-primary) 80%, black) 45%,
+    color-mix(in srgb, var(--color-primary) 65%, black) 100%
+  );
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.45),
+    0 14px 40px rgba(0, 0, 0, 0.35),
+    0 2px 4px rgba(0, 0, 0, 0.25),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    inset 0 3px 8px rgba(255, 255, 255, 0.06),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.08),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1.5px 0 rgba(0, 0, 0, 0.14);
+}
+
+:global(.dark-theme) .animBtn:active .animInner {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.25),
+    0 0 0 rgba(0, 0, 0, 0),
+    0 0 0 rgba(0, 0, 0, 0),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+    inset 0 1px 2px rgba(0, 0, 0, 0.12),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.28);
+}
+
+.animIcon {
+  width: 24px;
+  height: 24px;
+  display: block;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.pinIcon {
+  width: 24px;
+  height: 24px;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+.animText {
+  position: relative;
+}
+
+.animText span {
+  white-space: nowrap;
+}
+
+.textMobile {
+  display: none;
+}
+
+.ripple {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.ripple::before {
+  content: '';
+  position: absolute;
+  top: calc(var(--ripple-y, 0) * 1px);
+  left: calc(var(--ripple-x, 0) * 1px);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  width: 200%;
+  padding-bottom: 200%;
+  border-radius: 50%;
+  background: currentColor;
+  animation: rippleAnim 0.5s ease-in;
+}
+
+@keyframes rippleAnim {
+  25% { opacity: 0.12; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+}
+
 @media (max-width: 640px) {
   .root {
-    flex-wrap: wrap;
     padding: var(--space-3) var(--space-4);
-    gap: var(--space-4);
+    gap: var(--space-3);
   }
 
   .divider {
@@ -179,13 +403,7 @@
   }
 
   .locationLink {
-    width: 100%;
-  }
-
-  .changeBtn {
-    width: 100%;
-    justify-content: center;
-    padding-block: var(--space-3);
+    min-width: 0;
   }
 
   .city {
@@ -195,5 +413,32 @@
   .icon {
     width: 2.75rem;
     height: 2.75rem;
+  }
+
+  .changeBtn {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-xs);
+    white-space: nowrap;
+  }
+
+  .changeLabel {
+    display: none;
+  }
+
+  .changeLabelShort {
+    display: inline;
+    white-space: nowrap;
+  }
+
+  .textDesktop {
+    display: none;
+  }
+
+  .textMobile {
+    display: block;
+  }
+
+  .animInner {
+    padding: 8px 14px;
   }
 }

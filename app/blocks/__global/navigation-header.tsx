@@ -1,7 +1,7 @@
 import { NavLink, Link, useLocation } from "react-router";
 import { Home, CalendarDays } from "lucide-react";
 import classnames from "classnames";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useColorScheme } from "@dazl/color-scheme/react";
 import { useLanguage } from "~/i18n/language-context";
 import { NotificationModal } from "~/blocks/notifications/notification-modal";
@@ -15,8 +15,10 @@ export function NavigationHeader({ className }: NavigationHeaderProps) {
   const { t, locale, setLocale } = useLanguage();
   const { resolvedScheme, setColorScheme } = useColorScheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [optimisticAr, setOptimisticAr] = useState(locale === "ar");
+  const bellBtnRef = useRef<HTMLButtonElement>(null);
   const routerLocation = useLocation();
 
   useEffect(() => {
@@ -27,10 +29,35 @@ export function NavigationHeader({ className }: NavigationHeaderProps) {
     setOptimisticAr(locale === "ar");
   }, [locale]);
 
+  useEffect(() => {
+    if (!isClosing) return;
+    const timer = setTimeout(() => setIsClosing(false), 550);
+    return () => clearTimeout(timer);
+  }, [isClosing]);
+
+  const closeMenu = useCallback(() => {
+    setIsClosing(true);
+    requestAnimationFrame(() => {
+      setIsMenuOpen(false);
+    });
+  }, []);
+
+  const knobRef = useRef<HTMLSpanElement>(null);
+
   const handleLangToggle = () => {
     const next = !optimisticAr;
     setOptimisticAr(next);
-    setTimeout(() => setLocale(next ? "ar" : "en"), 450);
+    setTimeout(() => {
+      if (knobRef.current) {
+        knobRef.current.style.setProperty("transition", "none", "important");
+      }
+      setLocale(next ? "ar" : "en");
+      requestAnimationFrame(() => {
+        if (knobRef.current) {
+          knobRef.current.style.removeProperty("transition");
+        }
+      });
+    }, 450);
   };
 
   return (
@@ -47,12 +74,12 @@ export function NavigationHeader({ className }: NavigationHeaderProps) {
         type="button"
         aria-label="Close menu"
         tabIndex={isMenuOpen ? 0 : -1}
-        onClick={() => setIsMenuOpen(false)}
+        onClick={closeMenu}
       />
 
       <div
         id="mobile-navigation-menu"
-        className={classnames(style.navWrapper, isMenuOpen && style.navWrapperOpen)}
+        className={classnames(style.navWrapper, isMenuOpen && style.navWrapperOpen, isClosing && style.navWrapperClosing)}
       >
         <div className={style.nav}>
           <NavLink
@@ -81,6 +108,7 @@ export function NavigationHeader({ className }: NavigationHeaderProps) {
 
       <div className={style.actions}>
         <button
+          ref={bellBtnRef}
           className={style.bellBtn}
           onClick={() => setIsNotificationModalOpen(true)}
           aria-label={t("nav.notifications")}
@@ -95,20 +123,24 @@ export function NavigationHeader({ className }: NavigationHeaderProps) {
             checked={optimisticAr}
             onChange={handleLangToggle}
           />
-          <div className={style.langTrack}>
-            <span className={style.langLabelAr}>العربية</span>
-            <span className={style.langLabelEn}>English</span>
-            <div className={style.langKnob}></div>
-          </div>
+          <span className={style.langLabelAr}>العربية</span>
+          <span className={style.langLabelEn}>English</span>
+          <span ref={knobRef} className={style.langKnob}></span>
         </label>
 
         <button
-          className={classnames(style.hamburger, isMenuOpen && style.hamburgerOpen)}
+          className={classnames(style.hamburger, isMenuOpen && style.hamburgerOpen, isClosing && style.hamburgerClosing)}
           type="button"
           aria-label="Toggle menu"
           aria-controls="mobile-navigation-menu"
           aria-expanded={isMenuOpen}
-          onClick={() => setIsMenuOpen((isOpen) => !isOpen)}
+          onClick={() => {
+            if (isMenuOpen) {
+              closeMenu();
+            } else {
+              setIsMenuOpen(true);
+            }
+          }}
         >
           <div className={style.bar}></div>
           <div className={style.bar}></div>
@@ -118,6 +150,7 @@ export function NavigationHeader({ className }: NavigationHeaderProps) {
       <NotificationModal
         isOpen={isNotificationModalOpen}
         onClose={() => setIsNotificationModalOpen(false)}
+        buttonRef={bellBtnRef}
       />
     </header>
   );

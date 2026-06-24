@@ -21,7 +21,8 @@ export interface WilayaSelectorProps {
 }
 
 interface MenuPosition {
-  top: number;
+  top?: number;
+  bottom?: number;
   left: number;
   width: number;
 }
@@ -44,13 +45,16 @@ export function WilayaSelector({
   const [searchQuery, setSearchQuery] = useState("");
   const triggerRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
-  const [menuPos, setMenuPos] = useState<MenuPosition>({ top: 0, left: 0, width: 0 });
+  const [menuPos, setMenuPos] = useState<MenuPosition>({ left: 0, width: 0 });
 
   const updateMenuPosition = useCallback(() => {
     if (!triggerRef.current) return;
     const rect = triggerRef.current.getBoundingClientRect();
+    const isMobile = window.innerWidth < 640;
     setMenuPos({
-      top: rect.bottom + 8,
+      ...(isMobile
+        ? { bottom: window.innerHeight - rect.top + 8 }
+        : { top: rect.bottom + 8 }),
       left: rect.left,
       width: rect.width,
     });
@@ -97,9 +101,14 @@ export function WilayaSelector({
           role="listbox"
           style={{
             top: menuPos.top,
+            bottom: menuPos.bottom,
             left: menuPos.left,
             width: menuPos.width,
           }}
+          onClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+          onMouseUp={(e) => e.stopPropagation()}
+          onContextMenu={(e) => e.stopPropagation()}
         >
           <div className={styles.searchWrap}>
             <div className={styles.searchField}>

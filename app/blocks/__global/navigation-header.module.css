@@ -316,15 +316,6 @@
 }
 
 .langSwitcher {
-  display: flex;
-  align-items: center;
-}
-
-.langSwitcher input[type="checkbox"] {
-  display: none;
-}
-
-.langTrack {
   position: relative;
   width: 148px;
   height: 42px;
@@ -332,64 +323,90 @@
   background: #ffffff;
   border: 1px solid var(--color-border-light);
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.10);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 14px;
   cursor: pointer;
-  overflow: hidden;
-  box-sizing: border-box;
+  user-select: none;
   flex-shrink: 0;
+}
+
+.langSwitcher input {
+  position: absolute;
+  appearance: none;
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  background: #ffffff;
+  outline: none;
+  margin: 0;
+  top: 0;
+  left: 0;
 }
 
 .langLabelAr,
 .langLabelEn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
   font-size: 0.82rem;
   font-weight: 800;
-  z-index: 2;
-  transition: color 0.45s ease;
   user-select: none;
   line-height: 1;
+  transition: color 0.5s ease;
 }
 
 .langLabelAr {
-  color: rgba(0, 0, 0, 0.45);
-  padding-inline-end: 4px;
-}
-
-.langSwitcher input:checked ~ .langTrack .langLabelAr {
-  color: #ffffff;
+  inset-inline-start: 16px;
+  color: var(--color-text-muted);
 }
 
 .langLabelEn {
-  color: #ffffff;
-  padding-inline-start: 4px;
+  inset-inline-end: 16px;
+  color: var(--color-text-inverse);
 }
 
-.langSwitcher input:checked ~ .langTrack .langLabelEn {
-  color: rgba(0, 0, 0, 0.45);
+.langSwitcher input:checked ~ .langLabelAr {
+  color: var(--color-text-inverse);
+}
+
+.langSwitcher input:not(:checked) ~ .langLabelAr {
+  color: var(--color-text-muted);
+}
+
+.langSwitcher input:checked ~ .langLabelEn {
+  color: var(--color-text-muted);
+}
+
+.langSwitcher input:not(:checked) ~ .langLabelEn {
+  color: var(--color-text-inverse);
 }
 
 .langKnob {
   position: absolute;
-  inset-inline-start: calc(50% + 0px);
   top: 4px;
-  width: calc(50% - 4px);
-  height: calc(100% - 8px);
+  bottom: 4px;
   border-radius: 999px;
   background: #000000;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
   z-index: 1;
-  transition:
-    inset-inline-start 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-    inset-inline-end 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.langSwitcher input:checked ~ .langTrack .langKnob {
+.langSwitcher input:checked ~ .langKnob {
   inset-inline-start: 4px;
+  inset-inline-end: calc(50% + 4px);
+  transition:
+    inset-inline-start 0.5s ease,
+    inset-inline-end 0.4s ease 0.2s;
 }
 
-:global(.dark-theme) .langTrack {
+.langSwitcher input:not(:checked) ~ .langKnob {
+  inset-inline-start: calc(50% + 4px);
+  inset-inline-end: 4px;
+  transition:
+    inset-inline-start 0.4s ease 0.2s,
+    inset-inline-end 0.5s ease;
+}
+
+:global(.dark-theme) .langSwitcher {
   border-color: rgba(255, 255, 255, 0.12);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.20);
 }
@@ -412,7 +429,7 @@
 .hamburger .bar {
   width: 22px;
   height: 2px;
-  background-color: #111111;
+  background-color: var(--color-text);
   border-radius: 10px;
   transition:
     transform 0.55s ease,
@@ -497,15 +514,14 @@
     width: 46px;
     height: 46px;
     transform: translateX(-50%);
-    border: 1px solid var(--color-border-light);
+    border: 2px solid #000000;
     border-radius: var(--radius-full);
-    background: color-mix(in srgb, var(--color-bg-card) 92%, transparent);
+    background: color-mix(in srgb, var(--color-bg-card) 96%, transparent);
     box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     transition:
       top 0.55s ease,
-      left 0.55s ease,
       transform 0.55s ease,
       background 0.25s ease,
       border-color 0.25s ease,
@@ -514,6 +530,22 @@
 
   :global([dir="rtl"]) .hamburger {
     left: 45px;
+  }
+
+  @media (min-width: 381px) {
+    .hamburger {
+      width: 48px;
+      height: 48px;
+      left: calc(100vw - 46px);
+    }
+
+    .hamburger .bar {
+      width: 24px;
+    }
+
+    :global([dir="rtl"]) .hamburger {
+      left: 46px;
+    }
   }
 
   .hamburgerOpen {
@@ -525,13 +557,30 @@
     box-shadow: none;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
+    transition:
+      top 0.55s ease,
+      left 0.55s ease,
+      transform 0.55s ease,
+      background 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
   }
 
   :global([dir="rtl"]) .hamburgerOpen {
     left: 50%;
   }
 
-  .navWrapper {
+  .hamburgerClosing {
+    transition:
+      left 0.55s ease,
+      top 0.55s ease,
+      transform 0.55s ease,
+      background 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+   .navWrapper {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -559,13 +608,13 @@
     transform: translate3d(var(--menu-start-x), var(--menu-start-y), 0) scale(0.9);
     transform-origin: center;
     transition:
-      width 0.45s ease,
-      height 0.45s ease,
+      width 0.35s ease,
+      height 0.35s ease,
+      padding 0.35s ease,
+      border-radius 0.35s ease,
       opacity 0.25s ease,
-      padding 0.45s ease,
-      border-radius 0.45s ease,
-      transform 0.55s ease,
-      box-shadow 0.35s ease;
+      box-shadow 0.35s ease,
+      background-color 0.2s ease;
   }
 
   :global([dir="rtl"]) .navWrapper {
@@ -581,10 +630,25 @@
     pointer-events: auto;
     transform: translate3d(-50%, -50%, 0) scale(1);
     animation: mobileMenuOpen 0.72s ease both;
+    transition:
+      opacity 0.25s ease,
+      box-shadow 0.35s ease;
   }
 
   :global([dir="rtl"]) .navWrapperOpen {
     transform: translate3d(-50%, -50%, 0) scale(1);
+  }
+
+  .navWrapperClosing {
+    transition:
+      width 0.35s ease,
+      height 0.35s ease,
+      padding 0.35s ease,
+      border-radius 0.35s ease,
+      opacity 0.25s ease,
+      box-shadow 0.35s ease,
+      background-color 0.2s ease,
+      transform 0.35s ease;
   }
 
   @keyframes mobileMenuOpen {
@@ -646,11 +710,11 @@
   .navLink {
     width: 100%;
     min-width: 0;
-    height: 32px;
-    padding: 0;
-    gap: 0.625rem;
+    height: 44px;
+    padding: 0 var(--space-4);
+    gap: 0.75rem;
     overflow: visible;
-    border-radius: 0;
+    border-radius: var(--radius-lg);
     color: var(--color-text);
     opacity: 0;
     transform: scale(0);
@@ -669,14 +733,14 @@
   .navLink:focus,
   .navLinkActive {
     width: 100%;
-    background-color: transparent;
+    background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
     color: var(--color-primary);
   }
 
   .navLinkActive,
   .navLinkActive:hover,
   .navLinkActive:focus {
-    background-color: transparent;
+    background-color: color-mix(in srgb, var(--color-primary) 14%, transparent);
     color: var(--color-primary);
   }
 
@@ -696,8 +760,8 @@
   .navLinkIcon {
     position: static;
     display: flex;
-    width: 1.6rem;
-    height: 1.6rem;
+    width: 2rem;
+    height: 2rem;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
@@ -712,6 +776,8 @@
     padding-inline-start: 0;
     padding-inline-end: 0;
     text-align: center;
+    font-weight: 700;
+    font-size: var(--text-base);
     color: currentColor;
     opacity: 1;
     transform: none;
