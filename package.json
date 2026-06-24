@@ -9,7 +9,6 @@
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
-    "@dazl/color-scheme": "^1.2.1",
     "@react-router/node": "^7.14.1",
     "@react-router/serve": "^7.14.1",
     "classnames": "^2.5.1",

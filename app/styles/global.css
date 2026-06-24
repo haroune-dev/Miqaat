@@ -56,8 +56,6 @@
   --color-warning: var(--color-warning);
 }
 
-@custom-variant dark (&:where(.dark-theme, .dark-theme *));
-
 @custom-variant rtl (&:where([dir="rtl"], [dir="rtl"] *));
 
 html, body {

@@ -294,19 +294,6 @@
   cursor: not-allowed;
 }
 
-:global(.dark-theme) .toggle {
-  background: linear-gradient(rgba(0,0,0,0.15), rgba(255,255,255,0.03)), #333;
-  box-shadow: 0 0.07em 0.1em -0.1em rgba(0,0,0,0.6) inset;
-}
-
-:global(.dark-theme) .toggle::before {
-  background: linear-gradient(rgba(0,0,0,0.1), rgba(255,255,255,0.05)), #555;
-  box-shadow:
-    0 0.08em 0.15em -0.1em rgba(0,0,0,0.6) inset,
-    0 0.05em 0.08em -0.01em rgba(255,255,255,0.1),
-    0 0 0 0 rgba(76,204,102,0.7) inset;
-}
-
 .spinner {
   animation: spin 1s linear infinite;
 }

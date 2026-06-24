@@ -154,20 +154,6 @@
   box-shadow: 0 10px 22px rgba(15, 23, 42, 0.22);
 }
 
-:global(.dark-theme) .bellBtn {
-  background: linear-gradient(135deg, #111827, #2c2c2c);
-  border-color: rgba(244, 208, 63, 0.34);
-  box-shadow:
-    0 8px 20px rgba(0, 0, 0, 0.34),
-    0 0 0 1px rgba(255, 255, 255, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
-}
-
-:global(.dark-theme) .bellBtn:hover {
-  background: linear-gradient(135deg, #1f2937, #3a3a3a);
-  border-color: rgba(244, 208, 63, 0.52);
-}
-
 .bellBtn:focus-visible {
   outline: 3px solid color-mix(in srgb, var(--color-accent) 60%, transparent);
   outline-offset: 3px;
@@ -406,11 +392,6 @@
     inset-inline-end 0.5s ease;
 }
 
-:global(.dark-theme) .langSwitcher {
-  border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.20);
-}
-
 .hamburger {
   display: none;
   flex-direction: column;
@@ -498,10 +479,6 @@
     background: rgba(245, 246, 248, 0.5);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-  }
-
-  :global(.dark-theme) .mobileBackdropOpen {
-    background: rgba(13, 27, 42, 0.46);
   }
 
   .hamburger {

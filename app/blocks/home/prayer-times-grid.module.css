@@ -56,15 +56,6 @@
   letter-spacing: 0;
 }
 
-:global(.dark-theme) .sectionTitle {
-  color: var(--color-text);
-}
-
-:global(.dark-theme) .sectionTitle::before,
-:global(.dark-theme) .sectionTitle::after {
-  opacity: 0.75;
-}
-
 .root {
   display: flex;
   flex-wrap: wrap;

@@ -15,15 +15,9 @@
   z-index: 0;
   pointer-events: none;
   background-image:
-    repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.23) 0, rgba(0, 0, 0, 0.23) 1px, transparent 1px, transparent 20px),
-    repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.23) 0, rgba(0, 0, 0, 0.23) 1px, transparent 1px, transparent 20px);
+    repeating-linear-gradient(45deg, rgba(26, 26, 26, 0.219) 0, rgba(26, 26, 26, 0.219) 1px, transparent 1px, transparent 20px),
+    repeating-linear-gradient(-45deg, rgba(26, 26, 26, 0.219) 0, rgba(26, 26, 26, 0.219) 1px, transparent 1px, transparent 20px);
   background-size: 40px 40px;
-}
-
-:global(.dark-theme) .body::before {
-  background-image:
-    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.13) 0, rgba(255, 255, 255, 0.13) 1px, transparent 1px, transparent 20px),
-    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.13) 0, rgba(255, 255, 255, 0.13) 1px, transparent 1px, transparent 20px);
 }
 
 .pageContent {

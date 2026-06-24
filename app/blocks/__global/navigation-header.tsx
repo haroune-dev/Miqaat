@@ -2,7 +2,6 @@ import { NavLink, Link, useLocation } from "react-router";
 import { Home, CalendarDays } from "lucide-react";
 import classnames from "classnames";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useColorScheme } from "@dazl/color-scheme/react";
 import { useLanguage } from "~/i18n/language-context";
 import { NotificationModal } from "~/blocks/notifications/notification-modal";
 import style from "./navigation-header.module.css";
@@ -13,7 +12,6 @@ export interface NavigationHeaderProps {
 
 export function NavigationHeader({ className }: NavigationHeaderProps) {
   const { t, locale, setLocale } = useLanguage();
-  const { resolvedScheme, setColorScheme } = useColorScheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
