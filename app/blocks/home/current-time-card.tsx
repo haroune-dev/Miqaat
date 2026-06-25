@@ -18,8 +18,8 @@ export function CurrentTimeCard({ className }: CurrentTimeCardProps) {
     fetchHijriDate().then(setHijriInfo).catch(() => {});
   }, []);
 
-  const hijriDate = hijriInfo
-    ? (locale === "ar" ? hijriInfo.formattedAr : hijriInfo.formatted)
+  const hijriDate = locale === "ar" && hijriInfo
+    ? hijriInfo.formattedAr
     : clock.hijriDate;
 
   return (
