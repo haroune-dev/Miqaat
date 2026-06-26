@@ -96,11 +96,11 @@
 
 .time {
   font-family: var(--family-mono);
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: 500;
   line-height: 1;
   letter-spacing: -0.01em;
-  margin-bottom: 4px;
+  margin-top: 10px;
   transform: translateY(8px);
   direction: ltr;
   color: #fff;
