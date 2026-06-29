@@ -30,7 +30,7 @@ export function CalendarGrid({ className, data }: CalendarGridProps) {
     const handleScroll = () => {
       const { scrollLeft, scrollWidth, clientWidth } = el;
       const hasOverflow = scrollWidth > clientWidth;
-      
+
       if (!hasOverflow) {
         setShowRightIndicator(false);
         return;
@@ -38,18 +38,14 @@ export function CalendarGrid({ className, data }: CalendarGridProps) {
 
       const maxScroll = scrollWidth - clientWidth;
       const currentScroll = Math.abs(scrollLeft);
-      const isAtEnd = currentScroll >= maxScroll - 15; // 15px threshold
+      const isAtEnd = currentScroll >= maxScroll - 15;
 
       setShowRightIndicator(!isAtEnd);
     };
 
-    // Listen to scroll
     el.addEventListener("scroll", handleScroll);
-    
-    // Check initially on mount and when data changes
     handleScroll();
 
-    // Resize observer to handle viewport changes
     const resizeObserver = new ResizeObserver(() => {
       handleScroll();
     });
@@ -65,12 +61,10 @@ export function CalendarGrid({ className, data }: CalendarGridProps) {
     <div className={classnames(style.root, className)}>
       <div className={style.indicatorWrapper}>
         {showRightIndicator && (
-          <>
-            <div className={style.scrollShadow} />
-            <div className={style.scrollChevron} />
-          </>
+          <div className={style.scrollShadow} />
         )}
-        <div ref={wrapperRef} className={style.tableWrapper}>
+        <div className={style.cardContainer}>
+          <div ref={wrapperRef} className={style.tableWrapper}>
           <table className={style.table} dir={locale === "ar" ? "rtl" : "ltr"}>
             <thead>
               <tr className={style.headerRow}>
@@ -117,6 +111,7 @@ export function CalendarGrid({ className, data }: CalendarGridProps) {
               })}
             </tbody>
           </table>
+          </div>
         </div>
       </div>
     </div>

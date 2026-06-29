@@ -6,17 +6,17 @@
   position: relative;
 }
 
-.tableWrapper {
+.cardContainer {
   background: var(--color-bg-card);
   border-radius: var(--radius-xl);
   padding: var(--space-4);
   box-shadow: var(--shadow-sm);
-  overflow-x: auto;
   border: 1px solid var(--color-border-light);
   transition: box-shadow 0.25s ease;
+  overflow: hidden;
 }
 
-.tableWrapper:hover {
+.cardContainer:hover {
   box-shadow: var(--shadow-md);
 }
 
@@ -151,33 +151,44 @@
 }
 
 /* ===== Scrollbar Styling ===== */
+.tableWrapper {
+  overflow-x: auto;
+  width: 100%;
+  padding-bottom: var(--space-2);
+  /* Force scrollbar to always be visible on WebKit mobile browsers */
+  -webkit-overflow-scrolling: touch;
+}
+
 .tableWrapper::-webkit-scrollbar {
-  height: 8px;
+  height: 10px;
+  display: block;
 }
 
 .tableWrapper::-webkit-scrollbar-track {
-  background: var(--color-bg-muted);
-  border-radius: 4px;
+  background: color-mix(in srgb, var(--color-primary) 8%, var(--color-bg-muted));
+  border-radius: var(--radius-full);
+  margin-inline: var(--space-2);
 }
 
 .tableWrapper::-webkit-scrollbar-thumb {
-  background: var(--color-primary);
-  border-radius: 4px;
-  border: 2px solid var(--color-bg-muted);
+  background: linear-gradient(135deg, var(--color-primary), color-mix(in srgb, var(--color-primary) 70%, #000));
+  border-radius: var(--radius-full);
+  border: 2px solid color-mix(in srgb, var(--color-primary) 8%, var(--color-bg-muted));
+  min-width: 60px;
 }
 
 .tableWrapper::-webkit-scrollbar-thumb:hover {
-  background: var(--color-primary-dark);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 90%, #fff), var(--color-primary));
 }
 
 @supports (scrollbar-color: auto) {
   .tableWrapper {
-    scrollbar-color: var(--color-primary) var(--color-bg-muted);
+    scrollbar-color: var(--color-primary) color-mix(in srgb, var(--color-primary) 8%, var(--color-bg-muted));
     scrollbar-width: thin;
   }
 }
 
-/* ===== Scroll Indicator: shadow + double animated chevrons ===== */
+/* ===== Scroll Indicator: shadow ===== */
 .scrollShadow {
   position: absolute;
   top: 1px;
@@ -199,104 +210,10 @@
   border-radius: var(--radius-xl) 0 0 var(--radius-xl);
 }
 
-.scrollChevron {
-  position: absolute;
-  top: 50%;
-  z-index: 11;
-  width: 10px;
-  height: 10px;
-  border-color: var(--color-primary);
-  border-style: solid;
-  border-width: 0 3px 3px 0;
-  pointer-events: none;
-}
-
-[dir="ltr"] .scrollChevron {
-  right: 10px;
-  transform: translateY(-50%) rotate(-45deg);
-  animation: scroll-hint-ltr 1.8s ease-in-out infinite;
-}
-
-[dir="rtl"] .scrollChevron {
-  left: 10px;
-  transform: translateY(-50%) rotate(135deg);
-  animation: scroll-hint-rtl 1.8s ease-in-out infinite;
-}
-
-/* Secondary smaller chevron via pseudo-element */
-.scrollChevron::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  width: 8px;
-  height: 8px;
-  border-color: inherit;
-  border-style: solid;
-  border-width: 0 2.5px 2.5px 0;
-  pointer-events: none;
-}
-
-[dir="ltr"] .scrollChevron::after {
-  right: -8px;
-  transform: translateY(-50%) rotate(-45deg);
-  opacity: 0.45;
-  animation: scroll-hint-ltr-secondary 1.8s ease-in-out infinite;
-}
-
-[dir="rtl"] .scrollChevron::after {
-  left: -8px;
-  transform: translateY(-50%) rotate(135deg);
-  opacity: 0.45;
-  animation: scroll-hint-rtl-secondary 1.8s ease-in-out infinite;
-}
-
-@keyframes scroll-hint-ltr {
-  0%, 100% {
-    transform: translateY(-50%) translateX(0) rotate(-45deg);
-    opacity: 0.35;
-  }
-  50% {
-    transform: translateY(-50%) translateX(5px) rotate(-45deg);
-    opacity: 1;
-  }
-}
-
-@keyframes scroll-hint-rtl {
-  0%, 100% {
-    transform: translateY(-50%) translateX(0) rotate(135deg);
-    opacity: 0.35;
-  }
-  50% {
-    transform: translateY(-50%) translateX(-5px) rotate(135deg);
-    opacity: 1;
-  }
-}
-
-@keyframes scroll-hint-ltr-secondary {
-  0%, 100% {
-    transform: translateY(-50%) translateX(0) rotate(-45deg);
-    opacity: 0.2;
-  }
-  50% {
-    transform: translateY(-50%) translateX(5px) rotate(-45deg);
-    opacity: 0.75;
-  }
-}
-
-@keyframes scroll-hint-rtl-secondary {
-  0%, 100% {
-    transform: translateY(-50%) translateX(0) rotate(135deg);
-    opacity: 0.2;
-  }
-  50% {
-    transform: translateY(-50%) translateX(-5px) rotate(135deg);
-    opacity: 0.75;
-  }
-}
-
 /* ===== Responsive ===== */
 
 @media (max-width: 768px) {
+
   .th,
   .td {
     padding: var(--space-3) var(--space-2);
@@ -305,6 +222,7 @@
 }
 
 @media (max-width: 480px) {
+
   .th,
   .td {
     padding: var(--space-2) var(--space-1);
@@ -322,7 +240,7 @@
 
   @supports (scrollbar-color: auto) {
     .tableWrapper {
-      scrollbar-width: auto;
+      scrollbar-width: thin;
       scrollbar-color: var(--color-primary-light) var(--color-bg-muted);
     }
   }
