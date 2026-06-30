@@ -7,18 +7,49 @@
 .card {
   border-radius: var(--radius-lg);
   padding: var(--space-8) var(--space-5);
-  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-3);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+  background: hsl(43 100% 95% / 40%);
+  border: 1px solid hsl(43 80% 85% / 45%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow:
+    0 0 0.5rem 2px hsl(43 30% 30% / 12%),
+    inset 0 0 0.1rem hsl(43 70% 50% / 12%),
+    inset 0 0 0.2rem 0.1rem hsl(43 70% 50% / 8%),
+    inset 0 0 0.3rem 0.2rem hsl(43 70% 50% / 5%);
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--color-border);
+  border-color: var(--color-accent);
+  transform: scale(1.05);
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .card:hover {
+    border-color: inherit;
+    transform: none;
+  }
+  .card:active {
+    border-color: var(--color-accent);
+    transform: scale(1.05);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .card {
+    background: hsl(43 50% 8% / 40%);
+    border-color: hsl(43 50% 20% / 30%);
+    box-shadow:
+      0 0 0.5rem 2px hsl(43 30% 5% / 40%),
+      inset 0 0 0.1rem hsl(43 70% 50% / 12%),
+      inset 0 0 0.2rem 0.1rem hsl(43 70% 50% / 8%),
+      inset 0 0 0.3rem 0.2rem hsl(43 70% 50% / 5%);
+  }
 }
 
 .iconBox {
@@ -28,12 +59,19 @@
   width: 2.5rem;
   height: 2.5rem;
   border-radius: var(--radius-md);
-  background: var(--color-highlight);
+  background: hsl(210 50% 30% / 10%);
   color: var(--color-primary);
 }
 
+@media (prefers-color-scheme: dark) {
+  .iconBox {
+    background: hsl(210 50% 70% / 10%);
+    color: hsl(210 60% 65%);
+  }
+}
+
 .label {
-  font-size: var(--text-sm);
+  font-size: var(--text-base);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--color-text-muted);
@@ -42,8 +80,8 @@
 
 .value {
   font-family: var(--family-body);
-  font-size: var(--text-xl);
-  font-weight: 700;
+  font-size: var(--text-2xl);
+  font-weight: 800;
   color: var(--color-text);
   line-height: 1;
 }

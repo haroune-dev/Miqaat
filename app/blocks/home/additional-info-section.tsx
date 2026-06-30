@@ -47,26 +47,26 @@ export function AdditionalInfoSection({ className }: AdditionalInfoSectionProps)
   return (
     <div className={classnames(style.root, className)}>
       {sunrise && (
-        <div className={classnames(style.card, "bg-amber-50/50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-800/30")}>
-          <div className={classnames(style.iconBox, "bg-amber-100 dark:bg-amber-800/50 text-amber-600 dark:text-amber-400")}><Sunrise size={16} /></div>
+        <div className={style.card}>
+          <div className={style.iconBox}><Sunrise size={16} /></div>
           <div className={style.label}>{t("info.sunrise")}</div>
           <div className={style.value}>{formatMinutesToTime(parseTimeToMinutes(sunrise.time))}</div>
         </div>
       )}
       {maghrib && (
-        <div className={classnames(style.card, "bg-amber-50/50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-800/30")}>
-          <div className={classnames(style.iconBox, "bg-amber-100 dark:bg-amber-800/50 text-amber-600 dark:text-amber-400")}><Sunset size={16} /></div>
+        <div className={style.card}>
+          <div className={style.iconBox}><Sunset size={16} /></div>
           <div className={style.label}>{t("info.sunset")}</div>
           <div className={style.value}>{formatMinutesToTime(parseTimeToMinutes(maghrib.time))}</div>
         </div>
       )}
-      <div className={classnames(style.card, "bg-amber-50/50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-800/30")}>
-        <div className={classnames(style.iconBox, "bg-amber-100 dark:bg-amber-800/50 text-amber-600 dark:text-amber-400")}><Clock size={16} /></div>
+      <div className={style.card}>
+        <div className={style.iconBox}><Clock size={16} /></div>
         <div className={style.label}>{t("info.midnight")}</div>
         <div className={style.value}>{midnightStr}</div>
       </div>
-      <div className={classnames(style.card, "bg-amber-50/50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-800/30")}>
-        <div className={classnames(style.iconBox, "bg-amber-100 dark:bg-amber-800/50 text-amber-600 dark:text-amber-400")}><Sparkles size={16} /></div>
+      <div className={style.card}>
+        <div className={style.iconBox}><Sparkles size={16} /></div>
         <div className={style.label}>{t("info.lastThird")}</div>
         <div className={style.value}>{lastThirdStr}</div>
       </div>
