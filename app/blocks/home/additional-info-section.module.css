@@ -24,20 +24,10 @@
     inset 0 0 0.3rem 0.2rem hsl(43 70% 50% / 5%);
 }
 
-.card:hover {
+.card:hover,
+.card:active {
   border-color: var(--color-accent);
   transform: scale(1.05);
-}
-
-@media (hover: none) and (pointer: coarse) {
-  .card:hover {
-    border-color: inherit;
-    transform: none;
-  }
-  .card:active {
-    border-color: var(--color-accent);
-    transform: scale(1.05);
-  }
 }
 
 @media (prefers-color-scheme: dark) {
