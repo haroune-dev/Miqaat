@@ -27,21 +27,21 @@
 [View App](https://miqaat-eight.vercel.app/)
 
 ##  Key Features
-*    **Dynamic Location Selection**: Easily choose your Wilaya using an interface or by using automatic GPS detection.
-*    **Live Countdown**: Real-time updates and countdowns to the next prayer time.
-*    **Comprehensive Calendar**: View weekly and monthly prayer schedules with an elegant, printable layout.
-*    **Smart Notifications**: Frontend-scheduled notifications firing 1 minute before each prayer.
-*    **Hijri Date Display**: Accurate Islamic date fetched from the Aladhan API, displayed alongside the live clock.
+- Choose a wilaya manually or use GPS detection.
+- See the current prayer time with a live countdown to the next one.
+- View weekly and monthly prayer schedules in a clean calendar layout.
+- Receive frontend notifications 1 minute before each prayer.
+- Display the Hijri date alongside the live clock.
 
-## 📸 Screenshots
+##  Screenshots
 
-### 🏠 Home Dashboard
-Comprehensive view of current and upcoming prayer times with a live clock.
+###  Home Dashboard
+The home screen shows the current prayer time, upcoming prayer, and a live clock.
 <p align="center">
   <img src="public/Pasted image (2).png" alt="Home Screen" width="800" />
 </p>
 
-### 🗓️ Prayer Calendar
+###  Prayer Calendar
 weekly/monthly prayer time calendar.
 <p align="center">
   <img src="public/Pasted image (4).png" alt="Calendar View" width="800" />
@@ -54,12 +54,11 @@ weekly/monthly prayer time calendar.
     - **Tailwind CSS** (utility-first)
     - **Custom CSS** (design tokens, shimmer animations, theming system)
 *   **Icons**: Lucide React
-*   **Persistence**: LocalStorage for user preferences
-*   **Deployment**: Optimized production build via Vite
+*   **State / Persistence**: React Context and LocalStorage
 
-## 🏗️ Project Architecture
+##  Project Architecture
 
-### 🧩 System Overview
+###  System Overview
 - **UI Layer**
   - Routes / Pages
   - Blocks / Layout Sections
@@ -73,7 +72,7 @@ weekly/monthly prayer time calendar.
   - External AlAdhan API
   - Static Data / Types
 
-### 📁 Directory Breakdown
+###  Directory Breakdown
 *   **`app/routes/`**: Entry points for each page (Home, Settings, Calendar, Location).
 *   **`app/blocks/`**: Complex, layout-specific sections (e.g., Prayer Grid, Search Header) that compose pages.
 *   **`app/components/`**: Reusable atomic UI elements (Buttons, Inputs, Skeletons) following a consistent design system.
