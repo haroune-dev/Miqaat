@@ -47,7 +47,7 @@ weekly/monthly prayer time calendar.
   <img src="public/Pasted image (4).png" alt="Calendar View" width="800" />
 </p>
 
-## 🛠️ Tech Stack
+##  Tech Stack
 *   **Frontend**: React (React Router v7)
 *   **Language**: TypeScript
 *   **Styling**:
