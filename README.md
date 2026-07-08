@@ -83,7 +83,7 @@ weekly/monthly prayer time calendar.
 *   **`app/i18n/`**: Localization dictionary and logic for Arabic/English support.
 
 
-## 🔌 API Integration
+##  API Integration
 Miqaat integrates with two external APIs for accurate prayer times and Islamic date conversion.
 
 ### Prayer Times — AlAdhan API
